@@ -17,12 +17,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composecarrent.R
-import com.example.composecarrent.ui.theme.DarkBlue
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
 // настройка хедера выдвижного дравера

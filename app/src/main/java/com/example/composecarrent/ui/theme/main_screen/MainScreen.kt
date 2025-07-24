@@ -1,40 +1,44 @@
 package com.example.composecarrent.ui.theme.main_screen
 
-import androidx.compose.foundation.Image
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.composecarrent.R
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.composecarrent.ui.theme.bottomNavigation.BottomNavItemLine
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Preview(showBackground = true)
 @Composable
-fun MainScreen_Drawer() {
+fun MainScreen() {
     val drawerState = rememberDrawerState(DrawerValue.Open) // ( состояние, открыто по умолчанию )
+    val navController = rememberNavController()
     ModalNavigationDrawer(
         drawerState = drawerState,   // передача состояния ( открыто по умолчанию)
-        modifier = Modifier.fillMaxWidth(0.7f),  // дравер занимает 70% экрана
+        modifier = Modifier.fillMaxWidth(),
         drawerContent = {
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxWidth(0.7f) // дравер занимает 70% экрана
             ) {
                 DrawerHeader()
                 DrawerBody()
             }
         }
     ) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            bottomBar = {
+                BottomNavItemLine(navController = navController)   // передача в Scaffold нижнего меню
+            }
+        ) {  }
 
     }
-
-
 }

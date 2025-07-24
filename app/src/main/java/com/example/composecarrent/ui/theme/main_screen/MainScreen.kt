@@ -20,7 +20,6 @@ import com.example.composecarrent.ui.theme.bottomNavigation.BottomNavItemLine
 @Composable
 fun MainScreen() {
     val drawerState = rememberDrawerState(DrawerValue.Open) // ( состояние, открыто по умолчанию )
-    val navController = rememberNavController()
     ModalNavigationDrawer(
         drawerState = drawerState,   // передача состояния ( открыто по умолчанию)
         modifier = Modifier.fillMaxWidth(),
@@ -36,7 +35,7 @@ fun MainScreen() {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             bottomBar = {
-                BottomNavItemLine(navController = navController)   // передача в Scaffold нижнего меню
+                BottomNavItemLine()   // передача в Scaffold нижнего меню
             }
         ) {  }
 

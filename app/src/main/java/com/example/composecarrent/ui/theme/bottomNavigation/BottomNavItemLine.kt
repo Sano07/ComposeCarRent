@@ -13,19 +13,17 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
-fun BottomNavItemLine(navController: NavController) {
+fun BottomNavItemLine() {
     // список іtem-ов которые будут отображаться внизу
     val listItems = listOf(BottomNavItems.Home, BottomNavItems.Favorite, BottomNavItems.Settings)
-    // отслеживание текущего активного іtem-а
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = backStackEntry?.destination?.route
 
     NavigationBar {
+        // перебор списка іtem-ов для отображения в нав баре
         listItems.forEach { item ->
             NavigationBarItem(
-                selected = currentRoute == item.route,
+                selected = false,
                 onClick = {
-                    navController.navigate(item.route)
+
                 },
                 icon = {
                     Icon(painter = painterResource(id = item.iconId), contentDescription = "Icon Logo")

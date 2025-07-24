@@ -30,7 +30,7 @@ fun DrawerBody() {
     val categoriesList = listOf("Sedans", "Crossovers", "Full-size Sedans", "Coupes and Convertibles", "Electric Vehicles", "Moto")
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().background(Color.Gray) // серый фон для того чтоб не просвечивались item-ы
     ) {
         Image(
             modifier = Modifier.fillMaxSize(),

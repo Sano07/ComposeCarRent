@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.example.composecarrent.ui.theme.login_screen.LoginScreen
 import com.example.composecarrent.ui.theme.main_screen.MainScreen
 
 class MainActivity : ComponentActivity() {
@@ -11,7 +12,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MainScreen() // вызов хедера на основном экране
+            LoginScreen() // вызов экрана авторизации
+            MainScreen() // вызов основного экрана с хедером
             }
         }
     }

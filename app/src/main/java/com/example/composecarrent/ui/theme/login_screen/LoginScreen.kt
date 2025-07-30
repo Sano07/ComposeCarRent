@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -26,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -45,17 +47,19 @@ fun LoginScreen() {
 
     Box(
         modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
         Column() {
             Image(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .size(300.dp)
+                    .align(Alignment.CenterHorizontally),
                 painter = painterResource(id = R.drawable.im_car_rent_logo),
-                contentDescription = "Car_Rent_Logo",
-                alignment = Alignment.BottomCenter
+                contentDescription = "Car_Rent_Logo"
             )
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
                     .padding(15.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -64,15 +68,14 @@ fun LoginScreen() {
                     value = email,
                     onValueChange = { email = it },
                     label = { Text("You email") },
-                    singleLine = true,
-                    shape = RoundedCornerShape(10.dp)
+                    singleLine = true
                 )
+                Spacer(modifier = Modifier.height(15.dp))
                 TextField(
                     value = password,
                     onValueChange = { password = it },
                     label = { Text("You password") },
-                    singleLine = true,
-                    shape = RoundedCornerShape(10.dp)
+                    singleLine = true
                 )
                 Spacer(modifier = Modifier.height(150.dp))
                 Button(

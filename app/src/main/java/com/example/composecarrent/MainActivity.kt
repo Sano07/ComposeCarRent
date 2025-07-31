@@ -1,19 +1,19 @@
 package com.example.composecarrent
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.composecarrent.ui.theme.login_screen.LoginScreen
-import com.example.composecarrent.ui.theme.main_screen.MainScreen
+import com.example.composecarrent.ui.theme.navigation.AppNavigation
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("ViewModelConstructorInComposable")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            LoginScreen() // вызов экрана авторизации
-            MainScreen() // вызов основного экрана с хедером
+            AppNavigation()
             }
         }
     }

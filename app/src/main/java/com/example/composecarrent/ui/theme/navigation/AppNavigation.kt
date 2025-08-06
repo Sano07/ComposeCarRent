@@ -15,7 +15,7 @@ fun AppNavigation() {
         composable("login") {
             LoginScreen(navController = navController)
         }
-        composable("main") {
+        composable("home_screen") {
             MainScreen()
         }
     }

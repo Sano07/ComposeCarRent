@@ -47,8 +47,8 @@ fun LoginScreen( viewModel: AuthLogicViewModel = viewModel(), navController: Nav
                 "Ошибка: $registrationStatus",
                 Toast.LENGTH_SHORT
             ).show()
-        } else {
-            navController.navigate("main_screen") {
+        } else if(registrationStatus == "success") {
+            navController.navigate("home_screen") {
                 popUpTo("registration_screen") { inclusive = true }  // тема которая не пускает назад на экран регистрации в случае успеха
             }
         }
@@ -76,17 +76,18 @@ fun LoginScreen( viewModel: AuthLogicViewModel = viewModel(), navController: Nav
                 TextField(
                     value = email,
                     onValueChange = { email = it },
-                    label = { Text("You email") },
+                    label = { Text("Your email") },
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.height(15.dp))
                 TextField(
                     value = password,
                     onValueChange = { password = it },
-                    label = { Text("You password") },
+                    label = { Text("Your password") },
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.height(150.dp))
+                Column() {
                 Button(
                     onClick = {
                         viewModel.register(email, password)
@@ -99,10 +100,28 @@ fun LoginScreen( viewModel: AuthLogicViewModel = viewModel(), navController: Nav
                 )
                 {
                     Text(
-                        text = "Login",
+                        text = "LogIn",
                         color = Color.Black
                     )
                 }
+                Spacer(modifier = Modifier.height(15.dp))
+                Button(
+                    onClick = {
+
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .height(100.dp),
+                    colors = ButtonDefaults.buttonColors(Color.White),
+                    border = ButtonDefaults.outlinedButtonBorder(enabled = true)
+                )
+                {
+                    Text(
+                        text = "SignIn",
+                        color = Color.Black
+                    )
+                }
+            }
             }
         }
     }

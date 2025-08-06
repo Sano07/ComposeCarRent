@@ -17,10 +17,24 @@ class AuthLogicViewModel : ViewModel() {
     var registrationStatus by mutableStateOf<String?>(null)
         private set
 
+    var signInStatus by mutableStateOf<String?>(null)
+        private set
+
     fun register(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 registrationStatus = if (task.isSuccessful) {
+                    "success"
+                } else {
+                    task.exception?.message ?: "Unknown error"
+                }
+            }
+    }
+
+    fun signIn(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                signInStatus = if (task.isSuccessful) {
                     "success"
                 } else {
                     task.exception?.message ?: "Unknown error"

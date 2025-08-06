@@ -38,6 +38,7 @@ fun LoginScreen( viewModel: AuthLogicViewModel = viewModel(), navController: Nav
     var password by remember { mutableStateOf("") }    // cостояние отслеживает изменение пароля
     val context = LocalContext.current                      // получение контекста текущей активити для передачи в Тост
     val registrationStatus = viewModel.registrationStatus   // получение из вью модел статуса регистрации
+    val signInStatus = viewModel.signInStatus  // получение из вью статуса авторизации
 
         // наблюдение за статусом регистрации и дальнейшая логика
     LaunchedEffect(registrationStatus) {
@@ -48,6 +49,20 @@ fun LoginScreen( viewModel: AuthLogicViewModel = viewModel(), navController: Nav
                 Toast.LENGTH_SHORT
             ).show()
         } else if(registrationStatus == "success") {
+            navController.navigate("home_screen") {
+                popUpTo("registration_screen") { inclusive = true }  // тема которая не пускает назад на экран регистрации в случае успеха
+            }
+        }
+    }
+
+    LaunchedEffect(signInStatus) {
+        if (signInStatus != null && signInStatus != "success") {
+            Toast.makeText(
+                context,
+                "Ошибка: $signInStatus",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else if(signInStatus == "success") {
             navController.navigate("home_screen") {
                 popUpTo("registration_screen") { inclusive = true }  // тема которая не пускает назад на экран регистрации в случае успеха
             }
@@ -94,24 +109,24 @@ fun LoginScreen( viewModel: AuthLogicViewModel = viewModel(), navController: Nav
                     },
                     modifier = Modifier
                         .fillMaxWidth(0.7f)
-                        .height(100.dp),
+                        .height(70.dp),
                     colors = ButtonDefaults.buttonColors(Color.White),
                     border = ButtonDefaults.outlinedButtonBorder(enabled = true)
                 )
                 {
                     Text(
-                        text = "LogIn",
+                        text = "Registration",
                         color = Color.Black
                     )
                 }
                 Spacer(modifier = Modifier.height(15.dp))
                 Button(
                     onClick = {
-
+                        viewModel.signIn(email, password)
                     },
                     modifier = Modifier
                         .fillMaxWidth(0.7f)
-                        .height(100.dp),
+                        .height(70.dp),
                     colors = ButtonDefaults.buttonColors(Color.White),
                     border = ButtonDefaults.outlinedButtonBorder(enabled = true)
                 )

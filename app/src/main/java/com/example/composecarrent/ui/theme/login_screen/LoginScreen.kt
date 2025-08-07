@@ -30,17 +30,22 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.composecarrent.R
+import kotlin.math.log
 
 @Composable
-fun LoginScreen( viewModel: AuthLogicViewModel = viewModel(), navController: NavController) {
+fun LoginScreen(viewModel: AuthLogicViewModel = viewModel(), navController: NavController) {
 
     var email by remember { mutableStateOf("") }       // cостояние отслеживает изменение имейла
     var password by remember { mutableStateOf("") }    // cостояние отслеживает изменение пароля
-    val context = LocalContext.current                      // получение контекста текущей активити для передачи в Тост
-    val registrationStatus = viewModel.registrationStatus   // получение из вью модел статуса регистрации
+    val context =
+        LocalContext.current                      // получение контекста текущей активити для передачи в Тост
+    val registrationStatus =
+        viewModel.registrationStatus   // получение из вью модел статуса регистрации
     val signInStatus = viewModel.signInStatus  // получение из вью статуса авторизации
+    val logOutStatus = viewModel.logOutStatus // отслеживание статуса выхода из аккаунта
+    val deleteAccountStatus = viewModel.deleteAccountStatus // отслеживание статуса удаления аккаунта
 
-        // наблюдение за статусом регистрации и дальнейшая логика
+    // наблюдение за статусом регистрации и дальнейшая логика
     LaunchedEffect(registrationStatus) {
         if (registrationStatus != null && registrationStatus != "success") {
             Toast.makeText(
@@ -48,13 +53,16 @@ fun LoginScreen( viewModel: AuthLogicViewModel = viewModel(), navController: Nav
                 "Ошибка: $registrationStatus",
                 Toast.LENGTH_SHORT
             ).show()
-        } else if(registrationStatus == "success") {
+        } else if (registrationStatus == "success") {
             navController.navigate("home_screen") {
-                popUpTo("registration_screen") { inclusive = true }  // тема которая не пускает назад на экран регистрации в случае успеха
+                popUpTo("registration_screen") {
+                    inclusive = true
+                }  // тема которая не пускает назад на экран регистрации в случае успеха
             }
         }
     }
 
+    // наблюдение за статусом входа в приложение
     LaunchedEffect(signInStatus) {
         if (signInStatus != null && signInStatus != "success") {
             Toast.makeText(
@@ -62,10 +70,41 @@ fun LoginScreen( viewModel: AuthLogicViewModel = viewModel(), navController: Nav
                 "Ошибка: $signInStatus",
                 Toast.LENGTH_SHORT
             ).show()
-        } else if(signInStatus == "success") {
+        } else if (signInStatus == "success") {
             navController.navigate("home_screen") {
-                popUpTo("registration_screen") { inclusive = true }  // тема которая не пускает назад на экран регистрации в случае успеха
+                popUpTo("registration_screen") {
+                    inclusive = true
+                }  // тема которая не пускает назад на экран регистрации в случае успеха
             }
+        }
+    }
+
+    // наблюение за статусом выхода из аккаунта
+    LaunchedEffect(logOutStatus) {
+        if (logOutStatus != null && logOutStatus != "success") {
+            Toast.makeText(
+                context,
+                "Ошибка: $logOutStatus",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else if (logOutStatus == "success") {
+            navController.navigate("registration_screen")
+        }
+    }
+
+    LaunchedEffect(deleteAccountStatus) {
+        if (deleteAccountStatus != null && deleteAccountStatus != "success") {
+            Toast.makeText(
+                context,
+                "Ошибка: $deleteAccountStatus",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else if (deleteAccountStatus == "success") {
+            Toast.makeText(
+                context,
+                "Account was deleted successful",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -102,41 +141,41 @@ fun LoginScreen( viewModel: AuthLogicViewModel = viewModel(), navController: Nav
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.height(150.dp))
-                Column() {
-                Button(
-                    onClick = {
-                        viewModel.register(email, password)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth(0.7f)
-                        .height(70.dp),
-                    colors = ButtonDefaults.buttonColors(Color.White),
-                    border = ButtonDefaults.outlinedButtonBorder(enabled = true)
-                )
-                {
-                    Text(
-                        text = "Registration",
-                        color = Color.Black
+                Column {
+                    Button(
+                        onClick = {
+                            viewModel.register(email, password)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth(0.7f)
+                            .height(70.dp),
+                        colors = ButtonDefaults.buttonColors(Color.White),
+                        border = ButtonDefaults.outlinedButtonBorder(enabled = true)
                     )
-                }
-                Spacer(modifier = Modifier.height(15.dp))
-                Button(
-                    onClick = {
-                        viewModel.signIn(email, password)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth(0.7f)
-                        .height(70.dp),
-                    colors = ButtonDefaults.buttonColors(Color.White),
-                    border = ButtonDefaults.outlinedButtonBorder(enabled = true)
-                )
-                {
-                    Text(
-                        text = "SignIn",
-                        color = Color.Black
+                    {
+                        Text(
+                            text = "Registration",
+                            color = Color.Black
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(15.dp))
+                    Button(
+                        onClick = {
+                            viewModel.signIn(email, password)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth(0.7f)
+                            .height(70.dp),
+                        colors = ButtonDefaults.buttonColors(Color.White),
+                        border = ButtonDefaults.outlinedButtonBorder(enabled = true)
                     )
+                    {
+                        Text(
+                            text = "SignIn",
+                            color = Color.Black
+                        )
+                    }
                 }
-            }
             }
         }
     }

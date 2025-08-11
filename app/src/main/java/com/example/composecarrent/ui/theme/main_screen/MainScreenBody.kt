@@ -1,27 +1,18 @@
 package com.example.composecarrent.ui.theme.main_screen
 
-import android.content.ClipData.Item
-import android.graphics.Paint.Align
-import android.widget.ImageView
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -31,38 +22,42 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.drawable.toDrawable
 import com.example.composecarrent.R
+import com.example.composecarrent.ui.theme.data.CarDataModel
 
-var favStatus by mutableStateOf<Boolean>(true)
+var favStatus by mutableStateOf(true)
     private set
 
-/*
+val carList = listOf(
+    CarDataModel("", "Vaz", "911", "1000", "10", "29", "Механика", "Бензин", "Киев"),
+    CarDataModel("", "Skoda", "911", "1000", "10", "29", "Механика", "Бензин", "Киев"),
+    CarDataModel("", "Skoda", "911", "1000", "10", "29", "Механика", "Бензин", "Киев"),
+    CarDataModel("", "Skoda", "911", "1000", "10", "29", "Механика", "Бензин", "Киев"),
+    CarDataModel("", "Skoda", "911", "1000", "10", "29", "Механика", "Бензин", "Киев"),
+    CarDataModel("", "Skoda", "911", "1000", "10", "29", "Механика", "Бензин", "Киев"),
+    CarDataModel("", "Skoda", "911", "1000", "10", "29", "Механика", "Бензин", "Киев")
+)
+
+
 @Composable
-fun MainScreenBody(list: List<CarCardModel>) {
+fun MainScreenBody(list: List<CarDataModel>, modifier: Modifier = Modifier) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier
     ) {
         itemsIndexed(list) { _, item ->
             CarCards(item)
         }
     }
 }
-*/
 
-@Preview(showBackground = true)
 @Composable
-fun CarCards() {
+fun CarCards(item: CarDataModel) {
 
     val colorGreen = colorResource(id = R.color.green)
     val colorGrey = colorResource(id = R.color.grey)
@@ -87,7 +82,7 @@ fun CarCards() {
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = colorGrey,
-                    text = "Bugatti"
+                    text = item.mark
                 )
                 Row(
                     modifier = Modifier
@@ -97,7 +92,7 @@ fun CarCards() {
                     Text(
                         fontSize = 15.sp,
                         color = colorGrey,
-                        text = "La Voiture Noire"
+                        text = item.model
                     )
                 }
                 Text(
@@ -107,7 +102,7 @@ fun CarCards() {
                     fontSize = 20.sp,
                     color = colorGreen,
                     fontWeight = FontWeight.Bold,
-                    text = "6000$"
+                    text = "${item.coast}$"
                 )
                 Row(
                     modifier = Modifier
@@ -115,23 +110,27 @@ fun CarCards() {
                         .padding(5.dp),
                 ) {
                     Image(
-                        modifier = Modifier.padding(end = 5.dp).size(15.dp),
+                        modifier = Modifier
+                            .padding(end = 5.dp)
+                            .size(15.dp),
                         painter = painterResource(id = R.drawable.ic_consumption),
                         contentDescription = "Пробег"
                     )
                     Text(
                         color = colorGrey,
-                        text = "20.тыс."
+                        text = "${item.consumption}км."
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Image(
-                        modifier = Modifier.padding(end = 5.dp).size(15.dp),
+                        modifier = Modifier
+                            .padding(end = 5.dp)
+                            .size(15.dp),
                         painter = painterResource(id = R.drawable.ic_transmision),
                         contentDescription = "Коробка"
                     )
                     Text(
                         color = colorGrey,
-                        text = "Авто"
+                        text = item.transmission
                     )
                 }
                 Row(
@@ -140,28 +139,34 @@ fun CarCards() {
                         .padding(5.dp),
                 ) {
                     Image(
-                        modifier = Modifier.padding(end = 5.dp).size(15.dp),
+                        modifier = Modifier
+                            .padding(end = 5.dp)
+                            .size(15.dp),
                         painter = painterResource(id = R.drawable.ic_fuel),
                         contentDescription = "Бензин"
                     )
                     Text(
                         color = colorGrey,
-                        text = "22.3л"
+                        text = "${item.fuel}л."
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Image(
-                        modifier = Modifier.padding(end = 5.dp).size(15.dp),
+                        modifier = Modifier
+                            .padding(end = 5.dp)
+                            .size(15.dp),
                         painter = painterResource(id = R.drawable.ic_location),
                         contentDescription = "Город"
                     )
                     Text(
                         color = colorGrey,
-                        text = "Киев"
+                        text = item.location
                     )
                 }
                 IconButton(
                     onClick = {},
-                    modifier = Modifier.align(Alignment.End).padding(end = 10.dp)
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .padding(end = 10.dp)
                 ) {
                     when (favStatus) {
                         true -> Icon(
@@ -180,7 +185,6 @@ fun CarCards() {
             }
         }
     }
-
 }
 
 

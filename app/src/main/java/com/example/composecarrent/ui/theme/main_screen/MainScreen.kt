@@ -16,12 +16,12 @@ import androidx.compose.ui.zIndex
 import com.example.composecarrent.ui.theme.bottomNavigation.BottomNavItemLine
 import com.example.composecarrent.ui.theme.bottomNavigation.TopBar
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Preview(showBackground = true)
 @Composable
 fun MainScreen() {
     val drawerState = rememberDrawerState(DrawerValue.Open) // ( состояние, открыто по умолчанию )
+
     ModalNavigationDrawer(
         drawerState = drawerState,   // передача состояния ( открыто по умолчанию)
         drawerContent = {
@@ -43,9 +43,10 @@ fun MainScreen() {
                 BottomNavItemLine()   // передача в Scaffold нижнего меню
             }
         ) { padding ->
+
             MainScreenBody(
-                modifier = Modifier.padding(padding),
-                list = carList,
+                carList,
+                modifier = Modifier.padding(padding)
             )
         }
     }

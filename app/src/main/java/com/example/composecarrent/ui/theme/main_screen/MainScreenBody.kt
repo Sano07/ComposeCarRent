@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,9 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -30,9 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
-
-var favStatus by mutableStateOf(true)
-    private set
 
 val carList = listOf(
     CarDataModel("", "Vaz", "911", "1000", "10", "29", "Механика", "Бензин", "Киев"),
@@ -47,6 +40,7 @@ val carList = listOf(
 
 @Composable
 fun MainScreenBody(list: List<CarDataModel>, modifier: Modifier = Modifier) {
+
     LazyColumn(
         modifier = modifier
     ) {
@@ -163,24 +157,18 @@ fun CarCards(item: CarDataModel) {
                     )
                 }
                 IconButton(
-                    onClick = {},
+                    onClick = {
+
+                    },
                     modifier = Modifier
                         .align(Alignment.End)
                         .padding(end = 10.dp)
                 ) {
-                    when (favStatus) {
-                        true -> Icon(
-                            modifier = Modifier.size(50.dp),
-                            painter = painterResource(R.drawable.ic_favorite_red),
-                            contentDescription = "Добавлено в избранное"
-                        )
-
-                        false -> Icon(
-                            modifier = Modifier.size(50.dp),
-                            painter = painterResource(R.drawable.ic_favorite_black),
-                            contentDescription = "Не добавлено в избранное",
-                        )
-                    }
+                    Icon(
+                        modifier = Modifier.size(50.dp),
+                        painter = painterResource(R.drawable.ic_favorite_red),  // всегда красная иконка
+                        contentDescription = "Добавлено в избранное"
+                    )
                 }
             }
         }

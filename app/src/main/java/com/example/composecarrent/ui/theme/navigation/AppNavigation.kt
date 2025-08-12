@@ -19,7 +19,6 @@ fun AppNavigation() {
         }
         composable("home_screen") {
             MainScreen()
-            MainScreenBody(carList)
         }
     }
 }

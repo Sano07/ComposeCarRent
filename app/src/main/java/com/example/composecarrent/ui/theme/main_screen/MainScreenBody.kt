@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -39,19 +40,20 @@ val carList = listOf(
 
 
 @Composable
-fun MainScreenBody(list: List<CarDataModel>, modifier: Modifier = Modifier) {
+fun MainScreenBody(list: List<CarDataModel>, modifier: Modifier = Modifier, favCars: Set<Int>, onFavCarChange: (Int) -> Unit) {
 
     LazyColumn(
         modifier = modifier
     ) {
-        itemsIndexed(list) { _, item ->
-            CarCards(item)
+        itemsIndexed(list) { index, item ->
+            val isFav = favCars.contains(index)
+            CarCards(item, isFav, onFavCarChange = { onFavCarChange(index) })
         }
     }
 }
 
 @Composable
-fun CarCards(item: CarDataModel) {
+fun CarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: () -> Unit) {
 
     val colorGreen = colorResource(id = R.color.green)
     val colorGrey = colorResource(id = R.color.grey)
@@ -112,7 +114,7 @@ fun CarCards(item: CarDataModel) {
                     )
                     Text(
                         color = colorGrey,
-                        text = "${item.consumption}км."
+                        text = "${item.consumption}т.км."
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Image(
@@ -141,7 +143,7 @@ fun CarCards(item: CarDataModel) {
                     )
                     Text(
                         color = colorGrey,
-                        text = "${item.fuel}л."
+                        text = item.fuel
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Image(
@@ -157,17 +159,16 @@ fun CarCards(item: CarDataModel) {
                     )
                 }
                 IconButton(
-                    onClick = {
-
-                    },
+                    onClick = onFavCarChange,
                     modifier = Modifier
                         .align(Alignment.End)
                         .padding(end = 10.dp)
                 ) {
                     Icon(
                         modifier = Modifier.size(50.dp),
-                        painter = painterResource(R.drawable.ic_favorite_red),  // всегда красная иконка
-                        contentDescription = "Добавлено в избранное"
+                        painter = painterResource(R.drawable.ic_favorite),
+                        contentDescription = "Добавлено в избранное",
+                        tint = if (isFav) Color.Red else Color.Black
                     )
                 }
             }

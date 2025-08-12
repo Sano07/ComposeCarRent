@@ -1,32 +1,29 @@
 package com.example.composecarrent.ui.theme.bottomNavigation
 
-import android.graphics.drawable.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.zIndex
+import kotlinx.coroutines.Job
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar() {
+fun TopBar(onDrawerChange: () -> Unit) {
     TopAppBar(
-        title = { Text(text = "top bar") },
-        navigationIcon = {
+        title = { Text(text = "") },
+        actions = {
             IconButton(
-                onClick = {},
+                onClick =  onDrawerChange,
             ) {
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = "Меню",
-                    tint = Color.Black
+                    tint = Color.Black,
                 )
             }
         }

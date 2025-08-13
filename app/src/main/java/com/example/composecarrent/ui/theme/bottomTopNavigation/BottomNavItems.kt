@@ -1,4 +1,4 @@
-package com.example.composecarrent.ui.theme.bottomNavigation
+package com.example.composecarrent.ui.theme.bottomTopNavigation
 
 import com.example.composecarrent.R
 

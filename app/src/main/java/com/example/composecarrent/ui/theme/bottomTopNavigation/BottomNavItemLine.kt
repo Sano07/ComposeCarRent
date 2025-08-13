@@ -1,4 +1,4 @@
-package com.example.composecarrent.ui.theme.bottomNavigation
+package com.example.composecarrent.ui.theme.bottomTopNavigation
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -6,13 +6,10 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
 fun BottomNavItemLine() {

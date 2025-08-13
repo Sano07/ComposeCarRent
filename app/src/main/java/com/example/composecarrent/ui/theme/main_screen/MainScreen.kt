@@ -15,19 +15,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.zIndex
-import com.example.composecarrent.ui.theme.bottomNavigation.BottomNavItemLine
-import com.example.composecarrent.ui.theme.bottomNavigation.TopBar
+import com.example.composecarrent.ui.theme.bottomTopNavigation.BottomNavItemLine
+import com.example.composecarrent.ui.theme.bottomTopNavigation.TopBar
+import com.example.composecarrent.ui.theme.data.CarDataModel
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
-@Preview(showBackground = true)
 @Composable
 fun MainScreen() {
     val drawerState = rememberDrawerState(DrawerValue.Closed) // ( состояние, открыто по умолчанию )
     var favCars by remember { mutableStateOf(setOf<Int>()) }
+    var favCarList by remember { mutableStateOf(listOf<CarDataModel>()) }
     val coroutineScope = rememberCoroutineScope()
+    val db = Firebase.firestore
 
     ModalNavigationDrawer(
         drawerState = drawerState,   // передача состояния ( открыто по умолчанию)
@@ -61,14 +64,31 @@ fun MainScreen() {
                 carList,
                 modifier = Modifier.padding(padding),
                 favCars,
-                onFavCarChange = { carIndex ->
-                    favCars = if (favCars.contains(carIndex)) {
-                        favCars - carIndex
+                onFavCarChange = { carId : Int ->
+                    favCars = if (favCars.contains(carId)) {
+                        favCars - carId
                     } else {
-                        favCars + carIndex
+                        favCars + carId
                     }
                 }
             )
+        }
+
+        fun updateFavCarBD(list : List<CarDataModel>, favCars: Set<Int>) {
+
+            favCarList = list.filter { it.id in favCars }
+
+            favCarList.forEach { item ->
+                val docId = db.collection("favCars").document(item.id.toString())
+
+                docId.get().addOnSuccessListener { doc ->
+                    if (!doc.exists()) {
+                        docId.set(item)
+                    } else {
+                        docId.delete()
+                    }
+                }
+            }
         }
     }
 }

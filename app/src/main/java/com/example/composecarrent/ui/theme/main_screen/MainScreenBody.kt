@@ -29,13 +29,7 @@ import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
 
 val carList = listOf(
-    CarDataModel("", "Vaz", "911", "1000", "10", "29", "Механика", "Бензин", "Киев"),
-    CarDataModel("", "Skoda", "911", "1000", "10", "29", "Механика", "Бензин", "Киев"),
-    CarDataModel("", "Skoda", "911", "1000", "10", "29", "Механика", "Бензин", "Киев"),
-    CarDataModel("", "Skoda", "911", "1000", "10", "29", "Механика", "Бензин", "Киев"),
-    CarDataModel("", "Skoda", "911", "1000", "10", "29", "Механика", "Бензин", "Киев"),
-    CarDataModel("", "Skoda", "911", "1000", "10", "29", "Механика", "Бензин", "Киев"),
-    CarDataModel("", "Skoda", "911", "1000", "10", "29", "Механика", "Бензин", "Киев")
+
 )
 
 
@@ -53,7 +47,7 @@ fun MainScreenBody(list: List<CarDataModel>, modifier: Modifier = Modifier, favC
 }
 
 @Composable
-fun CarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: () -> Unit) {
+fun CarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: (String) -> Unit) {
 
     val colorGreen = colorResource(id = R.color.green)
     val colorGrey = colorResource(id = R.color.grey)
@@ -159,7 +153,7 @@ fun CarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: () -> Unit) {
                     )
                 }
                 IconButton(
-                    onClick = onFavCarChange,
+                    onClick = { onFavCarChange(item.id )},
                     modifier = Modifier
                         .align(Alignment.End)
                         .padding(end = 10.dp)

@@ -1,6 +1,7 @@
 package com.example.composecarrent.ui.theme.data
 
 data class CarDataModel(
+    val id : Int,
     val carIcon : String,
     val mark : String,
     val model : String,

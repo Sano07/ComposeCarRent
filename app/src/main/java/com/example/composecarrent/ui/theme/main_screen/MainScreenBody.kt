@@ -29,7 +29,18 @@ import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
 
 val carList = listOf(
-
+    CarDataModel(
+        id = 1,
+        carIcon = "",
+        mark = "test",
+        model = "test",
+        coast = "test",
+        mileage = "test",
+        consumption = "test",
+        transmission = "test",
+        fuel = "test",
+        location = "test"
+    )
 )
 
 
@@ -153,7 +164,7 @@ fun CarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: (String) -> Uni
                     )
                 }
                 IconButton(
-                    onClick = { onFavCarChange(item.id )},
+                    onClick = { onFavCarChange(item.id.toString() )},
                     modifier = Modifier
                         .align(Alignment.End)
                         .padding(end = 10.dp)

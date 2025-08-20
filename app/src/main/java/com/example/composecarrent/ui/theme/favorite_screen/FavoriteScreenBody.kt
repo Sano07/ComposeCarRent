@@ -1,7 +1,6 @@
 package com.example.composecarrent.ui.theme.favorite_screen
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,41 +15,34 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
-import com.example.composecarrent.ui.theme.main_screen.CarCards
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
-import com.google.firebase.firestore.ktx.firestore
 
 @Composable
-fun FavoriteScreen(favCars: Set<Int>, onFavCarChange: (Int) -> Unit) {
+fun FavoriteScreenBody(carList : List<CarDataModel>, favCars: Set<Int>, onFavCarChange: (Int) -> Unit) {
+
+    val favCarList = carList.filter { favCars.equals(it.id) }
 
     LazyColumn(
     ) {
-        itemsIndexed(favCars.toList()) { index, item ->
-            val isFav = favCars.contains(index)
-            FavCarCards(item, isFav, onFavCarChange = { onFavCarChange(index) })
+        itemsIndexed(favCarList.toList()) { _, item ->
+            FavCarCards(item, favCarsDelete = { onFavCarChange(item.id) })
         }
     }
 }
 
 @Composable
-fun FavCarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: () -> Unit) {
+fun FavCarCards(list: CarDataModel, favCarsDelete: () -> Unit) {
 
     val colorGreen = colorResource(id = R.color.green)
     val colorGrey = colorResource(id = R.color.grey)
@@ -76,7 +68,7 @@ fun FavCarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: () -> Unit) 
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = colorGrey,
-                        text = "item.mark"
+                        text = list.mark
                     )
                     Row(
                         modifier = Modifier
@@ -86,7 +78,7 @@ fun FavCarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: () -> Unit) 
                         Text(
                             fontSize = 15.sp,
                             color = colorGrey,
-                            text = "item.model"
+                            text = list.model
                         )
                     }
                     Text(
@@ -96,7 +88,7 @@ fun FavCarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: () -> Unit) 
                         fontSize = 20.sp,
                         color = colorGreen,
                         fontWeight = FontWeight.Bold,
-                        text = "123"
+                        text = "${list.coast}$"
                     )
                     Row(
                         modifier = Modifier
@@ -112,7 +104,7 @@ fun FavCarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: () -> Unit) 
                         )
                         Text(
                             color = colorGrey,
-                            text = "т.км."
+                            text = "${list.consumption}т.км."
                         )
                         Spacer(modifier = Modifier.width(5.dp))
                         Image(
@@ -124,7 +116,7 @@ fun FavCarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: () -> Unit) 
                         )
                         Text(
                             color = colorGrey,
-                            text = "item.transmission"
+                            text = list.transmission
                         )
                     }
                     Row(
@@ -141,7 +133,7 @@ fun FavCarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: () -> Unit) 
                         )
                         Text(
                             color = colorGrey,
-                            text = "item.fuel"
+                            text = list.fuel
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Image(
@@ -153,7 +145,7 @@ fun FavCarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: () -> Unit) 
                         )
                         Text(
                             color = colorGrey,
-                            text = "item.location"
+                            text = list.location
                         )
                     }
                 }
@@ -164,7 +156,7 @@ fun FavCarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: () -> Unit) 
             ) {
                 Button(
                     onClick = {
-                        //onFavCarChange
+                        // какая то логика для заказа машины
                     },
                     modifier = Modifier
                         .padding(end = 10.dp)
@@ -176,7 +168,7 @@ fun FavCarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: () -> Unit) 
                 }
                 Button(
                     onClick = {
-                        //onFavCarChange
+                        favCarsDelete()
                     },
                     modifier = Modifier
                         .padding(end = 10.dp)

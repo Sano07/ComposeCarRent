@@ -25,9 +25,8 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
-fun MainScreen() {
+fun MainScreen(favCars: Set<Int>, onFavCarChange: (Int) -> Unit) {
     val drawerState = rememberDrawerState(DrawerValue.Closed) // ( состояние, открыто по умолчанию )
-    var favCars by remember { mutableStateOf(setOf<Int>()) }
     var favCarList by remember { mutableStateOf(listOf<CarDataModel>()) }
     val coroutineScope = rememberCoroutineScope()
     val db = Firebase.firestore
@@ -64,13 +63,7 @@ fun MainScreen() {
                 carList,
                 modifier = Modifier.padding(padding),
                 favCars,
-                onFavCarChange = { carId : Int ->
-                    favCars = if (favCars.contains(carId)) {
-                        favCars - carId
-                    } else {
-                        favCars + carId
-                    }
-                }
+                onFavCarChange = onFavCarChange
             )
         }
 

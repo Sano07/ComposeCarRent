@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,6 +18,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -27,25 +32,35 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 @Composable
-fun FavoriteScreenBody(carList : List<CarDataModel>, favCars: Set<Int>, onFavCarChange: (Int) -> Unit) {
+fun FavoriteScreenBody(modifier: Modifier = Modifier) {
+    var favoriteCarList by remember { mutableStateOf<List<CarDataModel>>(emptyList()) }
 
-    val favCarList = carList.filter { favCars.equals(it.id) }
+    val db = Firebase.firestore
+    db.collection("favCars")
+            .get()
+            .addOnSuccessListener { result ->
+                favoriteCarList = result.toObjects(CarDataModel::class.java)
+            }
 
     LazyColumn(
+        modifier = modifier
     ) {
-        itemsIndexed(favCarList.toList()) { _, item ->
-            FavCarCards(item, favCarsDelete = { onFavCarChange(item.id) })
+        itemsIndexed(favoriteCarList.toList()) { _, item ->
+            FavCarCards(item)
         }
     }
 }
 
 @Composable
-fun FavCarCards(list: CarDataModel, favCarsDelete: () -> Unit) {
+fun FavCarCards(list: CarDataModel) {
 
     val colorGreen = colorResource(id = R.color.green)
     val colorGrey = colorResource(id = R.color.grey)
+    val db = Firebase.firestore
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -168,7 +183,15 @@ fun FavCarCards(list: CarDataModel, favCarsDelete: () -> Unit) {
                 }
                 Button(
                     onClick = {
-                        favCarsDelete()
+                        val docId = db.collection("favCars").document(list.id.toString())
+
+                        docId.get().addOnSuccessListener { doc ->
+                            if (!doc.exists()) {
+                                docId.set(list)
+                            } else {
+                                docId.delete()
+                            }
+                        }
                     },
                     modifier = Modifier
                         .padding(end = 10.dp)

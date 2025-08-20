@@ -16,6 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
 import com.example.composecarrent.ui.theme.bottomTopNavigation.BottomNavItemLine
 import com.example.composecarrent.ui.theme.bottomTopNavigation.TopBar
 import com.example.composecarrent.ui.theme.data.CarDataModel
@@ -25,17 +26,22 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
-fun MainScreen(favCars: Set<Int>, onFavCarChange: (Int) -> Unit) {
+fun MainScreen(
+    navController: NavController,
+    favCars: Set<Int>,
+    onFavCarChange: (Int) -> Unit
+) {
     val drawerState = rememberDrawerState(DrawerValue.Closed) // ( состояние, открыто по умолчанию )
-    var favCarList by remember { mutableStateOf(listOf<CarDataModel>()) }
+    //var favCarList by remember { mutableStateOf(listOf<CarDataModel>()) }
     val coroutineScope = rememberCoroutineScope()
-    val db = Firebase.firestore
 
     ModalNavigationDrawer(
         drawerState = drawerState,   // передача состояния ( открыто по умолчанию)
         drawerContent = {
             Column(
-                modifier = Modifier.fillMaxWidth(0.7f).zIndex(100f) // дравер занимает 70% экрана
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .zIndex(100f) // дравер занимает 70% экрана
             ) {
                 DrawerHeader()
                 DrawerBody()
@@ -47,7 +53,7 @@ fun MainScreen(favCars: Set<Int>, onFavCarChange: (Int) -> Unit) {
             modifier = Modifier.zIndex(100f),
             topBar = {
                 TopBar(
-                    onDrawerChange ={
+                    onDrawerChange = {
                         coroutineScope.launch {
                             drawerState.open()
                         }
@@ -55,7 +61,7 @@ fun MainScreen(favCars: Set<Int>, onFavCarChange: (Int) -> Unit) {
                 )
             },
             bottomBar = {
-                BottomNavItemLine()   // передача в Scaffold нижнего меню
+                BottomNavItemLine(navController = navController)   // передача в Scaffold нижнего меню
             }
         ) { padding ->
 
@@ -67,9 +73,10 @@ fun MainScreen(favCars: Set<Int>, onFavCarChange: (Int) -> Unit) {
             )
         }
 
-        fun updateFavCarBD(list : List<CarDataModel>, favCars: Set<Int>) {
+        /*
+        fun addCarToFavorite(list: List<CarDataModel>, favCars: Set<Int>) {
 
-            favCarList = list.filter { it.id in favCars }
+            favCarList = carList.filter { favCars.contains(it.id) }
 
             favCarList.forEach { item ->
                 val docId = db.collection("favCars").document(item.id.toString())
@@ -83,5 +90,6 @@ fun MainScreen(favCars: Set<Int>, onFavCarChange: (Int) -> Unit) {
                 }
             }
         }
+        */
     }
 }

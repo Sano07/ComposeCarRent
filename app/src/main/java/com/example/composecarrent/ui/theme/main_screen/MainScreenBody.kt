@@ -27,12 +27,38 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 val carList = listOf(
     CarDataModel(
         id = 1,
         carIcon = "",
-        mark = "test",
+        mark = "test1",
+        model = "test",
+        coast = "test",
+        mileage = "test",
+        consumption = "test",
+        transmission = "test",
+        fuel = "test",
+        location = "test"
+    ),
+    CarDataModel(
+        id = 2,
+        carIcon = "",
+        mark = "test2",
+        model = "test",
+        coast = "test",
+        mileage = "test",
+        consumption = "test",
+        transmission = "test",
+        fuel = "test",
+        location = "test"
+    ),
+    CarDataModel(
+        id = 3,
+        carIcon = "",
+        mark = "test3",
         model = "test",
         coast = "test",
         mileage = "test",
@@ -45,8 +71,12 @@ val carList = listOf(
 
 
 @Composable
-fun MainScreenBody(list: List<CarDataModel>, modifier: Modifier = Modifier, favCars: Set<Int>, onFavCarChange: (Int) -> Unit) {
-
+fun MainScreenBody(
+    list: List<CarDataModel>,
+    modifier: Modifier = Modifier,
+    favCars: Set<Int>,
+    onFavCarChange: (Int) -> Unit
+) {
     LazyColumn(
         modifier = modifier
     ) {
@@ -62,6 +92,7 @@ fun CarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: (String) -> Uni
 
     val colorGreen = colorResource(id = R.color.green)
     val colorGrey = colorResource(id = R.color.grey)
+    val db = Firebase.firestore
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -164,7 +195,18 @@ fun CarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: (String) -> Uni
                     )
                 }
                 IconButton(
-                    onClick = { onFavCarChange(item.id.toString() )},
+                    onClick = {
+                        onFavCarChange(item.id.toString())
+                        val docId = db.collection("favCars").document(item.id.toString())
+
+                        docId.get().addOnSuccessListener { doc ->
+                            if (!doc.exists()) {
+                                docId.set(item)
+                            } else {
+                                docId.delete()
+                            }
+                        }
+                    },
                     modifier = Modifier
                         .align(Alignment.End)
                         .padding(end = 10.dp)

@@ -18,6 +18,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             var favCars by remember { mutableStateOf(setOf<Int>()) }
+
             AppNavigation(
                 favCar = favCars,
                 onFavCarChange = { carId ->
@@ -28,6 +29,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             )
-            }
         }
     }
+}

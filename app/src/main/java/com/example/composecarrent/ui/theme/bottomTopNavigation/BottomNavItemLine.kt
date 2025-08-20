@@ -10,9 +10,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @Composable
-fun BottomNavItemLine() {
+fun BottomNavItemLine(navController : NavController) {
     // список іtem-ов которые будут отображаться внизу
     val listItems = listOf(BottomNavItems.Home, BottomNavItems.Favorite, BottomNavItems.Settings)
 
@@ -25,6 +26,12 @@ fun BottomNavItemLine() {
                 selected = selectedItem.value == item.title,
                 onClick = {
                     selectedItem.value = item.title
+                    navController.navigate(item.route) {
+                        // чтобы не дублировать экраны в backstack
+                        popUpTo(navController.graph.startDestinationId) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 },
                 icon = {
                     Icon(painter = painterResource(id = item.iconId), contentDescription = "Icon Logo")

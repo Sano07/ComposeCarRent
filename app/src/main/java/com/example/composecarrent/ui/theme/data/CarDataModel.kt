@@ -1,14 +1,14 @@
 package com.example.composecarrent.ui.theme.data
 
 data class CarDataModel(
-    val id : Int,
-    val carIcon : String,
-    val mark : String,
-    val model : String,
-    val coast : String,
-    val mileage : String,
-    val consumption : String,
-    val transmission : String,
-    val fuel : String,
-    val location : String
+    var id : Int = 0,
+    var carIcon : String = "",
+    var mark : String = "",
+    var model : String = "",
+    var coast : String = "",
+    var mileage : String = "",
+    var consumption : String = "",
+    var transmission : String = "",
+    var fuel : String = "",
+    var location : String = ""
 )

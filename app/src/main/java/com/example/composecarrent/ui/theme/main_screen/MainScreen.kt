@@ -9,24 +9,22 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.composecarrent.ui.theme.bottomTopNavigation.BottomNavItemLine
 import com.example.composecarrent.ui.theme.bottomTopNavigation.TopBar
-import com.example.composecarrent.ui.theme.data.CarDataModel
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun MainScreen(
+    selectedItem: MutableState<String>,
+    clicked: MutableState<Boolean>,
     navController: NavController,
     favCars: Set<Int>,
     onFavCarChange: (Int) -> Unit
@@ -61,11 +59,12 @@ fun MainScreen(
                 )
             },
             bottomBar = {
-                BottomNavItemLine(navController = navController)   // передача в Scaffold нижнего меню
+                BottomNavItemLine(selectedItem, navController = navController)   // передача в Scaffold нижнего меню
             }
         ) { padding ->
 
             MainScreenBody(
+                clicked,
                 carList,
                 modifier = Modifier.padding(padding),
                 favCars,

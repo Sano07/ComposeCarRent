@@ -1,8 +1,8 @@
 package com.example.composecarrent.ui.theme.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.navigation.NavController
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -18,6 +18,8 @@ fun AppNavigation(
 ) {
     val favCarList = carList.filter { favCar.contains(it.id) }
     val navController = rememberNavController()
+    val clicked = remember { mutableStateOf(true) }
+    val selectedItem = remember { mutableStateOf("Home") }
 
     NavHost(navController = navController, startDestination = "home_screen") {
         composable("login") {
@@ -25,6 +27,8 @@ fun AppNavigation(
         }
         composable("home_screen") {
             MainScreen(
+                selectedItem,
+                clicked,
                 navController = navController,
                 favCar,
                 onFavCarChange = onFavCarChange
@@ -32,6 +36,8 @@ fun AppNavigation(
         }
         composable("favorite_screen") {
             FavoriteScreen(
+                selectedItem,
+                favCar,
                 navController = navController,
                 favCarList,
                 onFavCarChange = onFavCarChange

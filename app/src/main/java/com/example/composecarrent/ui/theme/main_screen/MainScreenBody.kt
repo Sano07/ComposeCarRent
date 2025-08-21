@@ -16,6 +16,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -72,6 +73,7 @@ val carList = listOf(
 
 @Composable
 fun MainScreenBody(
+    clicked: MutableState<Boolean>,
     list: List<CarDataModel>,
     modifier: Modifier = Modifier,
     favCars: Set<Int>,
@@ -80,15 +82,15 @@ fun MainScreenBody(
     LazyColumn(
         modifier = modifier
     ) {
-        itemsIndexed(list) { index, item ->
-            val isFav = favCars.contains(index)
-            CarCards(item, isFav, onFavCarChange = { onFavCarChange(index) })
+        itemsIndexed(list) { _, item ->
+            val isFav = favCars.contains(item.id)
+            CarCards(favCars, clicked, item, isFav, onFavCarChange = { onFavCarChange(item.id) })
         }
     }
 }
 
 @Composable
-fun CarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: (String) -> Unit) {
+fun CarCards(favCars: Set<Int>, clicked: MutableState<Boolean>, item: CarDataModel, isFav: Boolean, onFavCarChange: (String) -> Unit) {
 
     val colorGreen = colorResource(id = R.color.green)
     val colorGrey = colorResource(id = R.color.grey)
@@ -202,11 +204,11 @@ fun CarCards(item: CarDataModel, isFav: Boolean, onFavCarChange: (String) -> Uni
                         docId.get().addOnSuccessListener { doc ->
                             if (!doc.exists()) {
                                 docId.set(item)
-                            } else {
-                                docId.delete()
                             }
                         }
+                        clicked.value = false
                     },
+                    enabled = !favCars.contains(item.id),
                     modifier = Modifier
                         .align(Alignment.End)
                         .padding(end = 10.dp)

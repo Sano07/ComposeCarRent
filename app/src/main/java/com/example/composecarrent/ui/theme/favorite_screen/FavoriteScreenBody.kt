@@ -2,6 +2,7 @@ package com.example.composecarrent.ui.theme.favorite_screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -31,13 +33,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 @Composable
-fun FavoriteScreenBody(favCars: Set<Int>, favCarState : List<CarDataModel>, modifier: Modifier = Modifier, onFavCarChange: (Int) -> Unit) {
+fun FavoriteScreenBody(modifier: Modifier = Modifier, onFavCarChange: (Int) -> Unit) {
 
     var favoriteCarList by remember { mutableStateOf<List<CarDataModel>>(emptyList()) }
 
@@ -51,27 +54,29 @@ fun FavoriteScreenBody(favCars: Set<Int>, favCarState : List<CarDataModel>, modi
             }
     }
 
-    LazyColumn(
-        modifier = modifier
-    ) {
-        itemsIndexed(favoriteCarList, key = { _, item -> item.id }) { _, item ->
-            val isFav = favCars.contains(item.id)
-            FavCarCards(
-                favCars,
-                onDelete = { carId ->
-                    db.collection("favCars").document(carId.toString()).delete()
-                    favoriteCarList = favoriteCarList.filter { it.id != carId }
+    if (favoriteCarList.isNotEmpty()) {
+        LazyColumn(
+            modifier = modifier
+        ) {
+            itemsIndexed(favoriteCarList, key = { _, item -> item.id }) { _, item ->
+                FavCarCards(
+                    onDelete = { carId ->
+                        db.collection("favCars").document(carId.toString()).delete()
+                        favoriteCarList = favoriteCarList.filter { it.id != carId }
 
-                },
-                list = item,
-                isFav,
-                onFavCarChange)
+                    },
+                    list = item,
+                    onFavCarChange
+                )
+            }
         }
+    } else {
+        EmptyFavCarScreen()
     }
 }
 
 @Composable
-fun FavCarCards(favCars: Set<Int>, onDelete: (Int) -> Unit, list: CarDataModel, isFav: Boolean, onFavCarChange: (Int) -> Unit) {
+fun FavCarCards(onDelete: (Int) -> Unit, list: CarDataModel, onFavCarChange: (Int) -> Unit) {
 
     val colorGreen = colorResource(id = R.color.green)
     val colorGrey = colorResource(id = R.color.grey)
@@ -209,6 +214,29 @@ fun FavCarCards(favCars: Set<Int>, onDelete: (Int) -> Unit, list: CarDataModel, 
                     Text(text = "Delete", color = Color.Black)
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun EmptyFavCarScreen() {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                modifier = Modifier.size(130.dp),
+                painter = painterResource(R.drawable.im_empty_screen),
+                contentDescription = ""
+            )
+            Text(
+                fontSize = 20.sp,
+                text = "List is empty : ("
+            )
         }
     }
 }

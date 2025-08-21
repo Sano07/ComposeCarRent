@@ -1,5 +1,7 @@
 package com.example.composecarrent.ui.theme.navigation
 
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,6 +22,7 @@ fun AppNavigation(
     val navController = rememberNavController()
     val clicked = remember { mutableStateOf(true) }
     val selectedItem = remember { mutableStateOf("Home") }
+    val drawerState = rememberDrawerState(DrawerValue.Closed) // ( состояние, открыто по умолчанию )
 
     NavHost(navController = navController, startDestination = "home_screen") {
         composable("login") {
@@ -27,6 +30,7 @@ fun AppNavigation(
         }
         composable("home_screen") {
             MainScreen(
+                drawerState,
                 selectedItem,
                 clicked,
                 navController = navController,

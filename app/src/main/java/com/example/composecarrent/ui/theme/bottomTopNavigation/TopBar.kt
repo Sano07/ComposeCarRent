@@ -13,18 +13,20 @@ import androidx.compose.ui.graphics.Color
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(onDrawerChange: () -> Unit) {
-    TopAppBar(
-        title = { Text(text = "") },
-        actions = {
-            IconButton(
-                onClick =  onDrawerChange,
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = "Меню",
-                    tint = Color.Black,
-                )
+        TopAppBar(
+            title = { Text(text = "") },
+            actions = {
+                IconButton(
+                    onClick = onDrawerChange,
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = "Меню",
+                        tint = Color.Black,
+                    )
+                }
+
+
             }
-        }
-    )
+        )
 }

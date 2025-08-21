@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
@@ -23,14 +24,13 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun MainScreen(
+    drawerState: DrawerState,
     selectedItem: MutableState<String>,
     clicked: MutableState<Boolean>,
     navController: NavController,
     favCars: Set<Int>,
     onFavCarChange: (Int) -> Unit
 ) {
-    val drawerState = rememberDrawerState(DrawerValue.Closed) // ( состояние, открыто по умолчанию )
-    //var favCarList by remember { mutableStateOf(listOf<CarDataModel>()) }
     val coroutineScope = rememberCoroutineScope()
 
     ModalNavigationDrawer(
@@ -71,24 +71,5 @@ fun MainScreen(
                 onFavCarChange = onFavCarChange
             )
         }
-
-        /*
-        fun addCarToFavorite(list: List<CarDataModel>, favCars: Set<Int>) {
-
-            favCarList = carList.filter { favCars.contains(it.id) }
-
-            favCarList.forEach { item ->
-                val docId = db.collection("favCars").document(item.id.toString())
-
-                docId.get().addOnSuccessListener { doc ->
-                    if (!doc.exists()) {
-                        docId.set(item)
-                    } else {
-                        docId.delete()
-                    }
-                }
-            }
-        }
-        */
     }
 }

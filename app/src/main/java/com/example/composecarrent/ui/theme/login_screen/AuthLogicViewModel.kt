@@ -42,7 +42,10 @@ class AuthLogicViewModel : ViewModel() {
             }
     }
 
-    fun signIn(email: String, password: String) {
+    fun signIn(
+        email: String,
+        password: String
+    ) {
         if (email.isBlank() || password.isBlank()) {
             signInStatus = "Cannot be empty"
             return

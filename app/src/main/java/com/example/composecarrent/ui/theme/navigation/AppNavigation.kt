@@ -5,9 +5,11 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.composecarrent.ui.theme.favorite_screen.FavoriteScreen
 import com.example.composecarrent.ui.theme.login_screen.LoginScreen
 import com.example.composecarrent.ui.theme.main_screen.MainScreen
@@ -24,7 +26,7 @@ fun AppNavigation(
     val selectedItem = remember { mutableStateOf("Home") }
     val drawerState = rememberDrawerState(DrawerValue.Closed) // ( состояние, открыто по умолчанию )
 
-    NavHost(navController = navController, startDestination = "home_screen") {
+    NavHost(navController = navController, startDestination = "login") {
         composable("login") {
             LoginScreen(navController = navController)
         }

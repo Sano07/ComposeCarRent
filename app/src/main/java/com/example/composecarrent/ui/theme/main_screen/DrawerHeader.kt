@@ -20,10 +20,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composecarrent.R
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 // настройка хедера выдвижного дравера
 fun DrawerHeader() {
+
+    val userEmail = FirebaseAuth.getInstance().currentUser?.email ?: ""
 
     // подключение шрифта
     val logoFontFamily = FontFamily(
@@ -32,13 +35,13 @@ fun DrawerHeader() {
 
     Column(
         Modifier.fillMaxWidth()
-            .height(220.dp)
+            .height(240.dp)
             .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            modifier = Modifier.size(150.dp),
+            modifier = Modifier.size(160.dp),
             painter = painterResource(id = R.drawable.im_car_rent_logo),
             contentDescription = "Car_Rent_Logo"
         )
@@ -49,6 +52,13 @@ fun DrawerHeader() {
             fontSize = 30.sp,
             fontFamily = logoFontFamily,
             fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = "Hello, $userEmail!",
+            color = Color.Black,
+            fontSize = 17.sp,
+            fontWeight = FontWeight.Medium
         )
     }
 }

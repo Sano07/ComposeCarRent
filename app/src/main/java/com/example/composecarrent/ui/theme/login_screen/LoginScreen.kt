@@ -112,7 +112,7 @@ fun LoginScreen(viewModel: AuthLogicViewModel = viewModel(), navController: NavC
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Column() {
+        Column {
             Image(
                 modifier = Modifier
                     .size(300.dp)

@@ -10,18 +10,19 @@ activityCompose = "1.10.1"
 composeBom = "2025.07.00"
 lifecycleRuntimeKtxVersion = "2.6.2"
 lifecycleViewmodelCompose = "2.9.2"
-navigationComposeJvmstubs = "2.9.2"
-bomVersion = "34.0.0"
 gmsVersion = "4.4.3"
+
+
+serializationKotlin = "1.7.1"
+serializationVersion = "2.0.0"
 
 [libraries]
 
+
+kotlinx-serializatiom-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serializationKotlin"}
+
 androidx-lifecycle-runtime-ktx-v262 = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtxVersion" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version = "34.0.0" }
-firebase-auth = { group = "com.google.firebase", name = "firebase-auth-ktx" }
-firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore-ktx" }
-firebase-storage = { group = "com.google.firebase", name = "firebase-storage-ktx" }
 
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -38,7 +39,7 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version = "2.9.2" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version = "2.9.3" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -46,4 +47,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 gms = { id = "com.google.gms.google-services", version.ref = "gmsVersion" }
 
-
+plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serializationVersion" }
+compose-compiler = {id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin"}

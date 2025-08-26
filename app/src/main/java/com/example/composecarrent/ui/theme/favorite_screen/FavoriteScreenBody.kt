@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -45,9 +46,12 @@ fun FavoriteScreenBody(modifier: Modifier = Modifier, onFavCarChange: (Int) -> U
     var favoriteCarList by remember { mutableStateOf<List<CarDataModel>>(emptyList()) }
 
     val db = Firebase.firestore
+    val uid = Firebase.auth.currentUser!!.uid
 
     LaunchedEffect(Unit) {
-        db.collection("favCars")
+        db.collection("users")
+            .document(uid)
+            .collection("favCars")
             .get()
             .addOnSuccessListener { result ->
                 favoriteCarList = result.toObjects(CarDataModel::class.java)
@@ -61,9 +65,12 @@ fun FavoriteScreenBody(modifier: Modifier = Modifier, onFavCarChange: (Int) -> U
             itemsIndexed(favoriteCarList, key = { _, item -> item.id }) { _, item ->
                 FavCarCards(
                     onDelete = { carId ->
-                        db.collection("favCars").document(carId.toString()).delete()
+                        db.collection("users")
+                            .document(uid)
+                            .collection("favCars")
+                            .document(carId.toString())
+                            .delete()
                         favoriteCarList = favoriteCarList.filter { it.id != carId }
-
                     },
                     list = item,
                     onFavCarChange

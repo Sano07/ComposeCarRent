@@ -17,9 +17,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,10 +35,10 @@ import com.example.composecarrent.R
 import kotlin.math.log
 
 @Composable
-fun LoginScreen(viewModel: AuthLogicViewModel = viewModel(), navController: NavController) {
+fun LoginScreen(isAdmin: MutableState<Boolean>, viewModel: AuthLogicViewModel = viewModel(), navController: NavController) {
 
-    var email by remember { mutableStateOf("") }       // cостояние отслеживает изменение имейла
-    var password by remember { mutableStateOf("") }    // cостояние отслеживает изменение пароля
+    var email by remember { mutableStateOf("admin@admin.com") }       // cостояние отслеживает изменение имейла
+    var password by remember { mutableStateOf("123456789") }    // cостояние отслеживает изменение пароля
     val context =
         LocalContext.current                      // получение контекста текущей активити для передачи в Тост
     val registrationStatus =
@@ -45,7 +47,15 @@ fun LoginScreen(viewModel: AuthLogicViewModel = viewModel(), navController: NavC
     val logOutStatus = viewModel.logOutStatus // отслеживание статуса выхода из аккаунта
     val deleteAccountStatus = viewModel.deleteAccountStatus // отслеживание статуса удаления аккаунта
 
+    
     // наблюдение за статусом регистрации и дальнейшая логика
+
+    LaunchedEffect(Unit) {
+        viewModel.checkIsAdmin { admin ->
+            isAdmin.value = admin
+        }
+    }
+
     LaunchedEffect(registrationStatus) {
         if (registrationStatus != null && registrationStatus != "success") {
             Toast.makeText(

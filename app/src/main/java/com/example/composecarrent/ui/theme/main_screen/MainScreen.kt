@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun MainScreen(
+    isAdmin: MutableState<Boolean>,
     drawerState: DrawerState,
     selectedItem: MutableState<String>,
     clicked: MutableState<Boolean>,
@@ -64,6 +65,7 @@ fun MainScreen(
         ) { padding ->
 
             MainScreenBody(
+                isAdmin,
                 clicked,
                 carList,
                 modifier = Modifier.padding(padding),

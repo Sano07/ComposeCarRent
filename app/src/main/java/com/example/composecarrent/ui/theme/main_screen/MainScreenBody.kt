@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -73,6 +74,7 @@ val carList = listOf(
 
 @Composable
 fun MainScreenBody(
+    isAdmin: MutableState<Boolean>,
     clicked: MutableState<Boolean>,
     list: List<CarDataModel>,
     modifier: Modifier = Modifier,
@@ -84,17 +86,18 @@ fun MainScreenBody(
     ) {
         itemsIndexed(list) { _, item ->
             val isFav = favCars.contains(item.id)
-            CarCards(favCars, clicked, item, isFav, onFavCarChange = { onFavCarChange(item.id) })
+            CarCards(isAdmin, favCars, clicked, item, isFav, onFavCarChange = { onFavCarChange(item.id) })
         }
     }
 }
 
 @Composable
-fun CarCards(favCars: Set<Int>, clicked: MutableState<Boolean>, item: CarDataModel, isFav: Boolean, onFavCarChange: (String) -> Unit) {
+fun CarCards(isAdmin: MutableState<Boolean>, favCars: Set<Int>, clicked: MutableState<Boolean>, item: CarDataModel, isFav: Boolean, onFavCarChange: (String) -> Unit) {
 
     val colorGreen = colorResource(id = R.color.green)
     val colorGrey = colorResource(id = R.color.grey)
     val db = Firebase.firestore
+    val uid = Firebase.auth.currentUser!!.uid
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -199,8 +202,10 @@ fun CarCards(favCars: Set<Int>, clicked: MutableState<Boolean>, item: CarDataMod
                 IconButton(
                     onClick = {
                         onFavCarChange(item.id.toString())
-                        val docId = db.collection("favCars").document(item.id.toString())
-
+                        val docId = db.collection("users")
+                            .document(uid)
+                            .collection("favCars")
+                            .document(item.id.toString())
                         docId.get().addOnSuccessListener { doc ->
                             if (!doc.exists()) {
                                 docId.set(item)
@@ -213,16 +218,17 @@ fun CarCards(favCars: Set<Int>, clicked: MutableState<Boolean>, item: CarDataMod
                         .align(Alignment.End)
                         .padding(end = 10.dp)
                 ) {
-                    Icon(
-                        modifier = Modifier.size(50.dp),
-                        painter = painterResource(R.drawable.ic_favorite),
-                        contentDescription = "Добавлено в избранное",
-                        tint = if (isFav) Color.Red else Color.Black
-                    )
+                        Icon(
+                            modifier = Modifier.size(50.dp),
+                            painter = painterResource(R.drawable.ic_favorite),
+                            contentDescription = "Добавлено в избранное",
+                            tint = if (isFav) Color.Red else Color.Black
+                        )
                 }
             }
         }
     }
 }
+
 
 

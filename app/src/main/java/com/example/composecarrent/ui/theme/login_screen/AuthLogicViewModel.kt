@@ -1,15 +1,14 @@
 package com.example.composecarrent.ui.theme.login_screen
 
-import android.widget.Toast
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.google.firebase.Firebase
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class AuthLogicViewModel : ViewModel() {
 
@@ -80,4 +79,13 @@ class AuthLogicViewModel : ViewModel() {
         }
 
     }
+
+    fun checkIsAdmin(isAdmin: (Boolean) -> Unit) {
+        val userUid = Firebase.auth.currentUser!!.uid
+        Firebase.firestore.collection("admin")
+            .document(userUid).get().addOnSuccessListener {
+                isAdmin((it.get("admin")) as Boolean)
+            }
+    }
+
 }

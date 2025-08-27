@@ -14,9 +14,6 @@ import com.example.composecarrent.ui.theme.favorite_screen.FavoriteScreen
 import com.example.composecarrent.ui.theme.login_screen.LoginScreen
 import com.example.composecarrent.ui.theme.main_screen.MainScreen
 import com.example.composecarrent.ui.theme.main_screen.carList
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -32,8 +29,6 @@ fun AppNavigation(
     val drawerState = rememberDrawerState(DrawerValue.Closed) // ( состояние, открыто по умолчанию )
     val isAdminState = remember { mutableStateOf(false) }
     val selectedFavCars by remember { mutableStateOf<List<Int>>(emptyList()) }
-    val db = Firebase.firestore
-    val uid = Firebase.auth.currentUser!!.uid
 
     NavHost(navController = navController, startDestination = "login") {
         composable("login") {
@@ -41,6 +36,7 @@ fun AppNavigation(
         }
         composable("home_screen") {
             MainScreen(
+                onFavCarUpdate,
                 selectedFavCars,
                 isAdminState,
                 drawerState,
@@ -61,10 +57,4 @@ fun AppNavigation(
             )
         }
     }
-    db.collection("users")
-        .document(uid)
-        .collection("favCars")
-        .get().addOnSuccessListener { result ->
-            favCar + result.documents.map { it.id }
-        }
 }

@@ -99,6 +99,8 @@ fun CarCards(isAdmin: MutableState<Boolean>, favCars: Set<Int>, clicked: Mutable
     val colorGrey = colorResource(id = R.color.grey)
     val db = Firebase.firestore
     val uid = Firebase.auth.currentUser!!.uid
+    val email = Firebase.auth.currentUser!!.email
+    val safeEmail = email?.replace("@", "_")?.replace(".", "_")
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -204,7 +206,7 @@ fun CarCards(isAdmin: MutableState<Boolean>, favCars: Set<Int>, clicked: Mutable
                     onClick = {
                         onFavCarChange(item.id.toString())
                         val docId = db.collection("users")
-                            .document(uid)
+                            .document("${safeEmail}_$uid")
                             .collection("favCars")
                             .document(item.id.toString())
                         docId.get().addOnSuccessListener { doc ->

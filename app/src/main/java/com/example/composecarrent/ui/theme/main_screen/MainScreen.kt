@@ -8,6 +8,7 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -23,6 +24,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun MainScreen(
+    onFavCarUpdate: (Set<Int>) -> Unit,
     selectedFavCars: List<Int>,
     isAdmin: MutableState<Boolean>,
     drawerState: DrawerState,
@@ -63,6 +65,38 @@ fun MainScreen(
                 BottomNavItemLine(selectedItem, navController = navController)   // передача в Scaffold нижнего меню
             }
         ) { padding ->
+
+            fun checkFavCars(onResult: (Set<Int>) -> Unit) {
+                val uid = Firebase.auth.currentUser!!.uid
+                val email = Firebase.auth.currentUser!!.email
+                Firebase.firestore.collection("users")
+                    .document("${email}_$uid")
+                    .collection("favCars")
+                    .get().addOnSuccessListener { result ->
+                        val favId = result.documents.map { it.id.toInt() }.toSet()
+                        onResult(favId)
+                    }
+            }
+
+            fun checkIsAdmin(isAdmin: (Boolean) -> Unit) {
+                val userUid = Firebase.auth.currentUser!!.uid
+                Firebase.firestore.collection("admin")
+                    .document(userUid).get().addOnSuccessListener {
+                        isAdmin((it.get("admin")) as Boolean)
+                    }
+            }
+
+            LaunchedEffect(Unit) {
+                checkFavCars { result ->
+                    onFavCarUpdate(favCars + result)
+                }
+            }
+
+            LaunchedEffect(Unit) {
+                checkIsAdmin { admin ->
+                    isAdmin.value = admin
+                }
+            }
 
             MainScreenBody(
                 selectedFavCars,

@@ -49,18 +49,20 @@ fun LoginScreen(onFavCarUpdate: (Set<Int>) -> Unit, favCar: Set<Int>, isAdmin: M
 
     // наблюдение за статусом регистрации и дальнейшая логика
 
+    /*
     LaunchedEffect(Unit) {
         viewModel.checkFavCars { result ->
             onFavCarUpdate(favCar + result)
         }
     }
 
+
     LaunchedEffect(Unit) {
         viewModel.checkIsAdmin { admin ->
             isAdmin.value = admin
         }
     }
-
+    */
     LaunchedEffect(registrationStatus) {
         if (registrationStatus != null && registrationStatus != "success") {
             Toast.makeText(

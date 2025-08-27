@@ -47,10 +47,11 @@ fun FavoriteScreenBody(modifier: Modifier = Modifier, onFavCarChange: (Int) -> U
 
     val db = Firebase.firestore
     val uid = Firebase.auth.currentUser!!.uid
+    val email = Firebase.auth.currentUser!!.email
 
     LaunchedEffect(Unit) {
         db.collection("users")
-            .document(uid)
+            .document("${email}_$uid")
             .collection("favCars")
             .get()
             .addOnSuccessListener { result ->
@@ -66,7 +67,7 @@ fun FavoriteScreenBody(modifier: Modifier = Modifier, onFavCarChange: (Int) -> U
                 FavCarCards(
                     onDelete = { carId ->
                         db.collection("users")
-                            .document(uid)
+                            .document("${email}_$uid")
                             .collection("favCars")
                             .document(carId.toString())
                             .delete()

@@ -35,7 +35,7 @@ import com.example.composecarrent.R
 import kotlin.math.log
 
 @Composable
-fun LoginScreen(isAdmin: MutableState<Boolean>, viewModel: AuthLogicViewModel = viewModel(), navController: NavController) {
+fun LoginScreen(onFavCarUpdate: (Set<Int>) -> Unit, favCar: Set<Int>, isAdmin: MutableState<Boolean>, viewModel: AuthLogicViewModel = viewModel(), navController: NavController) {
 
     var email by remember { mutableStateOf("admin@admin.com") }       // cостояние отслеживает изменение имейла
     var password by remember { mutableStateOf("123456789") }    // cостояние отслеживает изменение пароля
@@ -47,8 +47,13 @@ fun LoginScreen(isAdmin: MutableState<Boolean>, viewModel: AuthLogicViewModel = 
     val logOutStatus = viewModel.logOutStatus // отслеживание статуса выхода из аккаунта
     val deleteAccountStatus = viewModel.deleteAccountStatus // отслеживание статуса удаления аккаунта
 
-    
     // наблюдение за статусом регистрации и дальнейшая логика
+
+    LaunchedEffect(Unit) {
+        viewModel.checkFavCars { result ->
+            onFavCarUpdate(favCar + result)
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.checkIsAdmin { admin ->

@@ -74,6 +74,7 @@ val carList = listOf(
 
 @Composable
 fun MainScreenBody(
+    selectedFavCars: List<Int>,
     isAdmin: MutableState<Boolean>,
     clicked: MutableState<Boolean>,
     list: List<CarDataModel>,

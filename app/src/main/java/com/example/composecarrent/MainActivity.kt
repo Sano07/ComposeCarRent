@@ -21,6 +21,7 @@ class MainActivity : ComponentActivity() {
 
             AppNavigation(
                 favCar = favCars,
+                onFavCarUpdate = { favCars = it },
                 onFavCarChange = { carId ->
                     favCars = if (favCars.contains(carId)) {
                         favCars - carId

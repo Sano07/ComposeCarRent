@@ -26,6 +26,9 @@ class AuthLogicViewModel : ViewModel() {
     var deleteAccountStatus by mutableStateOf<String?>(null)
         private set
 
+    var checkFavCars by mutableStateOf(setOf(Int))
+        private set
+
     fun register(email: String, password: String) {
         if (email.isBlank() || password.isBlank()) {
             registrationStatus = "Cannot be empty"
@@ -88,4 +91,14 @@ class AuthLogicViewModel : ViewModel() {
             }
     }
 
+    fun checkFavCars(onResult: (Set<Int>) -> Unit) {
+        val uid = Firebase.auth.currentUser!!.uid
+        Firebase.firestore.collection("users")
+            .document(uid)
+            .collection("favCars")
+            .get().addOnSuccessListener { result ->
+                val favId = result.documents.map { it.id.toInt() }.toSet()
+                onResult(favId)
+            }
+    }
 }

@@ -35,6 +35,7 @@ import com.google.firebase.ktx.Firebase
 val carList = listOf(
     CarDataModel(
         id = 1,
+        category = "test",
         carIcon = "",
         mark = "test1",
         model = "test",
@@ -47,6 +48,7 @@ val carList = listOf(
     ),
     CarDataModel(
         id = 2,
+        category = "test",
         carIcon = "",
         mark = "test2",
         model = "test",
@@ -59,6 +61,7 @@ val carList = listOf(
     ),
     CarDataModel(
         id = 3,
+        category = "test",
         carIcon = "",
         mark = "test3",
         model = "test",
@@ -100,7 +103,7 @@ fun CarCards(isAdmin: MutableState<Boolean>, favCars: Set<Int>, clicked: Mutable
     val db = Firebase.firestore
     val uid = Firebase.auth.currentUser!!.uid
     val email = Firebase.auth.currentUser!!.email
-    val safeEmail = email?.replace("@", "_")?.replace(".", "_")
+    val safeEmail = email?.replace("@", "")?.replace(".", "")
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -206,7 +209,7 @@ fun CarCards(isAdmin: MutableState<Boolean>, favCars: Set<Int>, clicked: Mutable
                     onClick = {
                         onFavCarChange(item.id.toString())
                         val docId = db.collection("users")
-                            .document("${safeEmail}_$uid")
+                            .document("${safeEmail}$uid")
                             .collection("favCars")
                             .document(item.id.toString())
                         docId.get().addOnSuccessListener { doc ->

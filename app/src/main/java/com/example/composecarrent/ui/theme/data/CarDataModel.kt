@@ -2,6 +2,7 @@ package com.example.composecarrent.ui.theme.data
 
 data class CarDataModel(
     var id : Int = 0,
+    var category : String = "",
     var carIcon : String = "",
     var mark : String = "",
     var model : String = "",

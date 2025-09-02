@@ -43,6 +43,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.coil.compose)
 
     implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
     implementation("com.google.firebase:firebase-firestore-ktx:25.0.0")

@@ -11,5 +11,6 @@ data class CarDataModel(
     var consumption : String = "",
     var transmission : String = "",
     var fuel : String = "",
-    var location : String = ""
+    var location : String = "",
+    var decription : String = ""
 )

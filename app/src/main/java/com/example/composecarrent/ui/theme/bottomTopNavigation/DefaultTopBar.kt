@@ -9,9 +9,9 @@ import androidx.compose.ui.Modifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoritesTopBar() {
+fun DefaultTopBar(title : String) {
     CenterAlignedTopAppBar(
         modifier = Modifier.fillMaxWidth(),
-        title = { Text(text = "Favorite cars") },
+        title = { Text(text = title) },
     )
 }

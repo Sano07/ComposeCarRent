@@ -209,7 +209,7 @@ fun CarCards(isAdmin: MutableState<Boolean>, favCars: Set<Int>, clicked: Mutable
                     onClick = {
                         onFavCarChange(item.id.toString())
                         val docId = db.collection("users")
-                            .document("${safeEmail}$uid")
+                            .document(uid)
                             .collection("favCars")
                             .document(item.id.toString())
                         docId.get().addOnSuccessListener { doc ->

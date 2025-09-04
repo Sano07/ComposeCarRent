@@ -17,6 +17,7 @@ import androidx.navigation.NavController
 import com.example.composecarrent.ui.theme.bottomTopNavigation.BottomNavItemLine
 import com.example.composecarrent.ui.theme.bottomTopNavigation.TopBar
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
@@ -69,8 +70,13 @@ fun MainScreen(
             fun checkFavCars(onResult: (Set<Int>) -> Unit) {
                 val uid = Firebase.auth.currentUser!!.uid
                 val email = Firebase.auth.currentUser!!.email
-                Firebase.firestore.collection("users")
-                    .document("${email}_$uid")
+                val db = Firebase.firestore
+
+                val userEmail = mapOf("email" to email)
+                db.collection("users").document(uid).set(userEmail, SetOptions.merge())
+
+                db.collection("users")
+                    .document(uid)
                     .collection("favCars")
                     .get().addOnSuccessListener { result ->
                         val favId = result.documents.map { it.id.toInt() }.toSet()

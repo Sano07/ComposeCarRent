@@ -51,7 +51,7 @@ fun FavoriteScreenBody(modifier: Modifier = Modifier, onFavCarChange: (Int) -> U
 
     LaunchedEffect(Unit) {
         db.collection("users")
-            .document("${email}_$uid")
+            .document(uid)
             .collection("favCars")
             .get()
             .addOnSuccessListener { result ->
@@ -67,7 +67,7 @@ fun FavoriteScreenBody(modifier: Modifier = Modifier, onFavCarChange: (Int) -> U
                 FavCarCards(
                     onDelete = { carId ->
                         db.collection("users")
-                            .document("${email}_$uid")
+                            .document(uid)
                             .collection("favCars")
                             .document(carId.toString())
                             .delete()

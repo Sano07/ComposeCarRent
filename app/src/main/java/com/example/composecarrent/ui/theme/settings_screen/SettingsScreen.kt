@@ -1,4 +1,4 @@
-package com.example.composecarrent.ui.theme.favorite_screen
+package com.example.composecarrent.ui.theme.settings_screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,24 +10,20 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.composecarrent.ui.theme.bottomTopNavigation.BottomNavItemLine
 import com.example.composecarrent.ui.theme.bottomTopNavigation.DefaultTopBar
-import com.example.composecarrent.ui.theme.data.CarDataModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-
-fun FavoriteScreen(selectedItem: MutableState<String>, favCars: Set<Int>, navController: NavController, favCarList : List<CarDataModel>, onFavCarChange: (Int) -> Unit) {
+fun SettingsScreen(selectedItem: MutableState<String>, navController: NavController) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            DefaultTopBar("Favorite cars")
+            DefaultTopBar("Settings")
         },
         bottomBar = {
             BottomNavItemLine(selectedItem, navController = navController)   // передача в Scaffold нижнего меню
         }
     ) { padding ->
 
-        FavoriteScreenBody(
-            modifier = Modifier.padding(padding),
-            onFavCarChange = onFavCarChange)
+        SettingsScreenBody(modifier = Modifier.padding(padding))
     }
 }

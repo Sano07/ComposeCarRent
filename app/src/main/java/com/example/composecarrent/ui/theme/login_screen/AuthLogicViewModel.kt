@@ -62,11 +62,6 @@ class AuthLogicViewModel : ViewModel() {
             }
     }
 
-    fun logOut() {
-        logOutStatus = "success"
-        auth.signOut()
-    }
-
     fun deleteAccount(email: String, password: String) {
         if (email.isBlank() || password.isBlank()) {
             return

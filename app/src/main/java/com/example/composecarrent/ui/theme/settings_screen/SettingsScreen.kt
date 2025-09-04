@@ -20,10 +20,16 @@ fun SettingsScreen(selectedItem: MutableState<String>, navController: NavControl
             DefaultTopBar("Settings")
         },
         bottomBar = {
-            BottomNavItemLine(selectedItem, navController = navController)   // передача в Scaffold нижнего меню
+            BottomNavItemLine(
+                selectedItem,
+                navController = navController
+            )
         }
     ) { padding ->
 
-        SettingsScreenBody(modifier = Modifier.padding(padding))
+        SettingsScreenBody(
+            modifier = Modifier.padding(padding),
+            onLogOut = { navController.navigate("login")},
+            onAddCar = { navController.navigate("admin_screen") })
     }
 }

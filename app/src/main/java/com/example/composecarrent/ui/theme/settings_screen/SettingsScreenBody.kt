@@ -1,12 +1,13 @@
 package com.example.composecarrent.ui.theme.settings_screen
 
+import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,16 +17,38 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
-@Preview(showBackground = true)
 @Composable
-fun SettingsScreenBody(modifier: Modifier = Modifier) {
+fun SettingsScreenBody(
+    modifier: Modifier = Modifier,
+    onLogOut: () -> Unit,
+    onAddCar: () -> Unit,
+    viewModel: SettingsScreenViewModel = viewModel(),
+) {
+
+    val context =
+        LocalContext.current
+    val logOutStatus = viewModel.logOutStatus // отслеживание статуса выхода из аккаунта
+
+    LaunchedEffect(logOutStatus) {
+        if (logOutStatus == "success") {
+            Toast.makeText(
+                context,
+                "Log Out Success",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
     Box(
         modifier = modifier
     ) {
@@ -38,7 +61,7 @@ fun SettingsScreenBody(modifier: Modifier = Modifier) {
                     modifier = Modifier.background(Color.White),
                     text = "Current user",
                     color = Color.DarkGray,
-                    fontSize = 14.sp
+                    fontSize = 16.sp
                 )
             }
             Card(
@@ -49,6 +72,7 @@ fun SettingsScreenBody(modifier: Modifier = Modifier) {
                     modifier = Modifier.background(Color.White),
                     text = "admin@gmail.com",
                     color = Color.Black,
+                    fontWeight = FontWeight.Bold,
                     fontSize = 22.sp
                 )
             }
@@ -63,9 +87,12 @@ fun SettingsScreenBody(modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
                         .height(60.dp),
-                    onClick = {},
+                    onClick = {
+                        viewModel.logOut()
+                        onLogOut()
+                    },
                     colors = ButtonDefaults.buttonColors(Color.White),
-                    border = ButtonDefaults.outlinedButtonBorder(enabled = true)
+                    border = BorderStroke(2.dp, Color.Black)
                 ) {
                     Text(
                         text = "Log Out",
@@ -105,7 +132,7 @@ fun SettingsScreenBody(modifier: Modifier = Modifier) {
                     modifier = Modifier.background(Color.White),
                     text = "Balance",
                     color = Color.DarkGray,
-                    fontSize = 14.sp
+                    fontSize = 16.sp
                 )
             }
             Row(
@@ -129,7 +156,7 @@ fun SettingsScreenBody(modifier: Modifier = Modifier) {
                         .padding(end = 15.dp),
                     onClick = {},
                     colors = ButtonDefaults.buttonColors(Color.White),
-                    border = ButtonDefaults.outlinedButtonBorder(enabled = true),
+                    border = BorderStroke(2.dp, Color.Black)
                 ) {
                     Text(
                         text = "Fill",
@@ -155,9 +182,11 @@ fun SettingsScreenBody(modifier: Modifier = Modifier) {
                         .fillMaxWidth(0.7f)
                         .padding(15.dp)
                         .height(60.dp),
-                    onClick = {},
+                    onClick = {
+                        onAddCar()
+                    },
                     colors = ButtonDefaults.buttonColors(Color.White),
-                    border = ButtonDefaults.outlinedButtonBorder(enabled = true),
+                    border = BorderStroke(2.dp, Color.Black)
                 ) {
                     Text(
                         text = "Add new car",
@@ -169,4 +198,5 @@ fun SettingsScreenBody(modifier: Modifier = Modifier) {
         }
     }
 }
+
 

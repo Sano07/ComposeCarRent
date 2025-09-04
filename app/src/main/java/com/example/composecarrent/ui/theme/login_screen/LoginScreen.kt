@@ -1,6 +1,7 @@
 package com.example.composecarrent.ui.theme.login_screen
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,7 +45,6 @@ fun LoginScreen(onFavCarUpdate: (Set<Int>) -> Unit, favCar: Set<Int>, isAdmin: M
     val registrationStatus =
         viewModel.registrationStatus   // получение из вью модел статуса регистрации
     val signInStatus = viewModel.signInStatus  // получение из вью статуса авторизации
-    val logOutStatus = viewModel.logOutStatus // отслеживание статуса выхода из аккаунта
     val deleteAccountStatus = viewModel.deleteAccountStatus // отслеживание статуса удаления аккаунта
 
     // наблюдение за статусом регистрации и дальнейшая логика
@@ -93,19 +93,6 @@ fun LoginScreen(onFavCarUpdate: (Set<Int>) -> Unit, favCar: Set<Int>, isAdmin: M
                     inclusive = true
                 }  // тема которая не пускает назад на экран регистрации в случае успеха
             }
-        }
-    }
-
-    // наблюение за статусом выхода из аккаунта
-    LaunchedEffect(logOutStatus) {
-        if (logOutStatus != null && logOutStatus != "success") {
-            Toast.makeText(
-                context,
-                "Ошибка: $logOutStatus",
-                Toast.LENGTH_SHORT
-            ).show()
-        } else if (logOutStatus == "success") {
-            navController.navigate("registration_screen")
         }
     }
 
@@ -167,7 +154,7 @@ fun LoginScreen(onFavCarUpdate: (Set<Int>) -> Unit, favCar: Set<Int>, isAdmin: M
                             .fillMaxWidth(0.7f)
                             .height(70.dp),
                         colors = ButtonDefaults.buttonColors(Color.White),
-                        border = ButtonDefaults.outlinedButtonBorder(enabled = true)
+                        border = BorderStroke(2.dp, Color.Black)
                     )
                     {
                         Text(
@@ -184,7 +171,7 @@ fun LoginScreen(onFavCarUpdate: (Set<Int>) -> Unit, favCar: Set<Int>, isAdmin: M
                             .fillMaxWidth(0.7f)
                             .height(70.dp),
                         colors = ButtonDefaults.buttonColors(Color.White),
-                        border = ButtonDefaults.outlinedButtonBorder(enabled = true)
+                        border = BorderStroke(2.dp, Color.Black)
                     )
                     {
                         Text(

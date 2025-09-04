@@ -3,6 +3,7 @@ package com.example.composecarrent.ui.theme.admin_panel
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,42 +38,20 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.composecarrent.R
 
-@Preview(showBackground = true)
 @Composable
-fun AdminPanelScreenBody(viewModel: AdminPanelModelView = viewModel()) {
+fun AdminPanelScreenBody(
+    modifier: Modifier = Modifier,
+    viewModel: AdminPanelModelView = viewModel(),
+    onStepBack: () -> Unit
+) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp)
+        modifier = modifier
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
         ) {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                IconButton(
-                    modifier = Modifier.align(Alignment.CenterStart),
-                    onClick = {
-
-                    },
-                ) {
-                    Icon(
-                        modifier = Modifier.size(25.dp),
-                        painter = painterResource(R.drawable.ic_back),
-                        contentDescription = "",
-                        tint = Color.Black
-                    )
-                }
-                Text(
-                    text = "Admin panel",
-                    color = Color.Black,
-                    fontSize = 22.sp
-                )
-            }
 
             Spacer(modifier = Modifier.height(20.dp))
             Text(
@@ -219,20 +198,39 @@ fun AdminPanelScreenBody(viewModel: AdminPanelModelView = viewModel()) {
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth(0.7f)
-                        .padding(15.dp)
-                        .height(60.dp),
-                    onClick = {},
-                    colors = ButtonDefaults.buttonColors(Color.White),
-                    border = ButtonDefaults.outlinedButtonBorder(enabled = true),
-                ) {
-                    Text(
-                        text = "Save car",
-                        color = Color.Black,
-                        fontSize = 18.sp
-                    )
+                Row{
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth(0.5f)
+                            .padding(15.dp)
+                            .height(60.dp),
+                        onClick = {
+                            onStepBack()
+                        },
+                        colors = ButtonDefaults.buttonColors(Color.White),
+                        border = BorderStroke(2.dp, Color.Black)
+                    ) {
+                        Text(
+                            text = "Back",
+                            color = Color.Black,
+                            fontSize = 18.sp
+                        )
+                    }
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(15.dp)
+                            .height(60.dp),
+                        onClick = {},
+                        colors = ButtonDefaults.buttonColors(Color.White),
+                        border = BorderStroke(2.dp, Color.Black)
+                    ) {
+                        Text(
+                            text = "Save car",
+                            color = Color.Black,
+                            fontSize = 18.sp
+                        )
+                    }
                 }
             }
         }

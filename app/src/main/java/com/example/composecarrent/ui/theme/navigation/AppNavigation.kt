@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.composecarrent.ui.theme.admin_panel.AdminPanelScreen
 import com.example.composecarrent.ui.theme.favorite_screen.FavoriteScreen
 import com.example.composecarrent.ui.theme.login_screen.LoginScreen
 import com.example.composecarrent.ui.theme.main_screen.MainScreen
@@ -62,6 +63,9 @@ fun AppNavigation(
                 selectedItem,
                 navController = navController
             )
+        }
+        composable("admin_screen") {
+            AdminPanelScreen(navController = navController)
         }
     }
 }

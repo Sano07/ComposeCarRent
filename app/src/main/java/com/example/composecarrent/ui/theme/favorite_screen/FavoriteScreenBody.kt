@@ -1,5 +1,6 @@
 package com.example.composecarrent.ui.theme.favorite_screen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -204,7 +205,7 @@ fun FavCarCards(onDelete: (Int) -> Unit, list: CarDataModel, onFavCarChange: (In
                         .padding(end = 10.dp)
                         .width(120.dp),
                     colors = ButtonDefaults.buttonColors(Color.White),
-                    border = ButtonDefaults.outlinedButtonBorder(enabled = true)
+                    border = BorderStroke(2.dp, Color.Black)
                 ) {
                     Text(text = "Rent", color = Color.Black)
                 }
@@ -217,7 +218,7 @@ fun FavCarCards(onDelete: (Int) -> Unit, list: CarDataModel, onFavCarChange: (In
                         .padding(end = 10.dp)
                         .width(120.dp),
                     colors = ButtonDefaults.buttonColors(Color.White),
-                    border = ButtonDefaults.outlinedButtonBorder(enabled = true)
+                    border = BorderStroke(2.dp, Color.Black)
                 ) {
                     Text(text = "Delete", color = Color.Black)
                 }

@@ -19,11 +19,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,19 +28,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.composecarrent.R
-import kotlin.math.log
 
 @Composable
-fun LoginScreen(onFavCarUpdate: (Set<Int>) -> Unit, favCar: Set<Int>, isAdmin: MutableState<Boolean>, viewModel: AuthLogicViewModel = viewModel(), navController: NavController) {
+fun LoginScreen(email: MutableState<String>, password: MutableState<String>, onFavCarUpdate: (Set<Int>) -> Unit, favCar: Set<Int>, isAdmin: MutableState<Boolean>, viewModel: AuthLogicViewModel = viewModel(), navController: NavController) {
 
-    var email by remember { mutableStateOf("admin@admin.com") }       // cостояние отслеживает изменение имейла
-    var password by remember { mutableStateOf("123456789") }    // cостояние отслеживает изменение пароля
     val context =
         LocalContext.current                      // получение контекста текущей активити для передачи в Тост
     val registrationStatus =
         viewModel.registrationStatus   // получение из вью модел статуса регистрации
     val signInStatus = viewModel.signInStatus  // получение из вью статуса авторизации
-    val deleteAccountStatus = viewModel.deleteAccountStatus // отслеживание статуса удаления аккаунта
 
     // наблюдение за статусом регистрации и дальнейшая логика
 
@@ -96,22 +87,6 @@ fun LoginScreen(onFavCarUpdate: (Set<Int>) -> Unit, favCar: Set<Int>, isAdmin: M
         }
     }
 
-    LaunchedEffect(deleteAccountStatus) {
-        if (deleteAccountStatus != null && deleteAccountStatus != "success") {
-            Toast.makeText(
-                context,
-                "Ошибка: $deleteAccountStatus",
-                Toast.LENGTH_SHORT
-            ).show()
-        } else if (deleteAccountStatus == "success") {
-            Toast.makeText(
-                context,
-                "Account was deleted successful",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -132,15 +107,15 @@ fun LoginScreen(onFavCarUpdate: (Set<Int>) -> Unit, favCar: Set<Int>, isAdmin: M
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 TextField(
-                    value = email,
-                    onValueChange = { email = it },
+                    value = email.value,
+                    onValueChange = { email.value = it },
                     label = { Text("Your email") },
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.height(15.dp))
                 TextField(
-                    value = password,
-                    onValueChange = { password = it },
+                    value = password.value,
+                    onValueChange = { password.value = it },
                     label = { Text("Your password") },
                     singleLine = true
                 )
@@ -148,7 +123,7 @@ fun LoginScreen(onFavCarUpdate: (Set<Int>) -> Unit, favCar: Set<Int>, isAdmin: M
                 Column {
                     Button(
                         onClick = {
-                            viewModel.register(email, password)
+                            viewModel.register(email.value, password.value)
                         },
                         modifier = Modifier
                             .fillMaxWidth(0.7f)
@@ -165,7 +140,7 @@ fun LoginScreen(onFavCarUpdate: (Set<Int>) -> Unit, favCar: Set<Int>, isAdmin: M
                     Spacer(modifier = Modifier.height(15.dp))
                     Button(
                         onClick = {
-                            viewModel.signIn(email, password)
+                            viewModel.signIn(email.value, password.value)
                         },
                         modifier = Modifier
                             .fillMaxWidth(0.7f)

@@ -23,9 +23,6 @@ class AuthLogicViewModel : ViewModel() {
     var logOutStatus by mutableStateOf<String?>(null)
         private set
 
-    var deleteAccountStatus by mutableStateOf<String?>(null)
-        private set
-
     var checkFavCars by mutableStateOf(setOf(Int))
         private set
 
@@ -60,22 +57,6 @@ class AuthLogicViewModel : ViewModel() {
                     task.exception?.message ?: "Unknown error"
                 }
             }
-    }
-
-    fun deleteAccount(email: String, password: String) {
-        if (email.isBlank() || password.isBlank()) {
-            return
-        }
-        val credentials = EmailAuthProvider.getCredential(email, password)
-        auth.currentUser?.reauthenticate(credentials)?.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                auth.currentUser?.delete()
-                deleteAccountStatus = "success"
-            } else {
-                task.exception?.message ?: "Unknown error"
-            }
-        }
-
     }
 
     fun checkIsAdmin(isAdmin: (Boolean) -> Unit) {

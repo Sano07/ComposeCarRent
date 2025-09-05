@@ -13,7 +13,18 @@ import com.example.composecarrent.ui.theme.bottomTopNavigation.DefaultTopBar
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SettingsScreen(selectedItem: MutableState<String>, navController: NavController) {
+fun SettingsScreen(
+    email: MutableState<String>,
+    password: MutableState<String>,
+    isAdmin: MutableState<Boolean>,
+    selectedItem: MutableState<String>,
+    navController: NavController
+) {
+    fun resetStates() {
+        isAdmin.value = false
+        selectedItem.value = "Home"
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -28,8 +39,16 @@ fun SettingsScreen(selectedItem: MutableState<String>, navController: NavControl
     ) { padding ->
 
         SettingsScreenBody(
+            email,
+            password,
+            isAdmin,
             modifier = Modifier.padding(padding),
-            onLogOut = { navController.navigate("login")},
-            onAddCar = { navController.navigate("admin_screen") })
+            onLogOut = { navController.navigate("login") },
+            onAddCar = { navController.navigate("admin_screen") },
+            onReset = { resetStates() }
+        )
     }
 }
+
+
+

@@ -12,12 +12,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,21 +37,45 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun SettingsScreenBody(
+    email: MutableState<String>,
+    password: MutableState<String>,
+    isAdmin: MutableState<Boolean>,
     modifier: Modifier = Modifier,
     onLogOut: () -> Unit,
     onAddCar: () -> Unit,
+    onReset: () -> Unit,
     viewModel: SettingsScreenViewModel = viewModel(),
 ) {
 
     val context =
         LocalContext.current
     val logOutStatus = viewModel.logOutStatus // отслеживание статуса выхода из аккаунта
+    val deleteAccountStatus = viewModel.deleteAccountStatus // отслеживание статуса удаления аккаунта
+    var showDialog by remember { mutableStateOf(false) }
+
 
     LaunchedEffect(logOutStatus) {
         if (logOutStatus == "success") {
             Toast.makeText(
                 context,
                 "Log Out Success",
+                Toast.LENGTH_SHORT
+            ).show()
+            onReset()
+        }
+    }
+
+    LaunchedEffect(deleteAccountStatus) {
+        if (deleteAccountStatus != null && deleteAccountStatus != "success") {
+            Toast.makeText(
+                context,
+                "Ошибка: $deleteAccountStatus",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else if (deleteAccountStatus == "success") {
+            Toast.makeText(
+                context,
+                "Account was deleted successful",
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -70,7 +102,7 @@ fun SettingsScreenBody(
             ) {
                 Text(
                     modifier = Modifier.background(Color.White),
-                    text = "admin@gmail.com",
+                    text = email.value,
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp
@@ -105,7 +137,9 @@ fun SettingsScreenBody(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp),
-                    onClick = {},
+                    onClick = {
+                        showDialog = true
+                    },
                     colors = ButtonDefaults.buttonColors(Color.Red),
                     border = ButtonDefaults.outlinedButtonBorder(enabled = true),
                 ) {
@@ -165,7 +199,6 @@ fun SettingsScreenBody(
                     )
                 }
             }
-
             Spacer(modifier = Modifier.height(20.dp))
             Box(
                 modifier = Modifier
@@ -173,29 +206,58 @@ fun SettingsScreenBody(
                     .height(2.dp)
                     .background(Color.LightGray),
             )
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth(0.7f)
-                        .padding(15.dp)
-                        .height(60.dp),
-                    onClick = {
-                        onAddCar()
-                    },
-                    colors = ButtonDefaults.buttonColors(Color.White),
-                    border = BorderStroke(2.dp, Color.Black)
+            if (isAdmin.value) {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "Add new car",
-                        color = Color.Black,
-                        fontSize = 18.sp
-                    )
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth(0.7f)
+                            .padding(15.dp)
+                            .height(60.dp),
+                        onClick = {
+                            onAddCar()
+                        },
+                        colors = ButtonDefaults.buttonColors(Color.White),
+                        border = BorderStroke(2.dp, Color.Black)
+                    ) {
+                        Text(
+                            text = "Add new car",
+                            color = Color.Black,
+                            fontSize = 18.sp
+                        )
+                    }
                 }
             }
         }
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Confirmation") },
+            text = { Text("Are you sure you want to delete your account?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDialog = false
+                        viewModel.deleteAccount(email.value, password.value)
+                        onLogOut()
+                        onReset()
+                    }
+                ) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDialog = false }
+                ) {
+                    Text("Back")
+                }
+            }
+        )
     }
 }
 

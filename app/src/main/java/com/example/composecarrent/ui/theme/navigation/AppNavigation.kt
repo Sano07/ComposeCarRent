@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -24,6 +25,8 @@ fun AppNavigation(
     onFavCarUpdate: (Set<Int>) -> Unit,
     onFavCarChange: (Int) -> Unit
 ) {
+    val email = remember { mutableStateOf("admin@admin.com") }       // cостояние отслеживает изменение имейла
+    val password = remember { mutableStateOf("123456789") }    // cостояние отслеживает изменение пароля
     val favCarList = carList.filter { favCar.contains(it.id) }
     val navController = rememberNavController()
     val clicked = remember { mutableStateOf(true) }
@@ -34,7 +37,7 @@ fun AppNavigation(
 
     NavHost(navController = navController, startDestination = "login") {
         composable("login") {
-            LoginScreen(onFavCarUpdate, favCar = favCar, isAdminState, navController = navController)
+            LoginScreen(email, password, onFavCarUpdate, favCar = favCar, isAdminState, navController = navController)
         }
         composable("home_screen") {
             MainScreen(
@@ -60,6 +63,9 @@ fun AppNavigation(
         }
         composable("settings_screen") {
             SettingsScreen(
+                email,
+                password,
+                isAdminState,
                 selectedItem,
                 navController = navController
             )

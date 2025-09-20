@@ -43,6 +43,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.foundation) // версия уточни под свой Compose
+
+
     implementation(libs.coil.compose)
 
     implementation("com.google.firebase:firebase-auth-ktx:22.3.0")

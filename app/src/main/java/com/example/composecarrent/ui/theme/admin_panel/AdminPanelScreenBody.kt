@@ -77,7 +77,7 @@ fun AdminPanelScreenBody(
                     value = "",
                     shape = RoundedCornerShape(10.dp),
                     onValueChange = {},
-                    label = { Text("Model") },
+                    label = { Text("Model and Year") },
                     singleLine = true
                 )
             }
@@ -249,7 +249,7 @@ fun ImportImage(imageUri: Uri? = null, onImageSet: (Uri) -> Unit) {
 
     Button(
         onClick = { },
-        modifier = Modifier.size(110.dp),
+        modifier = Modifier.size(140.dp),
         shape = RoundedCornerShape(20.dp),
         colors = ButtonDefaults.buttonColors(Color.LightGray)
     ) {

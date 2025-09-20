@@ -36,7 +36,9 @@ val carList = listOf(
     CarDataModel(
         id = 1,
         category = "test",
-        carIcon = "",
+        carIcon1 = "",
+        carIcon2 = "",
+        carIcon3 = "",
         mark = "test1",
         model = "test",
         coast = "test",
@@ -49,7 +51,9 @@ val carList = listOf(
     CarDataModel(
         id = 2,
         category = "test",
-        carIcon = "",
+        carIcon1 = "",
+        carIcon2 = "",
+        carIcon3 = "",
         mark = "test2",
         model = "test",
         coast = "test",
@@ -62,7 +66,9 @@ val carList = listOf(
     CarDataModel(
         id = 3,
         category = "test",
-        carIcon = "",
+        carIcon1 = "",
+        carIcon2 = "",
+        carIcon3 = "",
         mark = "test3",
         model = "test",
         coast = "test",
@@ -117,7 +123,6 @@ fun CarCards(isAdmin: MutableState<Boolean>, favCars: Set<Int>, clicked: Mutable
                 painter = painterResource(id = R.drawable.im_car),
                 contentDescription = "машинка для примера",
                 contentScale = ContentScale.Inside,
-
                 )
             Column {
                 Text(

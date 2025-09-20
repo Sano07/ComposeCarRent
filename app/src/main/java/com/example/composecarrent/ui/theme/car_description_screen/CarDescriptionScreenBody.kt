@@ -1,5 +1,6 @@
 package com.example.composecarrent.ui.theme.car_description_screen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,9 +17,12 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -77,131 +81,169 @@ fun CarDescriptionScreenBody() {
                 .padding(5.dp)
         ) {
             ImagePager()
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                modifier = Modifier.padding(5.dp),
-                fontSize = 25.sp,
-                fontWeight = FontWeight.Bold,
-                color = colorGrey,
-                text = "Lada Prioasdasd asdsdasdsadasd asdasdara"
-            )
-            Text(
-                modifier = Modifier.padding(start = 8.dp),
-                fontSize = 20.sp,
-                color = colorGrey,
-                text = "Priora super ultra tachka , 2012"
-            )
-            Text(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
-                fontSize = 25.sp,
-                color = colorGreen,
-                fontWeight = FontWeight.Bold,
-                text = "100 000$"
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 10.dp)
+                    .verticalScroll(scrollStateText)
             ) {
-                Image(
-                    modifier = Modifier
-                        .padding(end = 5.dp)
-                        .size(22.dp),
-                    painter = painterResource(id = R.drawable.ic_consumption),
-                    contentDescription = "Пробег"
-                )
-                Text(
-                    fontSize = 20.sp,
-                    color = colorGrey,
-                    text = "50 т.км."
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Image(
-                    modifier = Modifier
-                        .padding(end = 5.dp)
-                        .size(22.dp),
-                    painter = painterResource(id = R.drawable.ic_transmision),
-                    contentDescription = "Коробка"
-                )
-                Text(
-                    fontSize = 20.sp,
-                    color = colorGrey,
-                    text = "Auto"
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Image(
-                    modifier = Modifier
-                        .padding(end = 5.dp)
-                        .size(22.dp),
-                    painter = painterResource(id = R.drawable.ic_fuel),
-                    contentDescription = "Бензин"
-                )
-                Text(
-                    fontSize = 20.sp,
-                    color = colorGrey,
-                    text = "Diesel"
-                )
-                Spacer(modifier = Modifier.width(10.dp))
+                Column {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        modifier = Modifier.padding(5.dp),
+                        fontSize = 25.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = colorGrey,
+                        text = "Lada Prioasdasd asdsdasdsadasd asdasdara"
+                    )
+                    Text(
+                        modifier = Modifier.padding(start = 8.dp),
+                        fontSize = 20.sp,
+                        color = colorGrey,
+                        text = "Priora super ultra tachka , 2012"
+                    )
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        fontSize = 25.sp,
+                        color = colorGreen,
+                        fontWeight = FontWeight.Bold,
+                        text = "100 000$"
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 10.dp)
+                    ) {
+                        Image(
+                            modifier = Modifier
+                                .padding(end = 5.dp)
+                                .size(22.dp),
+                            painter = painterResource(id = R.drawable.ic_consumption),
+                            contentDescription = "Пробег"
+                        )
+                        Text(
+                            fontSize = 20.sp,
+                            color = colorGrey,
+                            text = "50 т.км."
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Image(
+                            modifier = Modifier
+                                .padding(end = 5.dp)
+                                .size(22.dp),
+                            painter = painterResource(id = R.drawable.ic_transmision),
+                            contentDescription = "Коробка"
+                        )
+                        Text(
+                            fontSize = 20.sp,
+                            color = colorGrey,
+                            text = "Auto"
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Image(
+                            modifier = Modifier
+                                .padding(end = 5.dp)
+                                .size(22.dp),
+                            painter = painterResource(id = R.drawable.ic_fuel),
+                            contentDescription = "Бензин"
+                        )
+                        Text(
+                            fontSize = 20.sp,
+                            color = colorGrey,
+                            text = "Diesel"
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp)
+                    ) {
+                        Image(
+                            modifier = Modifier
+                                .padding(end = 5.dp)
+                                .size(22.dp),
+                            painter = painterResource(id = R.drawable.ic_location),
+                            contentDescription = "Город"
+                        )
+                        Text(
+                            fontSize = 20.sp,
+                            color = colorGrey,
+                            text = "Kiev"
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Image(
+                            modifier = Modifier
+                                .padding(end = 5.dp)
+                                .size(22.dp),
+                            painter = painterResource(id = R.drawable.ic_mileage),
+                            contentDescription = "Пробег"
+                        )
+                        Text(
+                            fontSize = 20.sp,
+                            color = colorGrey,
+                            text = "22 тыс. км"
+                        )
+                    }
+                    Text(
+                        modifier = Modifier.fillMaxWidth().padding(10.dp),
+                        fontSize = 15.sp,
+                        color = colorGrey,
+                        text = "Практичний, надійний універсал," +
+                                " з дуже економічним двигуном об'ємом дизельним" +
+                                " 2.0 літра потужністю 170к.с\n" +
+                                "Авто приїхало з Н" +
+                                "імеччини в 2022 році," +
+                                " має " +
+                                "одного власника в Україні. " +
+                                "Технічно автомобіль в чудовому стані. \n" +
+                                "Комплектація: кл" +
+                                "імат контро" +
+                                "ль, круїз контроль, датчик світл" +
+                                "а, датчик дощу, електро регулювання с" +
+                                "идіння воді" +
+                                "я, " +
+                                "мультимедія з підтримкою Ap" +
+                                "ple CarPl" +
+                                "ay AndroidAut" +
+                                "o, та інше."
+                    )
+
+                }
             }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)
-            ) {
-                Image(
+            Spacer(modifier = Modifier.height(15.dp))
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Button(
                     modifier = Modifier
-                        .padding(end = 5.dp)
-                        .size(22.dp),
-                    painter = painterResource(id = R.drawable.ic_location),
-                    contentDescription = "Город"
-                )
-                Text(
-                    fontSize = 20.sp,
-                    color = colorGrey,
-                    text = "Kiev"
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Image(
+                        .fillMaxWidth(0.5f)
+                        .padding(15.dp)
+                        .height(60.dp),
+                    onClick = {
+                        //onStepBack()
+                    },
+                    colors = ButtonDefaults.buttonColors(Color.White),
+                    border = BorderStroke(2.dp, Color.Black)
+                ) {
+                    Text(
+                        text = "Back",
+                        color = Color.Black,
+                        fontSize = 18.sp
+                    )
+                }
+                Button(
+                    onClick = {
+                        // какая то логика для заказа машины
+                    },
                     modifier = Modifier
-                        .padding(end = 5.dp)
-                        .size(22.dp),
-                    painter = painterResource(id = R.drawable.ic_mileage),
-                    contentDescription = "Пробег"
-                )
-                Text(
-                    fontSize = 20.sp,
-                    color = colorGrey,
-                    text = "22 тыс. км"
-                )
-            }
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp)
-                .heightIn(max = 200.dp)
-                .verticalScroll(scrollStateText)
-            ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    fontSize = 15.sp,
-                    color = colorGrey,
-                    text = "Практичний, надійний універсал," +
-                            " з дуже економічним двигуном об'ємом дизельним" +
-                            " 2.0 літра потужністю 170к.с\n" +
-                            "Авто приїхало з Н" +
-                            "імеччини в 2022 році," +
-                            " має одного власника в Україні. " +
-                            "Технічно автомобіль в чудовому стані. \n" +
-                            "Комплектація: кл" +
-                            "імат контро" +
-                            "ль, круїз контроль, датчик світл" +
-                            "а, датчик дощу, електро регулювання с" +
-                            "идіння воді" +
-                            "я, мультимедія з підтримкою Ap" +
-                            "ple CarPlay AndroidAut" +
-                            "o, та інше."
-                )
+                        .fillMaxWidth()
+                        .padding(15.dp)
+                        .height(60.dp),
+                    colors = ButtonDefaults.buttonColors(Color.White),
+                    border = BorderStroke(2.dp, Color.Black)
+                ) {
+                    Text(text = "Rent", color = Color.Black, fontSize = 18.sp)
+                }
             }
         }
     }

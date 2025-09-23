@@ -4,11 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
 class AuthLogicViewModel : ViewModel() {
 
@@ -18,12 +14,6 @@ class AuthLogicViewModel : ViewModel() {
         private set
 
     var signInStatus by mutableStateOf<String?>(null)
-        private set
-
-    var logOutStatus by mutableStateOf<String?>(null)
-        private set
-
-    var checkFavCars by mutableStateOf(setOf(Int))
         private set
 
     fun register(email: String, password: String) {
@@ -56,25 +46,6 @@ class AuthLogicViewModel : ViewModel() {
                 } else {
                     task.exception?.message ?: "Unknown error"
                 }
-            }
-    }
-
-    fun checkIsAdmin(isAdmin: (Boolean) -> Unit) {
-        val userUid = Firebase.auth.currentUser!!.uid
-        Firebase.firestore.collection("admin")
-            .document(userUid).get().addOnSuccessListener {
-                isAdmin((it.get("admin")) as Boolean)
-            }
-    }
-
-    fun checkFavCars(onResult: (Set<Int>) -> Unit) {
-        val uid = Firebase.auth.currentUser!!.uid
-        Firebase.firestore.collection("users")
-            .document(uid)
-            .collection("favCars")
-            .get().addOnSuccessListener { result ->
-                val favId = result.documents.map { it.id.toInt() }.toSet()
-                onResult(favId)
             }
     }
 }

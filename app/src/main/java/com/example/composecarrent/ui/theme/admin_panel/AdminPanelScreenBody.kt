@@ -26,6 +26,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.composecarrent.R
+import com.example.composecarrent.ui.theme.data.CarDataModel
 
 @Composable
 fun AdminPanelScreenBody(
@@ -44,6 +47,40 @@ fun AdminPanelScreenBody(
     viewModel: AdminPanelModelView = viewModel(),
     onStepBack: () -> Unit
 ) {
+
+    val mark = viewModel.mark
+    val modelYear = viewModel.modelYear
+    val coast = viewModel.coast
+    val consumption = viewModel.consumption
+    val mileage = viewModel.mileage
+    val fuel = viewModel.fuel
+    val transmission = viewModel.transmission
+    val location = viewModel.location
+    val carId = viewModel.carId
+    val category = viewModel.category
+    val description = viewModel.description
+
+    val carIcon1 = "carIcon"
+    val carIcon2 = "carIcon"
+    val carIcon3 = "carIcon"
+
+    val newCar = CarDataModel(
+        carId.toIntOrNull() ?: 0,
+        category,
+        carIcon1,
+        carIcon2,
+        carIcon3,
+        mark,
+        modelYear,
+        coast,
+        mileage,
+        consumption,
+        transmission,
+        fuel,
+        location,
+        description
+    )
+
     Box(
         modifier = modifier
     ) {
@@ -66,17 +103,17 @@ fun AdminPanelScreenBody(
             ) {
                 TextField(
                     modifier = Modifier.fillMaxWidth(0.5f),
-                    value = "",
+                    value = mark,
                     shape = RoundedCornerShape(10.dp),
-                    onValueChange = {},
+                    onValueChange = { viewModel.mark = it },
                     label = { Text("Mark") },
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.width(20.dp))
                 TextField(
-                    value = "",
+                    value = modelYear,
                     shape = RoundedCornerShape(10.dp),
-                    onValueChange = {},
+                    onValueChange = { viewModel.modelYear = it },
                     label = { Text("Model and Year") },
                     singleLine = true
                 )
@@ -88,17 +125,17 @@ fun AdminPanelScreenBody(
             ) {
                 TextField(
                     modifier = Modifier.fillMaxWidth(0.5f),
-                    value = "",
+                    value = coast,
                     shape = RoundedCornerShape(10.dp),
-                    onValueChange = {},
+                    onValueChange = { viewModel.coast = it },
                     label = { Text("Coast") },
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.width(20.dp))
                 TextField(
-                    value = "",
+                    value = consumption,
                     shape = RoundedCornerShape(10.dp),
-                    onValueChange = {},
+                    onValueChange = { viewModel.consumption = it },
                     label = { Text("Consumption") },
                     singleLine = true
                 )
@@ -110,17 +147,17 @@ fun AdminPanelScreenBody(
             ) {
                 TextField(
                     modifier = Modifier.fillMaxWidth(0.5f),
-                    value = "",
+                    value = mileage,
                     shape = RoundedCornerShape(10.dp),
-                    onValueChange = {},
+                    onValueChange = { viewModel.mileage = it },
                     label = { Text("Mileage") },
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.width(20.dp))
                 TextField(
-                    value = "",
+                    value = fuel,
                     shape = RoundedCornerShape(10.dp),
-                    onValueChange = {},
+                    onValueChange = { viewModel.fuel = it },
                     label = { Text("Fuel") },
                     singleLine = true
                 )
@@ -132,17 +169,17 @@ fun AdminPanelScreenBody(
             ) {
                 TextField(
                     modifier = Modifier.fillMaxWidth(0.5f),
-                    value = "",
+                    value = transmission,
                     shape = RoundedCornerShape(10.dp),
-                    onValueChange = {},
+                    onValueChange = { viewModel.transmission = it },
                     label = { Text("Transmission") },
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.width(20.dp))
                 TextField(
-                    value = "",
+                    value = location,
                     shape = RoundedCornerShape(10.dp),
-                    onValueChange = {},
+                    onValueChange = { viewModel.location = it },
                     label = { Text("Location") },
                     singleLine = true
                 )
@@ -154,17 +191,17 @@ fun AdminPanelScreenBody(
             ) {
                 TextField(
                     modifier = Modifier.fillMaxWidth(0.5f),
-                    value = "",
+                    value = carId,
                     shape = RoundedCornerShape(10.dp),
-                    onValueChange = {},
+                    onValueChange = { viewModel.carId = it },
                     label = { Text("Car ID") },
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.width(20.dp))
                 TextField(
-                    value = "",
+                    value = category,
                     shape = RoundedCornerShape(10.dp),
-                    onValueChange = {},
+                    onValueChange = { viewModel.category = it },
                     label = { Text("Category") },
                     singleLine = true
                 )
@@ -172,9 +209,9 @@ fun AdminPanelScreenBody(
             Spacer(modifier = Modifier.height(8.dp))
             TextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = "",
+                value = description,
                 shape = RoundedCornerShape(10.dp),
-                onValueChange = {},
+                onValueChange = { viewModel.description = it },
                 label = { Text("Description") },
                 maxLines = 5
             )
@@ -198,7 +235,7 @@ fun AdminPanelScreenBody(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                Row{
+                Row {
                     Button(
                         modifier = Modifier
                             .fillMaxWidth(0.5f)
@@ -221,7 +258,9 @@ fun AdminPanelScreenBody(
                             .fillMaxWidth()
                             .padding(15.dp)
                             .height(60.dp),
-                        onClick = {},
+                        onClick = {
+                            viewModel.addNewCar(newCar, category, carId)
+                        },
                         colors = ButtonDefaults.buttonColors(Color.White),
                         border = BorderStroke(2.dp, Color.Black)
                     ) {

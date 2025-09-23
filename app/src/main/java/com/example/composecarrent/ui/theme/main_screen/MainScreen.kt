@@ -105,6 +105,7 @@ fun MainScreen(
             }
 
             MainScreenBody(
+                navController = navController,
                 selectedFavCars,
                 isAdmin,
                 clicked,

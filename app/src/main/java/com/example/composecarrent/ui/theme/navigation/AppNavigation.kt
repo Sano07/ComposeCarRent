@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.composecarrent.ui.theme.admin_panel.AdminPanelScreen
+import com.example.composecarrent.ui.theme.car_description_screen.CarDescriptionScreen
 import com.example.composecarrent.ui.theme.favorite_screen.FavoriteScreen
 import com.example.composecarrent.ui.theme.login_screen.LoginScreen
 import com.example.composecarrent.ui.theme.main_screen.MainScreen
@@ -72,6 +73,9 @@ fun AppNavigation(
         }
         composable("admin_screen") {
             AdminPanelScreen(navController = navController)
+        }
+        composable("desc_screen") {
+            CarDescriptionScreen(navController = navController)
         }
     }
 }

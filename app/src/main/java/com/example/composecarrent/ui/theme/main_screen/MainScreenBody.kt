@@ -1,5 +1,6 @@
 package com.example.composecarrent.ui.theme.main_screen
 
+import android.widget.ImageButton
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,11 +27,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlin.contracts.contract
 
 val carList = listOf(
     CarDataModel(
@@ -83,6 +86,7 @@ val carList = listOf(
 
 @Composable
 fun MainScreenBody(
+    navController: NavController,
     selectedFavCars: List<Int>,
     isAdmin: MutableState<Boolean>,
     clicked: MutableState<Boolean>,
@@ -96,24 +100,23 @@ fun MainScreenBody(
     ) {
         itemsIndexed(list) { _, item ->
             val isFav = favCars.contains(item.id)
-            CarCards(isAdmin, favCars, clicked, item, isFav, onFavCarChange = { onFavCarChange(item.id) })
+            CarCards(navController, isAdmin, favCars, clicked, item, isFav, onFavCarChange = { onFavCarChange(item.id) })
         }
     }
 }
 
 @Composable
-fun CarCards(isAdmin: MutableState<Boolean>, favCars: Set<Int>, clicked: MutableState<Boolean>, item: CarDataModel, isFav: Boolean, onFavCarChange: (String) -> Unit) {
+fun CarCards(navController: NavController, isAdmin: MutableState<Boolean>, favCars: Set<Int>, clicked: MutableState<Boolean>, item: CarDataModel, isFav: Boolean, onFavCarChange: (String) -> Unit) {
 
     val colorGreen = colorResource(id = R.color.green)
     val colorGrey = colorResource(id = R.color.grey)
     val db = Firebase.firestore
     val uid = Firebase.auth.currentUser!!.uid
-    val email = Firebase.auth.currentUser!!.email
-    val safeEmail = email?.replace("@", "")?.replace(".", "")
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(15.dp)
+        shape = RoundedCornerShape(15.dp),
+        onClick = {navController.navigate("desc_screen")}
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
             Image(
@@ -208,6 +211,18 @@ fun CarCards(isAdmin: MutableState<Boolean>, favCars: Set<Int>, clicked: Mutable
                     Text(
                         color = colorGrey,
                         text = item.location
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Image(
+                        modifier = Modifier
+                            .padding(end = 5.dp)
+                            .size(15.dp),
+                        painter = painterResource(id = R.drawable.ic_mileage),
+                        contentDescription = "Пробег"
+                    )
+                    Text(
+                        color = colorGrey,
+                        text = item.mileage
                     )
                 }
                 IconButton(

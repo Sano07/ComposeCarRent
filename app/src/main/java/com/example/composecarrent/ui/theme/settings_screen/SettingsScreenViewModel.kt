@@ -1,6 +1,7 @@
 package com.example.composecarrent.ui.theme.settings_screen
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -16,6 +17,9 @@ class SettingsScreenViewModel : ViewModel() {
         private set
 
     var deleteAccountStatus by mutableStateOf<String?>(null)
+        private set
+
+    var fillBalanceValue by mutableIntStateOf(1000)
         private set
 
     fun logOut() {
@@ -36,6 +40,9 @@ class SettingsScreenViewModel : ViewModel() {
                 task.exception?.message ?: "Unknown error"
             }
         }
+    }
 
+    fun fillBalance() {
+        fillBalanceValue += 300
     }
 }

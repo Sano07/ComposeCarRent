@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,6 +53,7 @@ fun SettingsScreenBody(
     val logOutStatus = viewModel.logOutStatus // отслеживание статуса выхода из аккаунта
     val deleteAccountStatus = viewModel.deleteAccountStatus // отслеживание статуса удаления аккаунта
     var showDialog by remember { mutableStateOf(false) }
+    val fillBalanceValue = viewModel.fillBalanceValue
 
 
     LaunchedEffect(logOutStatus) {
@@ -178,7 +180,7 @@ fun SettingsScreenBody(
                     modifier = Modifier
                         .background(Color.White)
                         .fillMaxWidth(0.5f),
-                    text = "1000$",
+                    text = "$fillBalanceValue $",
                     color = Color.Green,
                     fontSize = 50.sp
                 )
@@ -188,7 +190,9 @@ fun SettingsScreenBody(
                         .fillMaxWidth()
                         .height(60.dp)
                         .padding(end = 15.dp),
-                    onClick = {},
+                    onClick = {
+                        viewModel.fillBalance()
+                    },
                     colors = ButtonDefaults.buttonColors(Color.White),
                     border = BorderStroke(2.dp, Color.Black)
                 ) {

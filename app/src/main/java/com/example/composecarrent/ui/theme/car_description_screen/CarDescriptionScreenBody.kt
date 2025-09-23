@@ -65,15 +65,14 @@ fun ImagePager() {
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun CarDescriptionScreenBody() {
+fun CarDescriptionScreenBody(modifier: Modifier = Modifier) {
     val colorGrey = colorResource(id = R.color.grey)
     val colorGreen = colorResource(id = R.color.green)
     val scrollStateText = rememberScrollState()
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier
     ) {
         Column(
             modifier = Modifier
@@ -207,44 +206,66 @@ fun CarDescriptionScreenBody() {
                                 "мультимедія з підтримкою Ap" +
                                 "ple CarPl" +
                                 "ay AndroidAut" +
+                                "o, та інше." +
+                        "Практичний, надійний універсал," +
+                                " з дуже економічним двигуном об'ємом дизельним" +
+                                " 2.0 літра потужністю 170к.с\n" +
+                                "Авто приїхало з Н" +
+                                "імеччини в 2022 році," +
+                                " має " +
+                                "одного власника в Україні. " +
+                                "Технічно автомобіль в чудовому стані. \n" +
+                                "Комплектація: кл" +
+                                "імат контро" +
+                                "ль, круїз контроль, датчик світл" +
+                                "а, датчик дощу, електро регулювання с" +
+                                "идіння воді" +
+                                "я, " +
+                                "мультимедія з підтримкою Ap" +
+                                "ple CarPl" +
+                                "ay AndroidAut" +
+                                "o, та інше." +
+                        "Практичний, надійний універсал," +
+                                " з дуже економічним двигуном об'ємом дизельним" +
+                                " 2.0 літра потужністю 170к.с\n" +
+                                "Авто приїхало з Н" +
+                                "імеччини в 2022 році," +
+                                " має " +
+                                "одного власника в Україні. " +
+                                "Технічно автомобіль в чудовому стані. \n" +
+                                "Комплектація: кл" +
+                                "імат контро" +
+                                "ль, круїз контроль, датчик світл" +
+                                "а, датчик дощу, електро регулювання с" +
+                                "идіння воді" +
+                                "я, " +
+                                "мультимедія з підтримкою Ap" +
+                                "ple CarPl" +
+                                "ay AndroidAut" +
+                                "o, та інше." +
+                        "Практичний, надійний універсал," +
+                                " з дуже економічним двигуном об'ємом дизельним" +
+                                " 2.0 літра потужністю 170к.с\n" +
+                                "Авто приїхало з Н" +
+                                "імеччини в 2022 році," +
+                                " має " +
+                                "одного власника в Україні. " +
+                                "Технічно автомобіль в чудовому стані. \n" +
+                                "Комплектація: кл" +
+                                "імат контро" +
+                                "ль, круїз контроль, датчик світл" +
+                                "а, датчик дощу, електро регулювання с" +
+                                "идіння воді" +
+                                "я, " +
+                                "мультимедія з підтримкою Ap" +
+                                "ple CarPl" +
+                                "ay AndroidAut" +
                                 "o, та інше."
                     )
 
                 }
             }
             Spacer(modifier = Modifier.height(15.dp))
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth(0.5f)
-                        .padding(15.dp)
-                        .height(60.dp),
-                    onClick = {
-                        //onStepBack()
-                    },
-                    colors = ButtonDefaults.buttonColors(Color.White),
-                    border = BorderStroke(2.dp, Color.Black)
-                ) {
-                    Text(
-                        text = "Back",
-                        color = Color.Black,
-                        fontSize = 18.sp
-                    )
-                }
-                Button(
-                    onClick = {
-                        // какая то логика для заказа машины
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp)
-                        .height(60.dp),
-                    colors = ButtonDefaults.buttonColors(Color.White),
-                    border = BorderStroke(2.dp, Color.Black)
-                ) {
-                    Text(text = "Rent", color = Color.Black, fontSize = 18.sp)
-                }
-            }
         }
     }
 }

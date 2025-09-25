@@ -52,6 +52,7 @@ fun SettingsScreenBody(
         LocalContext.current
     val logOutStatus = viewModel.logOutStatus // отслеживание статуса выхода из аккаунта
     val deleteAccountStatus = viewModel.deleteAccountStatus // отслеживание статуса удаления аккаунта
+    val fillAccountStatus = viewModel.fullAccountStatus
     var showDialog by remember { mutableStateOf(false) }
     val fillBalanceValue = viewModel.fillBalanceValue
 
@@ -82,6 +83,24 @@ fun SettingsScreenBody(
             ).show()
         }
     }
+
+    LaunchedEffect(fillAccountStatus) {
+        if (fillAccountStatus != null && fillAccountStatus != "success") {
+            Toast.makeText(
+                context,
+                "Ошибка: $fillAccountStatus",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else if (fillAccountStatus == "success") {
+            Toast.makeText(
+                context,
+                "Filling successful",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+
 
     Box(
         modifier = modifier

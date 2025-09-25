@@ -1,6 +1,7 @@
 package com.example.composecarrent.ui.theme.admin_panel
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -26,12 +27,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,6 +50,13 @@ fun AdminPanelScreenBody(
     viewModel: AdminPanelModelView = viewModel(),
     onStepBack: () -> Unit
 ) {
+    val context =
+        LocalContext.current
+    val categoryList = listOf("Sedans", "Crossovers", "Full-size Sedans", "Coupes and Convertibles", "Electric Vehicles", "Moto")
+    val fuelList = listOf("Diesel", "Gasoline", "Electricity" )
+    val gearList = listOf("Automatic", "Mechanical", "Robotic", "Variator" )
+
+    val addCarStatus = viewModel.addCarStatus
 
     val mark = viewModel.mark
     val modelYear = viewModel.modelYear
@@ -80,6 +90,22 @@ fun AdminPanelScreenBody(
         location,
         description
     )
+
+    LaunchedEffect(addCarStatus) {
+        if (addCarStatus != null && addCarStatus != "success") {
+            Toast.makeText(
+                context,
+                "$addCarStatus",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else if (addCarStatus == "success") {
+            Toast.makeText(
+                context,
+                "Save car was successful",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 
     Box(
         modifier = modifier
@@ -154,13 +180,9 @@ fun AdminPanelScreenBody(
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.width(20.dp))
-                TextField(
-                    value = fuel,
-                    shape = RoundedCornerShape(10.dp),
-                    onValueChange = { viewModel.fuel = it },
-                    label = { Text("Fuel") },
-                    singleLine = true
-                )
+                viewModel.DropDownMenu(modifier = Modifier.height(50.dp), "Fuel", fuelList) { selectedFuel ->
+                    viewModel.fuel = selectedFuel
+                }
             }
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -169,20 +191,16 @@ fun AdminPanelScreenBody(
             ) {
                 TextField(
                     modifier = Modifier.fillMaxWidth(0.5f),
-                    value = transmission,
-                    shape = RoundedCornerShape(10.dp),
-                    onValueChange = { viewModel.transmission = it },
-                    label = { Text("Transmission") },
-                    singleLine = true
-                )
-                Spacer(modifier = Modifier.width(20.dp))
-                TextField(
                     value = location,
                     shape = RoundedCornerShape(10.dp),
                     onValueChange = { viewModel.location = it },
                     label = { Text("Location") },
                     singleLine = true
                 )
+                Spacer(modifier = Modifier.width(20.dp))
+                viewModel.DropDownMenu(modifier = Modifier.height(50.dp), "Transmission", gearList) { selectedGear ->
+                    viewModel.transmission = selectedGear
+                }
             }
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -198,13 +216,9 @@ fun AdminPanelScreenBody(
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.width(20.dp))
-                TextField(
-                    value = category,
-                    shape = RoundedCornerShape(10.dp),
-                    onValueChange = { viewModel.category = it },
-                    label = { Text("Category") },
-                    singleLine = true
-                )
+                    viewModel.DropDownMenu(modifier = Modifier.height(50.dp), "Category", categoryList) { selectedCategory ->
+                        viewModel.category = selectedCategory
+                    }
             }
             Spacer(modifier = Modifier.height(8.dp))
             TextField(

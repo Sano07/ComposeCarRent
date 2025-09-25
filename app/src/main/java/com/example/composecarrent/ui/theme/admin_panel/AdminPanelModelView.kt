@@ -1,12 +1,24 @@
 package com.example.composecarrent.ui.theme.admin_panel
 
 import android.net.Uri
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MenuAnchorType
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import com.example.composecarrent.ui.theme.data.CarDataModel
 import com.google.firebase.auth.FirebaseAuth
@@ -34,6 +46,9 @@ class AdminPanelModelView : ViewModel() {
     var photoUri2 by mutableStateOf<Uri?>(null)
 
     var photoUri3 by mutableStateOf<Uri?>(null)
+
+    var addCarStatus by mutableStateOf<String?>(null)
+        private set
 
     fun setPhoto1(uri: Uri?) {
         photoUri1 = uri
@@ -64,8 +79,60 @@ class AdminPanelModelView : ViewModel() {
             carRoute.get().addOnSuccessListener { carRouteCheck ->
                 if (!carRouteCheck.exists()) {
                     carRoute.set(car)
+                    addCarStatus = "success"
+                } else {
+                    addCarStatus = "Error. Check id or category"
                 }
             }
         }
     }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun DropDownMenu(
+        modifier: Modifier,
+        label: String,
+        options: List<String>,
+        onSelected: (String) -> Unit
+    ) {
+        var openMenu by remember { mutableStateOf(false) }
+        var selectedOption by remember { mutableStateOf("") }
+
+        ExposedDropdownMenuBox(
+            modifier = modifier,
+            expanded = openMenu,
+            onExpandedChange = { openMenu = !openMenu }
+        ) {
+            OutlinedTextField(
+                value = selectedOption,
+                onValueChange = {},
+                readOnly = true,
+                label = { Text(label) },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = openMenu)
+                },
+                modifier = Modifier
+                    .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled = true) // нужно для правильного позиционирования меню
+                    .fillMaxWidth()
+            )
+
+            ExposedDropdownMenu(
+                expanded = openMenu,
+                onDismissRequest = { openMenu = false }
+            ) {
+                options.forEach { option ->
+                    DropdownMenuItem(
+                        text = { Text(option) },
+                        onClick = {
+                            selectedOption = option
+                            openMenu = false
+                            onSelected(option)
+                        }
+                    )
+                }
+            }
+        }
+    }
+
+
 }

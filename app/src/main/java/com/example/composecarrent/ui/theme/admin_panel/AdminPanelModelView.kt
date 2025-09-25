@@ -47,19 +47,20 @@ class AdminPanelModelView : ViewModel() {
         photoUri3 = uri
     }
 
+    // функция добавления новой машины, проверяется категория, если она есть - добавляется только машина
+    // если категории нет, создается категория и добавляется машина
+    // если есть машина, машина не записывается
     fun addNewCar(
         car: CarDataModel, category: String, carId: String
     ) {
+        val carCategory = db.collection("cars").document(category)
 
-        val docCategory = db.collection("cars").document(category)
-
-        docCategory.get().addOnSuccessListener { docCat ->
-            if (!docCat.exists()) {
-                // Если категории нет — создаётся пустой документ категории с указанием даты, без нее фаирстор не создаст ее
-                docCategory.set(mapOf("createdAt" to System.currentTimeMillis()))
+        carCategory.get().addOnSuccessListener { cat ->
+            if (!cat.exists()) {
+                carCategory.set(mapOf("category" to category))
             }
 
-            val carRoute = docCategory.collection("cars").document(carId)
+            val carRoute = carCategory.collection("cars").document(carId)
             carRoute.get().addOnSuccessListener { carRouteCheck ->
                 if (!carRouteCheck.exists()) {
                     carRoute.set(car)

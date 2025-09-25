@@ -1,6 +1,9 @@
 package com.example.composecarrent.ui.theme.admin_panel
 
+import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.net.Uri
+import android.util.Base64
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.DropdownMenu
@@ -85,6 +88,21 @@ class AdminPanelModelView : ViewModel() {
                 }
             }
         }
+    }
+
+
+    @SuppressLint("Recycle")
+    fun imageToBase64(uri: Uri, contentResolver: ContentResolver) : String {
+        val inputStream = contentResolver.openInputStream(uri)
+
+        val bytes = inputStream?.readBytes()
+        return bytes?.let {
+            Base64.encodeToString(it, Base64.DEFAULT)
+        } ?: ""
+    }
+
+    fun saveCarImages() {
+
     }
 
     @OptIn(ExperimentalMaterial3Api::class)

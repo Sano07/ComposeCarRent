@@ -52,6 +52,7 @@ fun AdminPanelScreenBody(
 ) {
     val context =
         LocalContext.current
+    val contentResolver = LocalContext.current.contentResolver
     val categoryList = listOf("Sedans", "Crossovers", "Full-size Sedans", "Coupes and Convertibles", "Electric Vehicles", "Moto")
     val fuelList = listOf("Diesel", "Gasoline", "Electricity" )
     val gearList = listOf("Automatic", "Mechanical", "Robotic", "Variator" )
@@ -70,16 +71,16 @@ fun AdminPanelScreenBody(
     val category = viewModel.category
     val description = viewModel.description
 
-    val carIcon1 = "carIcon"
-    val carIcon2 = "carIcon"
-    val carIcon3 = "carIcon"
+    val carIcon1 = viewModel.photoUri1?.let { viewModel.imageToBase64(it, contentResolver) }
+    val carIcon2 = viewModel.photoUri2?.let { viewModel.imageToBase64(it, contentResolver) }
+    val carIcon3 = viewModel.photoUri3?.let { viewModel.imageToBase64(it, contentResolver) }
 
     val newCar = CarDataModel(
         carId.toIntOrNull() ?: 0,
         category,
-        carIcon1,
-        carIcon2,
-        carIcon3,
+        carIcon1 ?: "",
+        carIcon2 ?: "",
+        carIcon3 ?: "",
         mark,
         modelYear,
         coast,
@@ -240,9 +241,9 @@ fun AdminPanelScreenBody(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                ImportImage(viewModel.photoUri1, onImageSet = { viewModel.setPhoto1(it) })
-                ImportImage(viewModel.photoUri2, onImageSet = { viewModel.setPhoto2(it) })
-                ImportImage(viewModel.photoUri3, onImageSet = { viewModel.setPhoto3(it) })
+                ImportImage(viewModel.photoUri1, onImageSet = { uri -> viewModel.photoUri1 = uri })
+                ImportImage(viewModel.photoUri2, onImageSet = { uri -> viewModel.photoUri2 = uri })
+                ImportImage(viewModel.photoUri3, onImageSet = { uri -> viewModel.photoUri3 = uri })
             }
             Spacer(modifier = Modifier.height(15.dp))
             Box(
@@ -274,6 +275,8 @@ fun AdminPanelScreenBody(
                             .height(60.dp),
                         onClick = {
                             viewModel.addNewCar(newCar, category, carId)
+                            onStepBack()
+
                         },
                         colors = ButtonDefaults.buttonColors(Color.White),
                         border = BorderStroke(2.dp, Color.Black)
@@ -292,7 +295,7 @@ fun AdminPanelScreenBody(
 
 @Composable
 fun ImportImage(imageUri: Uri? = null, onImageSet: (Uri) -> Unit) {
-    rememberLauncherForActivityResult(
+    val store = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
         if (uri != null) {
@@ -301,7 +304,9 @@ fun ImportImage(imageUri: Uri? = null, onImageSet: (Uri) -> Unit) {
     }
 
     Button(
-        onClick = { },
+        onClick = {
+            store.launch("image/*")
+        },
         modifier = Modifier.size(140.dp),
         shape = RoundedCornerShape(20.dp),
         colors = ButtonDefaults.buttonColors(Color.LightGray)

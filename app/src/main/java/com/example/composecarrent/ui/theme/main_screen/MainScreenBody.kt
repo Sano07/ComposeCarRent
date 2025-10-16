@@ -109,22 +109,16 @@ fun MainScreenBody(
 ) {
     var selectedCarList by remember { mutableStateOf<List<CarDataModel>>(emptyList()) }
 
-
     val db = Firebase.firestore
-    val selCategory = selectedCategory.toString()
 
-    LaunchedEffect(selectedCategory) {
-        try {
-            val result = db.collection("cars")
-                .document(selCategory)
+    LaunchedEffect(selectedCategory.value) {
+        db.collection("cars")
+                .document(selectedCategory.value)
                 .collection("cars")
                 .get()
-                .await()
-                selectedCarList = result.toObjects(CarDataModel::class.java)
-
-        } catch (e: Exception) {
-            Log.e("Firestore", "Ошибка загрузки: ${e.message}")
-        }
+                .addOnSuccessListener { result ->
+                    selectedCarList = result.toObjects(CarDataModel::class.java)
+                }
     }
 
     LazyColumn(

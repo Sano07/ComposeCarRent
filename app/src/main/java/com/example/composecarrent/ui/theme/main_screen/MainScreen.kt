@@ -56,6 +56,7 @@ fun MainScreen(
             modifier = Modifier.zIndex(100f),
             topBar = {
                 TopBar(
+                    selectedCategory,
                     onDrawerChange = {
                         coroutineScope.launch {
                             drawerState.open()

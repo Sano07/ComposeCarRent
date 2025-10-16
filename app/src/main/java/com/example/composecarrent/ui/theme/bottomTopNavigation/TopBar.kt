@@ -8,14 +8,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(onDrawerChange: () -> Unit) {
+fun TopBar(selectedCategory: MutableState<String>, onDrawerChange: () -> Unit) {
     CenterAlignedTopAppBar(
-            title = { Text(text = "Store", fontSize = 25.sp) },
+            title = { Text(text = selectedCategory.value, fontSize = 25.sp) },
             actions = {
                 IconButton(
                     onClick = onDrawerChange,

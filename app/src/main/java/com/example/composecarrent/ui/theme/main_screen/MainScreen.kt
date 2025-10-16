@@ -30,6 +30,7 @@ fun MainScreen(
     isAdmin: MutableState<Boolean>,
     drawerState: DrawerState,
     selectedItem: MutableState<String>,
+    selectedCategory: MutableState<String>,
     clicked: MutableState<Boolean>,
     navController: NavController,
     favCars: Set<Int>,
@@ -46,7 +47,7 @@ fun MainScreen(
                     .zIndex(100f) // дравер занимает 70% экрана
             ) {
                 DrawerHeader()
-                DrawerBody()
+                DrawerBody(selectedCategory)
             }
         },
         modifier = Modifier.zIndex(100f)
@@ -108,6 +109,7 @@ fun MainScreen(
                 navController = navController,
                 selectedFavCars,
                 isAdmin,
+                selectedCategory,
                 clicked,
                 carList,
                 modifier = Modifier.padding(padding),

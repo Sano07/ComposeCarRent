@@ -35,6 +35,7 @@ fun AppNavigation(
     val drawerState = rememberDrawerState(DrawerValue.Closed) // ( состояние, открыто по умолчанию )
     val isAdminState = remember { mutableStateOf(false) }
     val selectedFavCars by remember { mutableStateOf<List<Int>>(emptyList()) }
+    val selCategory = mutableStateOf("Sedans")
 
     NavHost(navController = navController, startDestination = "login") {
         composable("login") {
@@ -47,6 +48,7 @@ fun AppNavigation(
                 isAdminState,
                 drawerState,
                 selectedItem,
+                selCategory,
                 clicked,
                 navController = navController,
                 favCar,

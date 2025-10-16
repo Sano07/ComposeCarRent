@@ -1,5 +1,6 @@
 package com.example.composecarrent.ui.theme.main_screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,6 +15,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,8 +29,9 @@ import androidx.compose.ui.unit.sp
 import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.WhiteLine
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
-fun DrawerBody() {
+fun DrawerBody(selectedCategory: MutableState<String>) {
     val categoriesList = listOf("Sedans", "Crossovers", "Full-size Sedans", "Coupes and Convertibles", "Electric Vehicles", "Moto")
 
     Box(
@@ -48,7 +53,9 @@ fun DrawerBody() {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {  }
+                            .clickable {
+                                selectedCategory.value = item
+                            }
                     ) {
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
@@ -71,3 +78,4 @@ fun DrawerBody() {
         }
     }
 }
+

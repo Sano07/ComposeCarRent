@@ -1,5 +1,7 @@
 package com.example.composecarrent.ui.theme.main_screen
 
+import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.ImageButton
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -17,7 +19,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,7 +40,10 @@ import com.example.composecarrent.ui.theme.data.CarDataModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.tasks.await
 import kotlin.contracts.contract
+
+
 
 val carList = listOf(
     CarDataModel(
@@ -84,21 +94,43 @@ val carList = listOf(
 )
 
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun MainScreenBody(
     navController: NavController,
     selectedFavCars: List<Int>,
     isAdmin: MutableState<Boolean>,
+    selectedCategory: MutableState<String>,
     clicked: MutableState<Boolean>,
     list: List<CarDataModel>,
     modifier: Modifier = Modifier,
     favCars: Set<Int>,
     onFavCarChange: (Int) -> Unit
 ) {
+    var selectedCarList by remember { mutableStateOf<List<CarDataModel>>(emptyList()) }
+
+
+    val db = Firebase.firestore
+    val selCategory = selectedCategory.toString()
+
+    LaunchedEffect(selectedCategory) {
+        try {
+            val result = db.collection("cars")
+                .document(selCategory)
+                .collection("cars")
+                .get()
+                .await()
+                selectedCarList = result.toObjects(CarDataModel::class.java)
+
+        } catch (e: Exception) {
+            Log.e("Firestore", "Ошибка загрузки: ${e.message}")
+        }
+    }
+
     LazyColumn(
         modifier = modifier
     ) {
-        itemsIndexed(list) { _, item ->
+        itemsIndexed(selectedCarList) { _, item ->
             val isFav = favCars.contains(item.id)
             CarCards(navController, isAdmin, favCars, clicked, item, isFav, onFavCarChange = { onFavCarChange(item.id) })
         }

@@ -91,6 +91,7 @@ class AdminPanelModelView : ViewModel() {
     }
 
 
+    // конвертация картинки в Base 64
     @SuppressLint("Recycle")
     fun imageToBase64(uri: Uri, contentResolver: ContentResolver) : String {
         val inputStream = contentResolver.openInputStream(uri)
@@ -101,9 +102,8 @@ class AdminPanelModelView : ViewModel() {
         } ?: ""
     }
 
-    fun saveCarImages() {
 
-    }
+
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable

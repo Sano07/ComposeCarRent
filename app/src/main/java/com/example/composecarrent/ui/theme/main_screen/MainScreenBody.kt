@@ -1,6 +1,9 @@
 package com.example.composecarrent.ui.theme.main_screen
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.util.Log
 import android.widget.ImageButton
 import androidx.compose.foundation.Image
@@ -35,14 +38,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
+import kotlinx.serialization.builtins.ByteArraySerializer
 import kotlin.contracts.contract
-
 
 
 val carList = listOf(
@@ -113,12 +117,12 @@ fun MainScreenBody(
 
     LaunchedEffect(selectedCategory.value) {
         db.collection("cars")
-                .document(selectedCategory.value)
-                .collection("cars")
-                .get()
-                .addOnSuccessListener { result ->
-                    selectedCarList = result.toObjects(CarDataModel::class.java)
-                }
+            .document(selectedCategory.value)
+            .collection("cars")
+            .get()
+            .addOnSuccessListener { result ->
+                selectedCarList = result.toObjects(CarDataModel::class.java)
+            }
     }
 
     LazyColumn(
@@ -126,13 +130,28 @@ fun MainScreenBody(
     ) {
         itemsIndexed(selectedCarList) { _, item ->
             val isFav = favCars.contains(item.id)
-            CarCards(navController, isAdmin, favCars, clicked, item, isFav, onFavCarChange = { onFavCarChange(item.id) })
+            CarCards(
+                navController,
+                isAdmin,
+                favCars,
+                clicked,
+                item,
+                isFav,
+                onFavCarChange = { onFavCarChange(item.id) })
         }
     }
 }
 
 @Composable
-fun CarCards(navController: NavController, isAdmin: MutableState<Boolean>, favCars: Set<Int>, clicked: MutableState<Boolean>, item: CarDataModel, isFav: Boolean, onFavCarChange: (String) -> Unit) {
+fun CarCards(
+    navController: NavController,
+    isAdmin: MutableState<Boolean>,
+    favCars: Set<Int>,
+    clicked: MutableState<Boolean>,
+    item: CarDataModel,
+    isFav: Boolean,
+    onFavCarChange: (String) -> Unit
+) {
 
     val colorGreen = colorResource(id = R.color.green)
     val colorGrey = colorResource(id = R.color.grey)
@@ -142,17 +161,24 @@ fun CarCards(navController: NavController, isAdmin: MutableState<Boolean>, favCa
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(15.dp),
-        onClick = {navController.navigate("desc_screen")}
+        onClick = { navController.navigate("desc_screen") }
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
-            Image(
+
+            fun decodeBase64ToImage(icon : String) : Bitmap {
+                val base64DecodeImage = Base64.decode(icon, Base64.DEFAULT)
+                val bitmap = BitmapFactory.decodeByteArray(base64DecodeImage, 0, base64DecodeImage.size)
+                return bitmap
+            }
+
+            AsyncImage(
+                model = decodeBase64ToImage(item.carIcon1),
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
                     .padding(5.dp),
-                painter = painterResource(id = R.drawable.im_car),
                 contentDescription = "машинка для примера",
                 contentScale = ContentScale.Inside,
-                )
+            )
             Column {
                 Text(
                     modifier = Modifier.padding(5.dp),
@@ -270,12 +296,12 @@ fun CarCards(navController: NavController, isAdmin: MutableState<Boolean>, favCa
                         .align(Alignment.End)
                         .padding(end = 10.dp)
                 ) {
-                        Icon(
-                            modifier = Modifier.size(50.dp),
-                            painter = painterResource(R.drawable.ic_favorite),
-                            contentDescription = "Добавлено в избранное",
-                            tint = if (isFav) Color.Red else Color.Black
-                        )
+                    Icon(
+                        modifier = Modifier.size(50.dp),
+                        painter = painterResource(R.drawable.ic_favorite),
+                        contentDescription = "Добавлено в избранное",
+                        tint = if (isFav) Color.Red else Color.Black
+                    )
                 }
             }
         }

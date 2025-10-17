@@ -52,14 +52,11 @@ fun ImagePager(
     image3: String
 ) {
 
-    val images = listOf(image1, image2, image3)
-    val decodedImages = mutableListOf<Bitmap>()
-
-    images.forEach { image ->
-        decodedImages.add(onDecode(image))
+    val images = listOfNotNull(image1, image2, image3)
+    val decodedImages = remember(images) {
+        images.map { onDecode(it) }
     }
-
-    val pagerState = rememberPagerState(pageCount = { images.size })
+    val pagerState = rememberPagerState(pageCount = { decodedImages.size })
 
     HorizontalPager(
         state = pagerState,

@@ -103,7 +103,9 @@ val carList = listOf(
 fun MainScreenBody(
     navController: NavController,
     selectedFavCars: List<Int>,
+    onDecode: (String) -> Bitmap,
     isAdmin: MutableState<Boolean>,
+    selectedCarForDesc: MutableState<Int?>,
     selectedCategory: MutableState<String>,
     clicked: MutableState<Boolean>,
     list: List<CarDataModel>,
@@ -132,7 +134,9 @@ fun MainScreenBody(
             val isFav = favCars.contains(item.id)
             CarCards(
                 navController,
+                onDecode,
                 isAdmin,
+                selectedCarForDesc,
                 favCars,
                 clicked,
                 item,
@@ -145,7 +149,9 @@ fun MainScreenBody(
 @Composable
 fun CarCards(
     navController: NavController,
+    onDecode: (String) -> Bitmap,
     isAdmin: MutableState<Boolean>,
+    selectedCarForDesc: MutableState<Int?>,
     favCars: Set<Int>,
     clicked: MutableState<Boolean>,
     item: CarDataModel,
@@ -161,18 +167,15 @@ fun CarCards(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(15.dp),
-        onClick = { navController.navigate("desc_screen") }
+        onClick = {
+            navController.navigate("desc_screen")
+            selectedCarForDesc.value = item.id
+        }
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
 
-            fun decodeBase64ToImage(icon : String) : Bitmap {
-                val base64DecodeImage = Base64.decode(icon, Base64.DEFAULT)
-                val bitmap = BitmapFactory.decodeByteArray(base64DecodeImage, 0, base64DecodeImage.size)
-                return bitmap
-            }
-
             AsyncImage(
-                model = decodeBase64ToImage(item.carIcon1),
+                model = onDecode(item.carIcon1),
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
                     .padding(5.dp),

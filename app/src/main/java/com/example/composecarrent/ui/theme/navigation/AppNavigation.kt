@@ -1,6 +1,9 @@
 package com.example.composecarrent.ui.theme.navigation
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -36,6 +39,14 @@ fun AppNavigation(
     val isAdminState = remember { mutableStateOf(false) }
     val selectedFavCars by remember { mutableStateOf<List<Int>>(emptyList()) }
     val selCategory = remember { mutableStateOf("Crossovers") }
+    val selectedCarForDesc = remember { mutableStateOf<Int?>(null) }
+
+    // расшифровка картинки из base64 в Image
+    val onDecode = fun(icon : String) : Bitmap {
+        val base64DecodeImage = Base64.decode(icon, Base64.DEFAULT)
+        val bitmap = BitmapFactory.decodeByteArray(base64DecodeImage, 0, base64DecodeImage.size)
+        return bitmap
+    }
 
     NavHost(navController = navController, startDestination = "login") {
         composable("login") {
@@ -46,6 +57,8 @@ fun AppNavigation(
                 onFavCarUpdate,
                 selectedFavCars,
                 isAdminState,
+                selectedCarForDesc,
+                onDecode,
                 drawerState,
                 selectedItem,
                 selCategory,
@@ -61,7 +74,8 @@ fun AppNavigation(
                 favCar,
                 navController = navController,
                 favCarList,
-                onFavCarChange = onFavCarChange
+                onFavCarChange = onFavCarChange,
+                onDecode
             )
         }
         composable("settings_screen") {
@@ -77,7 +91,7 @@ fun AppNavigation(
             AdminPanelScreen(navController = navController)
         }
         composable("desc_screen") {
-            CarDescriptionScreen(navController = navController)
+            CarDescriptionScreen(navController = navController, onDecode, selectedCarForDesc, selCategory)
         }
     }
 }

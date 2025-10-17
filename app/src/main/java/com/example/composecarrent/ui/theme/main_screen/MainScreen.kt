@@ -1,6 +1,7 @@
 package com.example.composecarrent.ui.theme.main_screen
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,6 +29,8 @@ fun MainScreen(
     onFavCarUpdate: (Set<Int>) -> Unit,
     selectedFavCars: List<Int>,
     isAdmin: MutableState<Boolean>,
+    selectedCarForDesc: MutableState<Int?>,
+    onDecode: (String) -> Bitmap,
     drawerState: DrawerState,
     selectedItem: MutableState<String>,
     selectedCategory: MutableState<String>,
@@ -109,7 +112,9 @@ fun MainScreen(
             MainScreenBody(
                 navController = navController,
                 selectedFavCars,
+                onDecode,
                 isAdmin,
+                selectedCarForDesc,
                 selectedCategory,
                 clicked,
                 carList,

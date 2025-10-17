@@ -1,5 +1,6 @@
 package com.example.composecarrent.ui.theme.favorite_screen
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.CreationExtras
+import coil.compose.AsyncImage
 import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
 import com.google.firebase.auth.ktx.auth
@@ -42,13 +44,12 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 @Composable
-fun FavoriteScreenBody(modifier: Modifier = Modifier, onFavCarChange: (Int) -> Unit) {
+fun FavoriteScreenBody(modifier: Modifier = Modifier, onFavCarChange: (Int) -> Unit, onDecode: (String) -> Bitmap) {
 
     var favoriteCarList by remember { mutableStateOf<List<CarDataModel>>(emptyList()) }
 
     val db = Firebase.firestore
     val uid = Firebase.auth.currentUser!!.uid
-    val email = Firebase.auth.currentUser!!.email
 
     LaunchedEffect(Unit) {
         db.collection("users")
@@ -75,7 +76,8 @@ fun FavoriteScreenBody(modifier: Modifier = Modifier, onFavCarChange: (Int) -> U
                         favoriteCarList = favoriteCarList.filter { it.id != carId }
                     },
                     list = item,
-                    onFavCarChange
+                    onFavCarChange,
+                    onDecode
                 )
             }
         }
@@ -85,7 +87,12 @@ fun FavoriteScreenBody(modifier: Modifier = Modifier, onFavCarChange: (Int) -> U
 }
 
 @Composable
-fun FavCarCards(onDelete: (Int) -> Unit, list: CarDataModel, onFavCarChange: (Int) -> Unit) {
+fun FavCarCards(
+    onDelete: (Int) -> Unit,
+    list: CarDataModel,
+    onFavCarChange: (Int) -> Unit,
+    onDecode: (String) -> Bitmap
+) {
 
     val colorGreen = colorResource(id = R.color.green)
     val colorGrey = colorResource(id = R.color.grey)
@@ -96,14 +103,13 @@ fun FavCarCards(onDelete: (Int) -> Unit, list: CarDataModel, onFavCarChange: (In
     ) {
         Column {
             Row(modifier = Modifier.fillMaxWidth()) {
-                Image(
+                AsyncImage(
+                    model = onDecode(list.carIcon1),
                     modifier = Modifier
                         .fillMaxWidth(0.6f)
                         .padding(5.dp),
-                    painter = painterResource(id = R.drawable.im_car),
                     contentDescription = "машинка для примера",
                     contentScale = ContentScale.Inside,
-
                     )
                 Column {
                     Text(

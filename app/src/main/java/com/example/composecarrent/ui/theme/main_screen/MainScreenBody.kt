@@ -10,7 +10,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
@@ -178,9 +181,10 @@ fun CarCards(
                 model = onDecode(item.carIcon1),
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
-                    .padding(5.dp),
+                    .aspectRatio(16 / 11f)
+                    .clip(RoundedCornerShape(8.dp)),
                 contentDescription = "машинка для примера",
-                contentScale = ContentScale.Inside,
+                contentScale = ContentScale.Crop,
             )
             Column {
                 Text(
@@ -220,11 +224,11 @@ fun CarCards(
                             .padding(end = 5.dp)
                             .size(15.dp),
                         painter = painterResource(id = R.drawable.ic_consumption),
-                        contentDescription = "Пробег"
+                        contentDescription = "расход"
                     )
                     Text(
                         color = colorGrey,
-                        text = "${item.consumption}т.км."
+                        text = "${item.consumption}л."
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Image(
@@ -260,24 +264,27 @@ fun CarCards(
                         modifier = Modifier
                             .padding(end = 5.dp)
                             .size(15.dp),
+                        painter = painterResource(id = R.drawable.ic_mileage),
+                        contentDescription = "Пробег"
+                    )
+                    Text(
+                        color = colorGrey,
+                        text = "${item.mileage}тыс.км"
+                    )
+                }
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp),) {
+                    Image(
+                        modifier = Modifier
+                            .padding(end = 5.dp)
+                            .size(15.dp),
                         painter = painterResource(id = R.drawable.ic_location),
                         contentDescription = "Город"
                     )
                     Text(
                         color = colorGrey,
                         text = item.location
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Image(
-                        modifier = Modifier
-                            .padding(end = 5.dp)
-                            .size(15.dp),
-                        painter = painterResource(id = R.drawable.ic_mileage),
-                        contentDescription = "Пробег"
-                    )
-                    Text(
-                        color = colorGrey,
-                        text = item.mileage
                     )
                 }
                 IconButton(
@@ -300,7 +307,7 @@ fun CarCards(
                         .padding(end = 10.dp)
                 ) {
                     Icon(
-                        modifier = Modifier.size(50.dp),
+                        modifier = Modifier.size(60.dp),
                         painter = painterResource(R.drawable.ic_favorite),
                         contentDescription = "Добавлено в избранное",
                         tint = if (isFav) Color.Red else Color.Black

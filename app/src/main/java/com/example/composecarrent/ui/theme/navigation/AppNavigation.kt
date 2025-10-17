@@ -42,7 +42,7 @@ fun AppNavigation(
     val selectedCarForDesc = remember { mutableStateOf<Int?>(null) }
 
     // расшифровка картинки из base64 в Image
-    val onDecode = fun(icon : String) : Bitmap {
+    val onDecode = fun(icon: String): Bitmap {
         val base64DecodeImage = Base64.decode(icon, Base64.DEFAULT)
         val bitmap = BitmapFactory.decodeByteArray(base64DecodeImage, 0, base64DecodeImage.size)
         return bitmap

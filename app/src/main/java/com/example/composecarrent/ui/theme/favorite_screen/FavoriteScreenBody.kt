@@ -149,11 +149,11 @@ fun FavCarCards(
                                 .padding(end = 5.dp)
                                 .size(15.dp),
                             painter = painterResource(id = R.drawable.ic_consumption),
-                            contentDescription = "Пробег"
+                            contentDescription = "расход"
                         )
                         Text(
                             color = colorGrey,
-                            text = "${list.consumption}т.км."
+                            text = "${list.consumption}л."
                         )
                         Spacer(modifier = Modifier.width(5.dp))
                         Image(

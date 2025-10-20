@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.net.Uri
 import android.util.Base64
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.DropdownMenu
@@ -86,7 +87,7 @@ class AdminPanelModelView : ViewModel() {
                 } else {
                     addCarStatus = "Error. Check id or category"
                 }
-            }
+            }.addOnFailureListener { e -> addCarStatus = e.toString() }
         }
     }
 

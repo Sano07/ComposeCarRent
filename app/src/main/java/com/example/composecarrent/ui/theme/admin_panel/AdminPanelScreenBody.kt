@@ -9,6 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -239,11 +240,11 @@ fun AdminPanelScreenBody(
             Spacer(modifier = Modifier.height(15.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                ImportImage(viewModel.photoUri1, onImageSet = { uri -> viewModel.photoUri1 = uri })
-                ImportImage(viewModel.photoUri2, onImageSet = { uri -> viewModel.photoUri2 = uri })
-                ImportImage(viewModel.photoUri3, onImageSet = { uri -> viewModel.photoUri3 = uri })
+                ImportImage(viewModel.photoUri1, modifier = Modifier.weight(1f).height(100.dp), onImageSet = { uri -> viewModel.photoUri1 = uri })
+                ImportImage(viewModel.photoUri2, modifier = Modifier.weight(1f).height(100.dp), onImageSet = { uri -> viewModel.photoUri2 = uri })
+                ImportImage(viewModel.photoUri3, modifier = Modifier.weight(1f).height(100.dp), onImageSet = { uri -> viewModel.photoUri3 = uri })
             }
             Spacer(modifier = Modifier.height(15.dp))
             Box(
@@ -294,7 +295,7 @@ fun AdminPanelScreenBody(
 }
 
 @Composable
-fun ImportImage(imageUri: Uri? = null, onImageSet: (Uri) -> Unit) {
+fun ImportImage(imageUri: Uri? = null, modifier: Modifier, onImageSet: (Uri) -> Unit) {
     val store = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
@@ -307,9 +308,10 @@ fun ImportImage(imageUri: Uri? = null, onImageSet: (Uri) -> Unit) {
         onClick = {
             store.launch("image/*")
         },
-        modifier = Modifier.size(140.dp),
+        modifier = modifier,
         shape = RoundedCornerShape(20.dp),
-        colors = ButtonDefaults.buttonColors(Color.LightGray)
+        colors = ButtonDefaults.buttonColors(Color.LightGray),
+        contentPadding = PaddingValues(0.dp)
     ) {
         if (imageUri != null) {
             Image(
@@ -320,7 +322,7 @@ fun ImportImage(imageUri: Uri? = null, onImageSet: (Uri) -> Unit) {
             )
         } else {
             Icon(
-                Icons.Default.AccountBox, contentDescription = ""
+                Icons.Default.AccountBox, contentDescription = "" , modifier = Modifier.fillMaxSize()
             )
         }
 

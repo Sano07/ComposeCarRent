@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -31,7 +32,7 @@ import com.example.composecarrent.ui.theme.WhiteLine
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun DrawerBody(selectedCategory: MutableState<String>) {
+fun DrawerBody(selectedCategory: MutableState<String>, onDrawerChange: () -> Unit) {
     val categoriesList = listOf("Sedans", "Crossovers", "Full-size Sedans", "Coupes and Convertibles", "Electric Vehicles", "Moto")
 
     Box(
@@ -55,6 +56,7 @@ fun DrawerBody(selectedCategory: MutableState<String>) {
                             .fillMaxWidth()
                             .clickable {
                                 selectedCategory.value = item
+                                onDrawerChange()
                             }
                     ) {
                         Spacer(modifier = Modifier.height(12.dp))

@@ -50,7 +50,12 @@ fun MainScreen(
                     .zIndex(100f) // дравер занимает 70% экрана
             ) {
                 DrawerHeader()
-                DrawerBody(selectedCategory)
+                DrawerBody(selectedCategory,
+                    onDrawerChange = {
+                    coroutineScope.launch {
+                        drawerState.close()
+                    }
+                })
             }
         },
         modifier = Modifier.zIndex(100f)

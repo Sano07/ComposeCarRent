@@ -38,22 +38,6 @@ fun LoginScreen(email: MutableState<String>, password: MutableState<String>, onF
         viewModel.registrationStatus   // получение из вью модел статуса регистрации
     val signInStatus = viewModel.signInStatus  // получение из вью статуса авторизации
 
-    // наблюдение за статусом регистрации и дальнейшая логика
-
-    /*
-    LaunchedEffect(Unit) {
-        viewModel.checkFavCars { result ->
-            onFavCarUpdate(favCar + result)
-        }
-    }
-
-
-    LaunchedEffect(Unit) {
-        viewModel.checkIsAdmin { admin ->
-            isAdmin.value = admin
-        }
-    }
-    */
     LaunchedEffect(registrationStatus) {
         if (registrationStatus != null && registrationStatus != "success") {
             Toast.makeText(

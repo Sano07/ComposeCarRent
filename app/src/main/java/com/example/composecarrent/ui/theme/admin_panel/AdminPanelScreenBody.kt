@@ -56,7 +56,7 @@ fun AdminPanelScreenBody(
     val contentResolver = LocalContext.current.contentResolver
     val categoryList = listOf("Sedans", "Crossovers", "Full-size Sedans", "Coupes and Convertibles", "Electric Vehicles", "Moto")
     val fuelList = listOf("Diesel", "Gasoline", "Electricity" )
-    val gearList = listOf("Automatic", "Mechanical", "Robotic", "Variator" )
+    val gearList = listOf("Auto", "Mech", "Robot", "Variator" )
 
     val addCarStatus = viewModel.addCarStatus
 
@@ -77,7 +77,7 @@ fun AdminPanelScreenBody(
     val carIcon3 = viewModel.photoUri3?.let { viewModel.imageToBase64(it, contentResolver) }
 
     val newCar = CarDataModel(
-        carId.toIntOrNull() ?: 0,
+        carId.toInt(),
         category,
         carIcon1 ?: "",
         carIcon2 ?: "",
@@ -211,9 +211,10 @@ fun AdminPanelScreenBody(
             ) {
                 TextField(
                     modifier = Modifier.fillMaxWidth(0.5f),
-                    value = carId,
+                    value = carId.toString(),
+                    readOnly = true,
                     shape = RoundedCornerShape(10.dp),
-                    onValueChange = { viewModel.carId = it },
+                    onValueChange = {},
                     label = { Text("Car ID") },
                     singleLine = true
                 )
@@ -275,7 +276,7 @@ fun AdminPanelScreenBody(
                             .padding(15.dp)
                             .height(60.dp),
                         onClick = {
-                            viewModel.addNewCar(newCar, category, carId)
+                            viewModel.addNewCar(newCar, category, carId.toString())
                             onStepBack()
 
                         },

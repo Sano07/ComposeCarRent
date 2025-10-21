@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
@@ -84,6 +86,8 @@ fun FavoriteScreenBody(modifier: Modifier = Modifier, onFavCarChange: (Int) -> U
     } else {
         EmptyFavCarScreen()
     }
+
+
 }
 
 @Composable
@@ -107,9 +111,10 @@ fun FavCarCards(
                     model = onDecode(list.carIcon1),
                     modifier = Modifier
                         .fillMaxWidth(0.6f)
-                        .padding(5.dp),
+                        .aspectRatio(16 / 11f)
+                        .clip(RoundedCornerShape(8.dp)),
                     contentDescription = "машинка для примера",
-                    contentScale = ContentScale.Inside,
+                    contentScale = ContentScale.Crop,
                     )
                 Column {
                     Text(

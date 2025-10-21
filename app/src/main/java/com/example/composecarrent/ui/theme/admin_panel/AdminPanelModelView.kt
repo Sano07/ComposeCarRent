@@ -41,7 +41,7 @@ class AdminPanelModelView : ViewModel() {
     var fuel by mutableStateOf("")
     var transmission by mutableStateOf("")
     var location by mutableStateOf("")
-    var carId by mutableStateOf("")
+    var carId by mutableStateOf(System.currentTimeMillis())
     var category by mutableStateOf("")
     var description by mutableStateOf("")
 

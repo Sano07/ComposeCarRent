@@ -235,12 +235,12 @@ fun CarCards(
                         modifier = Modifier
                             .padding(end = 5.dp)
                             .size(15.dp),
-                        painter = painterResource(id = R.drawable.ic_transmision),
-                        contentDescription = "Коробка"
+                        painter = painterResource(id = R.drawable.ic_fuel),
+                        contentDescription = "Бензин"
                     )
                     Text(
                         color = colorGrey,
-                        text = item.transmission
+                        text = item.fuel
                     )
                 }
                 Row(
@@ -252,12 +252,12 @@ fun CarCards(
                         modifier = Modifier
                             .padding(end = 5.dp)
                             .size(15.dp),
-                        painter = painterResource(id = R.drawable.ic_fuel),
-                        contentDescription = "Бензин"
+                        painter = painterResource(id = R.drawable.ic_transmision),
+                        contentDescription = "Коробка"
                     )
                     Text(
                         color = colorGrey,
-                        text = item.fuel
+                        text = item.transmission
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Image(
@@ -269,7 +269,7 @@ fun CarCards(
                     )
                     Text(
                         color = colorGrey,
-                        text = "${item.mileage}тыс.км"
+                        text = "${item.mileage} т.км"
                     )
                 }
                 Row(modifier = Modifier

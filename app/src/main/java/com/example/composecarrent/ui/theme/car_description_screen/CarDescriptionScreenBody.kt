@@ -228,7 +228,7 @@ fun CarDescriptionScreenBody(
                         Text(
                             fontSize = 20.sp,
                             color = colorGrey,
-                            text = "${selectedCarDescription?.mileage.toString()}тыс. км"
+                            text = "${selectedCarDescription?.mileage.toString()} т.км."
                         )
                     }
                     Text(

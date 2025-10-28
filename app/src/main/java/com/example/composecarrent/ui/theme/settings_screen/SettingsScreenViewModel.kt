@@ -20,7 +20,6 @@ class SettingsScreenViewModel : ViewModel() {
         private set
 
     var fullAccountStatus by mutableStateOf<String?>(null)
-        private set
 
     var fillBalanceValue by mutableIntStateOf(1000)
         private set
@@ -47,6 +46,5 @@ class SettingsScreenViewModel : ViewModel() {
 
     fun fillBalance() {
         fillBalanceValue += 300
-        fullAccountStatus = "success"
     }
 }

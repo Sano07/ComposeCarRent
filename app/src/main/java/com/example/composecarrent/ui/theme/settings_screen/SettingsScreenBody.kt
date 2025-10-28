@@ -211,6 +211,7 @@ fun SettingsScreenBody(
                         .padding(end = 15.dp),
                     onClick = {
                         viewModel.fillBalance()
+                        viewModel.fullAccountStatus = "success"
                     },
                     colors = ButtonDefaults.buttonColors(Color.White),
                     border = BorderStroke(2.dp, Color.Black)

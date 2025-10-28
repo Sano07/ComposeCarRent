@@ -43,7 +43,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.foundation) // версия уточни под свой Compose
+    implementation(libs.androidx.foundation)
+    implementation(libs.lottie.compose)
 
 
     implementation(libs.coil.compose)

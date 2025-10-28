@@ -15,6 +15,7 @@ lifecycleViewmodelCompose = "2.9.2"
 gmsVersion = "4.4.3"
 
 
+lottieCompose = "6.0.0"
 serializationKotlin = "1.7.1"
 serializationVersion = "2.0.0"
 
@@ -44,6 +45,7 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version = "2.9.3" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

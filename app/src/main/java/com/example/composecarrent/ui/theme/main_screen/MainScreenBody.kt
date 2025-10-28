@@ -52,54 +52,6 @@ import kotlinx.serialization.builtins.ByteArraySerializer
 import kotlin.contracts.contract
 
 
-val carList = listOf(
-    CarDataModel(
-        id = 1,
-        category = "test",
-        carIcon1 = "",
-        carIcon2 = "",
-        carIcon3 = "",
-        mark = "test1",
-        model = "test",
-        coast = "test",
-        mileage = "test",
-        consumption = "test",
-        transmission = "test",
-        fuel = "test",
-        location = "test"
-    ),
-    CarDataModel(
-        id = 2,
-        category = "test",
-        carIcon1 = "",
-        carIcon2 = "",
-        carIcon3 = "",
-        mark = "test2",
-        model = "test",
-        coast = "test",
-        mileage = "test",
-        consumption = "test",
-        transmission = "test",
-        fuel = "test",
-        location = "test"
-    ),
-    CarDataModel(
-        id = 3,
-        category = "test",
-        carIcon1 = "",
-        carIcon2 = "",
-        carIcon3 = "",
-        mark = "test3",
-        model = "test",
-        coast = "test",
-        mileage = "test",
-        consumption = "test",
-        transmission = "test",
-        fuel = "test",
-        location = "test"
-    )
-)
-
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -111,7 +63,6 @@ fun MainScreenBody(
     selectedCarForDesc: MutableState<Int?>,
     selectedCategory: MutableState<String>,
     clicked: MutableState<Boolean>,
-    list: List<CarDataModel>,
     modifier: Modifier = Modifier,
     favCars: Set<Int>,
     onFavCarChange: (Int) -> Unit

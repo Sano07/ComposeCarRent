@@ -122,7 +122,6 @@ fun MainScreen(
                 selectedCarForDesc,
                 selectedCategory,
                 clicked,
-                carList,
                 modifier = Modifier.padding(padding),
                 favCars,
                 onFavCarChange = onFavCarChange

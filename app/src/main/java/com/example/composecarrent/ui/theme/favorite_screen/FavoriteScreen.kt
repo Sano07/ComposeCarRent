@@ -20,7 +20,6 @@ fun FavoriteScreen(
     selectedItem: MutableState<String>,
     favCars: Set<Int>,
     navController: NavController,
-    favCarList: List<CarDataModel>,
     onFavCarChange: (Int) -> Unit,
     onDecode: (String) -> Bitmap
 ) {

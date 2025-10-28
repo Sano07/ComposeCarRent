@@ -1,8 +1,6 @@
 package com.example.composecarrent.ui.theme.car_description_screen
 
 import android.graphics.Bitmap
-import android.util.Log
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +10,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,33 +18,30 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
+import com.example.composecarrent.ui.theme.loader.LottieLoader
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.delay
 
 @Composable
 fun ImagePager(
@@ -57,10 +51,6 @@ fun ImagePager(
     image3: Bitmap?
 ) {
     val images = listOfNotNull(image1, image2, image3)
-    //val decodedImages = remember(images) {
-    //    images.map { onDecode(it).asImageBitmap() }
-    //}
-    //Log.d("Debug", "$decodedImages")
     val pagerState = rememberPagerState(pageCount = { images.size })
 
     HorizontalPager(
@@ -83,6 +73,7 @@ fun ImagePager(
 @Composable
 fun CarDescriptionScreenBody(
     modifier: Modifier = Modifier,
+    showLoader: MutableState<Boolean>,
     onDecode: (String) -> Bitmap,
     selectedCarForDesc: MutableState<Int?>,
     selectedCategory: MutableState<String>
@@ -95,7 +86,13 @@ fun CarDescriptionScreenBody(
     val db = Firebase.firestore
     var selectedCarDescription by remember { mutableStateOf<CarDataModel?>(null) }
 
-    // добавил ид тачки, нужно добавить категорию
+//    LaunchedEffect(selectedCarDescription) {
+//        if (selectedCarDescription != null) {
+//            // Ждём хотя бы 1 секунду, чтобы анимация успела проиграться
+//            delay(1000)
+//            showLoader = false
+//        }
+//    }
 
     LaunchedEffect(Unit) {
         db.collection("cars")
@@ -106,6 +103,8 @@ fun CarDescriptionScreenBody(
             .addOnSuccessListener { result ->
                 selectedCarDescription = result.toObject(CarDataModel::class.java)
             }
+        delay(3000) // минимум 5 секунда
+        showLoader.value = false
     }
 
     val decod1 = selectedCarDescription?.let { onDecode(it.carIcon1) }
@@ -113,136 +112,140 @@ fun CarDescriptionScreenBody(
     val decod3 = selectedCarDescription?.let { onDecode(it.carIcon3) }
 
     Box(
-        modifier = modifier
+        modifier = modifier, contentAlignment = Alignment.Center
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-        ) {
-            ImagePager(
-                onDecode,
-                decod1,
-                decod2,
-                decod3
-            )
-            Box(
+        if (showLoader.value) {
+            LottieLoader(modifier = Modifier.fillMaxSize().size(150.dp))
+        } else {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .verticalScroll(scrollStateText)
+                    .padding(5.dp)
             ) {
-                Column {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(
-                        modifier = Modifier.padding(5.dp),
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = colorGrey,
-                        text = selectedCarDescription?.mark.toString()
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = 8.dp),
-                        fontSize = 20.sp,
-                        color = colorGrey,
-                        text = selectedCarDescription?.model.toString()
-                    )
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        fontSize = 25.sp,
-                        color = colorGreen,
-                        fontWeight = FontWeight.Bold,
-                        text = "${selectedCarDescription?.coast.toString()}$"
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 10.dp)
-                    ) {
-                        Image(
-                            modifier = Modifier
-                                .padding(end = 5.dp)
-                                .size(22.dp),
-                            painter = painterResource(id = R.drawable.ic_consumption),
-                            contentDescription = "Пробег"
+                ImagePager(
+                    onDecode,
+                    decod1,
+                    decod2,
+                    decod3
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(scrollStateText)
+                ) {
+                    Column {
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Text(
+                            modifier = Modifier.padding(5.dp),
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = colorGrey,
+                            text = selectedCarDescription?.mark.toString()
                         )
                         Text(
+                            modifier = Modifier.padding(start = 8.dp),
                             fontSize = 20.sp,
                             color = colorGrey,
-                            text = selectedCarDescription?.consumption.toString()
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Image(
-                            modifier = Modifier
-                                .padding(end = 5.dp)
-                                .size(22.dp),
-                            painter = painterResource(id = R.drawable.ic_transmision),
-                            contentDescription = "Коробка"
+                            text = selectedCarDescription?.model.toString()
                         )
                         Text(
-                            fontSize = 20.sp,
-                            color = colorGrey,
-                            text = selectedCarDescription?.transmission.toString()
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Image(
                             modifier = Modifier
-                                .padding(end = 5.dp)
-                                .size(22.dp),
-                            painter = painterResource(id = R.drawable.ic_fuel),
-                            contentDescription = "Бензин"
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            fontSize = 25.sp,
+                            color = colorGreen,
+                            fontWeight = FontWeight.Bold,
+                            text = "${selectedCarDescription?.coast.toString()}$"
                         )
-                        Text(
-                            fontSize = 20.sp,
-                            color = colorGrey,
-                            text = selectedCarDescription?.fuel.toString()
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp)
-                    ) {
-                        Image(
+                        Row(
                             modifier = Modifier
-                                .padding(end = 5.dp)
-                                .size(22.dp),
-                            painter = painterResource(id = R.drawable.ic_location),
-                            contentDescription = "Город"
-                        )
-                        Text(
-                            fontSize = 20.sp,
-                            color = colorGrey,
-                            text = selectedCarDescription?.location.toString()
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Image(
+                                .fillMaxWidth()
+                                .padding(start = 10.dp)
+                        ) {
+                            Image(
+                                modifier = Modifier
+                                    .padding(end = 5.dp)
+                                    .size(22.dp),
+                                painter = painterResource(id = R.drawable.ic_consumption),
+                                contentDescription = "Пробег"
+                            )
+                            Text(
+                                fontSize = 20.sp,
+                                color = colorGrey,
+                                text = selectedCarDescription?.consumption.toString()
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Image(
+                                modifier = Modifier
+                                    .padding(end = 5.dp)
+                                    .size(22.dp),
+                                painter = painterResource(id = R.drawable.ic_transmision),
+                                contentDescription = "Коробка"
+                            )
+                            Text(
+                                fontSize = 20.sp,
+                                color = colorGrey,
+                                text = selectedCarDescription?.transmission.toString()
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Image(
+                                modifier = Modifier
+                                    .padding(end = 5.dp)
+                                    .size(22.dp),
+                                painter = painterResource(id = R.drawable.ic_fuel),
+                                contentDescription = "Бензин"
+                            )
+                            Text(
+                                fontSize = 20.sp,
+                                color = colorGrey,
+                                text = selectedCarDescription?.fuel.toString()
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                        }
+                        Row(
                             modifier = Modifier
-                                .padding(end = 5.dp)
-                                .size(22.dp),
-                            painter = painterResource(id = R.drawable.ic_mileage),
-                            contentDescription = "Пробег"
-                        )
+                                .fillMaxWidth()
+                                .padding(10.dp)
+                        ) {
+                            Image(
+                                modifier = Modifier
+                                    .padding(end = 5.dp)
+                                    .size(22.dp),
+                                painter = painterResource(id = R.drawable.ic_location),
+                                contentDescription = "Город"
+                            )
+                            Text(
+                                fontSize = 20.sp,
+                                color = colorGrey,
+                                text = selectedCarDescription?.location.toString()
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Image(
+                                modifier = Modifier
+                                    .padding(end = 5.dp)
+                                    .size(22.dp),
+                                painter = painterResource(id = R.drawable.ic_mileage),
+                                contentDescription = "Пробег"
+                            )
+                            Text(
+                                fontSize = 20.sp,
+                                color = colorGrey,
+                                text = "${selectedCarDescription?.mileage.toString()} т.км."
+                            )
+                        }
                         Text(
-                            fontSize = 20.sp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(10.dp),
+                            fontSize = 15.sp,
                             color = colorGrey,
-                            text = "${selectedCarDescription?.mileage.toString()} т.км."
+                            text = selectedCarDescription?.decription.toString()
                         )
-                    }
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
-                        fontSize = 15.sp,
-                        color = colorGrey,
-                        text = selectedCarDescription?.decription.toString()
-                    )
 
+                    }
                 }
+                Spacer(modifier = Modifier.height(15.dp))
             }
-            Spacer(modifier = Modifier.height(15.dp))
         }
     }
 }

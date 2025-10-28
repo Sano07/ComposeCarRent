@@ -19,7 +19,6 @@ import com.example.composecarrent.ui.theme.car_description_screen.CarDescription
 import com.example.composecarrent.ui.theme.favorite_screen.FavoriteScreen
 import com.example.composecarrent.ui.theme.login_screen.LoginScreen
 import com.example.composecarrent.ui.theme.main_screen.MainScreen
-import com.example.composecarrent.ui.theme.main_screen.carList
 import com.example.composecarrent.ui.theme.settings_screen.SettingsScreen
 
 @SuppressLint("UnrememberedMutableState")
@@ -31,7 +30,7 @@ fun AppNavigation(
 ) {
     val email = remember { mutableStateOf("admin@admin.com") }       // cостояние отслеживает изменение имейла
     val password = remember { mutableStateOf("123456789") }    // cостояние отслеживает изменение пароля
-    val favCarList = carList.filter { favCar.contains(it.id) }
+    //val favCarList = carList.filter { favCar.contains(it.id) }
     val navController = rememberNavController()
     val clicked = remember { mutableStateOf(true) }
     val selectedItem = remember { mutableStateOf("Home") }
@@ -73,7 +72,6 @@ fun AppNavigation(
                 selectedItem,
                 favCar,
                 navController = navController,
-                favCarList,
                 onFavCarChange = onFavCarChange,
                 onDecode
             )

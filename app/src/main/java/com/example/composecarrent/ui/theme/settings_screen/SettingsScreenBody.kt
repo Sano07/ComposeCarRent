@@ -98,6 +98,7 @@ fun SettingsScreenBody(
                 Toast.LENGTH_SHORT
             ).show()
         }
+        viewModel.fullAccountStatus = null
     }
 
 

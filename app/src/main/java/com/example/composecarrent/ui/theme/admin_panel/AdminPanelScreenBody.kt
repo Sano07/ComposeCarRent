@@ -77,7 +77,7 @@ fun AdminPanelScreenBody(
     val carIcon3 = viewModel.photoUri3?.let { viewModel.imageToBase64(it, contentResolver) }
 
     val newCar = CarDataModel(
-        carId.toInt(),
+        carId,
         category,
         carIcon1 ?: "",
         carIcon2 ?: "",

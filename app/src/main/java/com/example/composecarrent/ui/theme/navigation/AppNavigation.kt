@@ -38,7 +38,7 @@ fun AppNavigation(
     val drawerState = rememberDrawerState(DrawerValue.Closed) // ( состояние, открыто по умолчанию )
     val isAdminState = remember { mutableStateOf(false) }
     val selectedFavCars by remember { mutableStateOf<List<Int>>(emptyList()) }
-    val selCategory = remember { mutableStateOf("Crossovers") }
+    val selCategory = remember { mutableStateOf("Sedans") }
     val selectedCarForDesc = remember { mutableStateOf<Int?>(null) }
 
     // расшифровка картинки из base64 в Image

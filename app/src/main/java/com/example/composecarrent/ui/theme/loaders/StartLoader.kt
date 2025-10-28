@@ -1,4 +1,4 @@
-package com.example.composecarrent.ui.theme.loader
+package com.example.composecarrent.ui.theme.loaders
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -14,12 +14,11 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.composecarrent.R
 
 @Composable
-fun LottieLoader(modifier: Modifier = Modifier) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.carr))
+fun StartLoader(modifier: Modifier = Modifier) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.car_logo))
     val progress by animateLottieCompositionAsState(
         composition,
-        iterations = LottieConstants.IterateForever,
-        clipSpec = LottieClipSpec.Progress(0.1f, 1f)
+        iterations = 1
     )
 
     LottieAnimation(

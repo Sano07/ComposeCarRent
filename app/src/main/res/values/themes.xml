@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.ComposeCarRent" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Основная тема приложения -->
+    <style name="Theme.ComposeCarRent" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Цвет фона для Compose -->
+        <item name="android:statusBarColor">@android:color/white</item>
+    </style>
+
+    <!-- Тема для кастомного SplashScreen -->
+    <style name="Theme.ComposeCarRent.Splash" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@null</item>
+    </style>
 </resources>

@@ -20,6 +20,7 @@ import com.example.composecarrent.ui.theme.favorite_screen.FavoriteScreen
 import com.example.composecarrent.ui.theme.login_screen.LoginScreen
 import com.example.composecarrent.ui.theme.main_screen.MainScreen
 import com.example.composecarrent.ui.theme.settings_screen.SettingsScreen
+//import com.example.composecarrent.ui.theme.splash_screen.SplashScreen
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -48,6 +49,11 @@ fun AppNavigation(
     }
 
     NavHost(navController = navController, startDestination = "login") {
+        //composable("splash") {
+        //    SplashScreen(
+        //        onLoginScreen = { navController.navigate("login") }
+        //    )
+        //}
         composable("login") {
             LoginScreen(email, password, onFavCarUpdate, favCar = favCar, isAdminState, navController = navController)
         }

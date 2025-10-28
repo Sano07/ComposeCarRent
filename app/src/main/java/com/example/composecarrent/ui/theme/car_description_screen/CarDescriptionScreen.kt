@@ -23,8 +23,7 @@ fun CarDescriptionScreen(
     selectedCarForDesc: MutableState<Int?>,
     selectedCategory: MutableState<String>
 ) {
-    var isLoading by mutableStateOf(false)
-    var showLoader = remember { mutableStateOf(true) }
+    val showLoader = remember { mutableStateOf(true) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),

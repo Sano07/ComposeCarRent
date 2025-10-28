@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
-import com.example.composecarrent.ui.theme.loader.LottieLoader
+import com.example.composecarrent.ui.theme.loaders.LottieLoader
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay

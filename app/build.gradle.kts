@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.composecarrent"
-        minSdk = 26
+        minSdk = 31
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -45,6 +45,7 @@ android {
 dependencies {
     implementation(libs.androidx.foundation)
     implementation(libs.lottie.compose)
+    implementation(libs.androidx.core.splashscreen)
 
 
     implementation(libs.coil.compose)

@@ -14,12 +14,11 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.composecarrent.R
 
 @Composable
-fun LottieLoader(modifier: Modifier = Modifier) {
+fun DescLoader(modifier: Modifier = Modifier) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.carr))
     val progress by animateLottieCompositionAsState(
         composition,
-        iterations = LottieConstants.IterateForever,
-        clipSpec = LottieClipSpec.Progress(0.1f, 1f)
+        iterations = LottieConstants.IterateForever
     )
 
     LottieAnimation(

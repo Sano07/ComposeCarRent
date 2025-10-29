@@ -11,14 +11,14 @@ import androidx.compose.ui.unit.dp
 import com.example.composecarrent.ui.theme.loaders.StartLoader
 import kotlinx.coroutines.delay
 
-//@Composable
-//fun SplashScreen(onLoginScreen: () -> Unit) {
-//    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-//        StartLoader(modifier = Modifier.size(200.dp)) // твоя Lottie-анимация
-//    }
-//
-//    LaunchedEffect(Unit) {
-//        delay(3000)
-//        onLoginScreen()
-//    }
-//}
+@Composable
+fun SplashScreen(onLoginScreen: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        StartLoader(modifier = Modifier.size(200.dp))
+    }
+
+    LaunchedEffect(Unit) {
+        delay(3000)
+        onLoginScreen()
+    }
+}

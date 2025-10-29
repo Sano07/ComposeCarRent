@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
-import com.example.composecarrent.ui.theme.loaders.LottieLoader
+import com.example.composecarrent.ui.theme.loaders.DescLoader
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
@@ -103,7 +103,7 @@ fun CarDescriptionScreenBody(
             .addOnSuccessListener { result ->
                 selectedCarDescription = result.toObject(CarDataModel::class.java)
             }
-        delay(3000) // минимум 5 секунда
+        delay(2000) // минимум 2 секунды
         showLoader.value = false
     }
 
@@ -115,7 +115,7 @@ fun CarDescriptionScreenBody(
         modifier = modifier, contentAlignment = Alignment.Center
     ) {
         if (showLoader.value) {
-            LottieLoader(modifier = Modifier.fillMaxSize().size(150.dp))
+            DescLoader(modifier = Modifier.fillMaxSize().size(150.dp))
         } else {
             Column(
                 modifier = Modifier

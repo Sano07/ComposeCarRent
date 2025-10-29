@@ -7,10 +7,12 @@ import android.util.Base64
 import android.util.Log
 import android.widget.ImageButton
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -44,13 +46,14 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
+import com.example.composecarrent.ui.theme.loaders.DescLoader
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
 import kotlinx.serialization.builtins.ByteArraySerializer
 import kotlin.contracts.contract
-
 
 
 @SuppressLint("UnrememberedMutableState")
@@ -59,6 +62,7 @@ fun MainScreenBody(
     navController: NavController,
     selectedFavCars: List<Int>,
     onDecode: (String) -> Bitmap,
+    showMainLoader: MutableState<Boolean>,
     isAdmin: MutableState<Boolean>,
     selectedCarForDesc: MutableState<Int?>,
     selectedCategory: MutableState<String>,
@@ -79,23 +83,36 @@ fun MainScreenBody(
             .addOnSuccessListener { result ->
                 selectedCarList = result.toObjects(CarDataModel::class.java)
             }
+        delay(1000) // минимум 1 секунды
+        showMainLoader.value = false
     }
 
-    LazyColumn(
-        modifier = modifier
-    ) {
-        itemsIndexed(selectedCarList) { _, item ->
-            val isFav = favCars.contains(item.id)
-            CarCards(
-                navController,
-                onDecode,
-                isAdmin,
-                selectedCarForDesc,
-                favCars,
-                clicked,
-                item,
-                isFav,
-                onFavCarChange = { onFavCarChange(item.id) })
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (showMainLoader.value) {
+            DescLoader(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .size(150.dp)
+            )
+        } else {
+            LazyColumn(
+                modifier = modifier
+            ) {
+                itemsIndexed(selectedCarList) { _, item ->
+                    val isFav = favCars.contains(item.id)
+                    CarCards(
+                        navController,
+                        onDecode,
+                        isAdmin,
+                        selectedCarForDesc,
+                        favCars,
+                        clicked,
+                        item,
+                        isFav,
+                        onFavCarChange = { onFavCarChange(item.id) }
+                    )
+                }
+            }
         }
     }
 }
@@ -223,9 +240,11 @@ fun CarCards(
                         text = "${item.mileage} т.км"
                     )
                 }
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp),) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp),
+                ) {
                     Image(
                         modifier = Modifier
                             .padding(end = 5.dp)

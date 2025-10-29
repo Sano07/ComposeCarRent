@@ -7,9 +7,4 @@
         <item name="android:statusBarColor">@android:color/white</item>
     </style>
 
-    <!-- Тема для кастомного SplashScreen -->
-    <style name="Theme.ComposeCarRent.Splash" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:windowBackground">@color/white</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@null</item>
-    </style>
 </resources>

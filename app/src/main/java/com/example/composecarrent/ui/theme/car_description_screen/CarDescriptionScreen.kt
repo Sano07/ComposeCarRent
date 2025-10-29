@@ -23,7 +23,7 @@ fun CarDescriptionScreen(
     selectedCarForDesc: MutableState<Int?>,
     selectedCategory: MutableState<String>
 ) {
-    val showLoader = remember { mutableStateOf(true) }
+    val showDescLoader = remember { mutableStateOf(true) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -31,7 +31,7 @@ fun CarDescriptionScreen(
             DefaultTopBar("Details")
         },
         bottomBar = {
-            if (!showLoader.value) {
+            if (!showDescLoader.value) {
                 CarDescriptionScreenBottomBar(onStepBack = { navController.popBackStack() })
             }
         }
@@ -39,7 +39,7 @@ fun CarDescriptionScreen(
 
         CarDescriptionScreenBody(
             modifier = Modifier.padding(padding),
-            showLoader,
+            showDescLoader,
             onDecode,
             selectedCarForDesc,
             selectedCategory

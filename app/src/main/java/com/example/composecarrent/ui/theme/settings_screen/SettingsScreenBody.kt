@@ -113,7 +113,7 @@ fun SettingsScreenBody(
         Column {
             Card(
                 modifier = Modifier
-                    .padding(start = 35.dp, top = 50.dp).background(Color.White)
+                    .padding(start = 35.dp, top = 50.dp)
             ) {
                 Text(
                     modifier = Modifier.background(colorWhiteBack),
@@ -127,7 +127,7 @@ fun SettingsScreenBody(
                     .padding(top = 15.dp, start = 30.dp).background(colorWhiteBack)
             ) {
                 Text(
-                    modifier = Modifier.background(Color.White),
+                    modifier = Modifier.background(colorWhiteBack),
                     text = email.value,
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,

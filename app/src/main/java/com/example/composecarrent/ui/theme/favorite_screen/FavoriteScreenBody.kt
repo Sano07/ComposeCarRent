@@ -102,7 +102,7 @@ fun FavCarCards(
     val colorGrey = colorResource(id = R.color.grey)
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp),
         shape = RoundedCornerShape(15.dp)
     ) {
         Column {

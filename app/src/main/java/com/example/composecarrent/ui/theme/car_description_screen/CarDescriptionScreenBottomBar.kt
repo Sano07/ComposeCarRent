@@ -1,6 +1,7 @@
 package com.example.composecarrent.ui.theme.car_description_screen
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,13 +14,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.composecarrent.R
 
 @Composable
 fun CarDescriptionScreenBottomBar(onStepBack: () -> Unit) {
+    val colorWhiteBack = colorResource(id = R.color.white2)
+
     Card {
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth().background(colorWhiteBack).height(120.dp)) {
             Button(
                 modifier = Modifier
                     .fillMaxWidth(0.5f)

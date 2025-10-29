@@ -20,7 +20,7 @@ fun SplashScreen(onLoginScreen: () -> Unit) {
     }
 
     LaunchedEffect(Unit) {
-        delay(4000)
+        delay(5000)
         onLoginScreen()
     }
 }

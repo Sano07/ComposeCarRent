@@ -28,7 +28,9 @@ fun CarDescriptionScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            DefaultTopBar("Details")
+            if (!showDescLoader.value) {
+                DefaultTopBar("Details")
+            }
         },
         bottomBar = {
             if (!showDescLoader.value) {

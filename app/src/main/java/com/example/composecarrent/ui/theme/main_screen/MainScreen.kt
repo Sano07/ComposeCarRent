@@ -55,10 +55,10 @@ fun MainScreen(
                 DrawerHeader()
                 DrawerBody(selectedCategory,
                     onDrawerChange = {
-                    coroutineScope.launch {
-                        drawerState.close()
-                    }
-                })
+                        coroutineScope.launch {
+                            drawerState.close()
+                        }
+                    })
             }
         },
         modifier = Modifier.zIndex(100f)
@@ -66,17 +66,24 @@ fun MainScreen(
         Scaffold(
             modifier = Modifier.zIndex(100f),
             topBar = {
-                TopBar(
-                    selectedCategory,
-                    onDrawerChange = {
-                        coroutineScope.launch {
-                            drawerState.open()
+                if (!showMainLoader.value) {
+                    TopBar(
+                        selectedCategory,
+                        onDrawerChange = {
+                            coroutineScope.launch {
+                                drawerState.open()
+                            }
                         }
-                    }
-                )
+                    )
+                }
             },
             bottomBar = {
-                BottomNavItemLine(selectedItem, navController = navController)   // передача в Scaffold нижнего меню
+                if (!showMainLoader.value) {
+                    BottomNavItemLine(
+                        selectedItem,
+                        navController = navController
+                    )   // передача в Scaffold нижнего меню
+                }
             }
         ) { padding ->
 

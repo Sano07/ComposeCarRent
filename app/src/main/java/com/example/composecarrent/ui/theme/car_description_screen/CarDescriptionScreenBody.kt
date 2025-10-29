@@ -86,14 +86,6 @@ fun CarDescriptionScreenBody(
     val db = Firebase.firestore
     var selectedCarDescription by remember { mutableStateOf<CarDataModel?>(null) }
 
-//    LaunchedEffect(selectedCarDescription) {
-//        if (selectedCarDescription != null) {
-//            // Ждём хотя бы 1 секунду, чтобы анимация успела проиграться
-//            delay(1000)
-//            showLoader = false
-//        }
-//    }
-
     LaunchedEffect(Unit) {
         db.collection("cars")
             .document(selectedCategory.value)
@@ -119,7 +111,8 @@ fun CarDescriptionScreenBody(
         } else {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
+                    .verticalScroll(scrollStateText)
                     .padding(5.dp)
             ) {
                 ImagePager(
@@ -131,7 +124,6 @@ fun CarDescriptionScreenBody(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .verticalScroll(scrollStateText)
                 ) {
                     Column {
                         Spacer(modifier = Modifier.height(10.dp))

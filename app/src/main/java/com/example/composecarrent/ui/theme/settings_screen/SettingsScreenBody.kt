@@ -31,10 +31,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.composecarrent.R
 
 @Composable
 fun SettingsScreenBody(
@@ -55,6 +57,8 @@ fun SettingsScreenBody(
     val fillAccountStatus = viewModel.fullAccountStatus
     var showDialog by remember { mutableStateOf(false) }
     val fillBalanceValue = viewModel.fillBalanceValue
+    val colorGreen = colorResource(id = R.color.green)
+    val colorWhiteBack = colorResource(id = R.color.white2)
 
 
     LaunchedEffect(logOutStatus) {
@@ -109,10 +113,10 @@ fun SettingsScreenBody(
         Column {
             Card(
                 modifier = Modifier
-                    .padding(start = 35.dp, top = 50.dp)
+                    .padding(start = 35.dp, top = 50.dp).background(Color.White)
             ) {
                 Text(
-                    modifier = Modifier.background(Color.White),
+                    modifier = Modifier.background(colorWhiteBack),
                     text = "Current user",
                     color = Color.DarkGray,
                     fontSize = 16.sp
@@ -120,7 +124,7 @@ fun SettingsScreenBody(
             }
             Card(
                 modifier = Modifier
-                    .padding(top = 15.dp, start = 30.dp)
+                    .padding(top = 15.dp, start = 30.dp).background(colorWhiteBack)
             ) {
                 Text(
                     modifier = Modifier.background(Color.White),
@@ -140,7 +144,7 @@ fun SettingsScreenBody(
                 Button(
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
-                        .height(60.dp),
+                        .height(60.dp).background(colorWhiteBack),
                     onClick = {
                         viewModel.logOut()
                         onLogOut()
@@ -158,7 +162,7 @@ fun SettingsScreenBody(
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(60.dp),
+                        .height(60.dp).background(colorWhiteBack),
                     onClick = {
                         showDialog = true
                     },
@@ -185,7 +189,7 @@ fun SettingsScreenBody(
                     .padding(start = 35.dp, top = 30.dp)
             ) {
                 Text(
-                    modifier = Modifier.background(Color.White),
+                    modifier = Modifier.background(colorWhiteBack),
                     text = "Balance",
                     color = Color.DarkGray,
                     fontSize = 16.sp
@@ -198,10 +202,10 @@ fun SettingsScreenBody(
             ) {
                 Text(
                     modifier = Modifier
-                        .background(Color.White)
+                        .background(colorWhiteBack)
                         .fillMaxWidth(0.5f),
                     text = "$fillBalanceValue $",
-                    color = Color.Green,
+                    color = colorGreen,
                     fontSize = 50.sp
                 )
                 Spacer(modifier = Modifier.width(20.dp))

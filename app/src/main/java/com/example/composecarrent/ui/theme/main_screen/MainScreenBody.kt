@@ -76,15 +76,19 @@ fun MainScreenBody(
     val db = Firebase.firestore
 
     LaunchedEffect(selectedCategory.value) {
-        db.collection("cars")
-            .document(selectedCategory.value)
-            .collection("cars")
-            .get()
-            .addOnSuccessListener { result ->
-                selectedCarList = result.toObjects(CarDataModel::class.java)
-            }
-        delay(1000) // минимум 1 секунды
-        showMainLoader.value = false
+
+        try {
+            val result = db.collection("cars")
+                .document(selectedCategory.value)
+                .collection("cars")
+                .get()
+                .await()
+            selectedCarList = result.toObjects(CarDataModel::class.java)
+        } catch (_: Exception) {
+        } finally {
+            showMainLoader.value = false
+        }
+
     }
 
     Box(modifier = Modifier.fillMaxSize()) {

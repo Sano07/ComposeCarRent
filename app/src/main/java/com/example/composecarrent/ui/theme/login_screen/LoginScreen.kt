@@ -3,6 +3,7 @@ package com.example.composecarrent.ui.theme.login_screen
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -84,83 +85,75 @@ fun LoginScreen(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(Color.White),
         contentAlignment = Alignment.Center
     ) {
-//        if (showLoader.value) {
-//            StartLoader(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .size(150.dp)
-//            )
-//        } else
-//        {
-            Column {
-                Image(
-                    modifier = Modifier
-                        .size(300.dp)
-                        .align(Alignment.CenterHorizontally),
-                    painter = painterResource(id = R.drawable.im_car_rent_logo),
-                    contentDescription = "Car_Rent_Logo"
+        Column {
+            Image(
+                modifier = Modifier
+                    .size(300.dp)
+                    .align(Alignment.CenterHorizontally),
+                painter = painterResource(id = R.drawable.im_car_rent_logo),
+                contentDescription = "Car_Rent_Logo"
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                TextField(
+                    value = email.value,
+                    onValueChange = { email.value = it },
+                    label = { Text("Your email") },
+                    singleLine = true
                 )
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    TextField(
-                        value = email.value,
-                        onValueChange = { email.value = it },
-                        label = { Text("Your email") },
-                        singleLine = true
+                Spacer(modifier = Modifier.height(15.dp))
+                TextField(
+                    value = password.value,
+                    onValueChange = { password.value = it },
+                    label = { Text("Your password") },
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.height(150.dp))
+                Column {
+                    Button(
+                        onClick = {
+                            viewModel.register(email.value, password.value)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth(0.7f)
+                            .height(70.dp),
+                        colors = ButtonDefaults.buttonColors(Color.White),
+                        border = BorderStroke(2.dp, Color.Black)
                     )
+                    {
+                        Text(
+                            text = "Registration",
+                            color = Color.Black
+                        )
+                    }
                     Spacer(modifier = Modifier.height(15.dp))
-                    TextField(
-                        value = password.value,
-                        onValueChange = { password.value = it },
-                        label = { Text("Your password") },
-                        singleLine = true
+                    Button(
+                        onClick = {
+                            viewModel.signIn(email.value, password.value)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth(0.7f)
+                            .height(70.dp),
+                        colors = ButtonDefaults.buttonColors(Color.White),
+                        border = BorderStroke(2.dp, Color.Black)
                     )
-                    Spacer(modifier = Modifier.height(150.dp))
-                    Column {
-                        Button(
-                            onClick = {
-                                viewModel.register(email.value, password.value)
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth(0.7f)
-                                .height(70.dp),
-                            colors = ButtonDefaults.buttonColors(Color.White),
-                            border = BorderStroke(2.dp, Color.Black)
+                    {
+                        Text(
+                            text = "SignIn",
+                            color = Color.Black
                         )
-                        {
-                            Text(
-                                text = "Registration",
-                                color = Color.Black
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(15.dp))
-                        Button(
-                            onClick = {
-                                viewModel.signIn(email.value, password.value)
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth(0.7f)
-                                .height(70.dp),
-                            colors = ButtonDefaults.buttonColors(Color.White),
-                            border = BorderStroke(2.dp, Color.Black)
-                        )
-                        {
-                            Text(
-                                text = "SignIn",
-                                color = Color.Black
-                            )
-                        }
                     }
                 }
             }
         }
     }
+}
 //}

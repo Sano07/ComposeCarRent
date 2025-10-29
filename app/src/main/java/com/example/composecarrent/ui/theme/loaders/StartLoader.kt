@@ -24,6 +24,6 @@ fun StartLoader(modifier: Modifier = Modifier) {
     LottieAnimation(
         composition = composition,
         progress = { progress },
-        modifier = modifier.size(150.dp)
+        modifier = modifier.size(250.dp)
     )
 }

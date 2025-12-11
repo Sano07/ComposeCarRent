@@ -164,7 +164,7 @@ fun CarDescriptionScreenBody(
                             Text(
                                 fontSize = 20.sp,
                                 color = colorGrey,
-                                text = selectedCarDescription?.consumption.toString()
+                                text = "${selectedCarDescription?.consumption.toString()}л."
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Image(

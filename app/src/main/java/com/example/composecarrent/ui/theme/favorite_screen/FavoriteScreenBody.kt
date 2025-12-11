@@ -23,6 +23,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,12 +42,20 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import coil.compose.AsyncImage
 import com.example.composecarrent.R
 import com.example.composecarrent.ui.theme.data.CarDataModel
+import com.example.composecarrent.ui.theme.loaders.DescLoader
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.tasks.await
 
 @Composable
-fun FavoriteScreenBody(modifier: Modifier = Modifier, onFavCarChange: (Int) -> Unit, onDecode: (String) -> Bitmap) {
+fun FavoriteScreenBody(
+    modifier: Modifier = Modifier,
+    onFavCarChange: (Int) -> Unit,
+    onDecode: (String) -> Bitmap,
+    showMainLoader: MutableState<Boolean>
+) {
 
     var favoriteCarList by remember { mutableStateOf<List<CarDataModel>>(emptyList()) }
 
@@ -54,41 +63,54 @@ fun FavoriteScreenBody(modifier: Modifier = Modifier, onFavCarChange: (Int) -> U
     val uid = Firebase.auth.currentUser!!.uid
 
     LaunchedEffect(Unit) {
-        db.collection("users")
-            .document(uid)
-            .collection("favCars")
-            .get()
-            .addOnSuccessListener { result ->
-                favoriteCarList = result.toObjects(CarDataModel::class.java)
-            }
+        try {
+            val result = db.collection("users")
+                .document(uid)
+                .collection("favCars")
+                .get()
+                .await()
+                    favoriteCarList = result.toObjects(CarDataModel::class.java)
+        } catch (_: Exception) {
+        } finally {
+            showMainLoader.value = false
+        }
     }
 
-    if (favoriteCarList.isNotEmpty()) {
-        LazyColumn(
-            modifier = modifier
-        ) {
-            itemsIndexed(favoriteCarList, key = { _, item -> item.id }) { _, item ->
-                FavCarCards(
-                    onDelete = { carId ->
-                        db.collection("users")
-                            .document(uid)
-                            .collection("favCars")
-                            .document(carId.toString())
-                            .delete()
-                        favoriteCarList = favoriteCarList.filter { it.id != carId }
-                    },
-                    list = item,
-                    onFavCarChange,
-                    onDecode
-                )
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (showMainLoader.value) {
+            DescLoader(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .size(150.dp)
+            )
+        } else {
+            if (favoriteCarList.isNotEmpty()) {
+                LazyColumn(
+                    modifier = modifier
+                ) {
+                    itemsIndexed(favoriteCarList, key = { _, item -> item.id }) { _, item ->
+                        FavCarCards(
+                            onDelete = { carId ->
+                                db.collection("users")
+                                    .document(uid)
+                                    .collection("favCars")
+                                    .document(carId.toString())
+                                    .delete()
+                                favoriteCarList = favoriteCarList.filter { it.id != carId }
+                            },
+                            list = item,
+                            onFavCarChange,
+                            onDecode
+                        )
+                    }
+                }
+            } else {
+                EmptyFavCarScreen()
             }
         }
-    } else {
-        EmptyFavCarScreen()
     }
-
-
 }
+
 
 @Composable
 fun FavCarCards(
@@ -102,7 +124,9 @@ fun FavCarCards(
     val colorGrey = colorResource(id = R.color.grey)
 
     Card(
-        modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 5.dp),
         shape = RoundedCornerShape(15.dp)
     ) {
         Column {
@@ -115,7 +139,7 @@ fun FavCarCards(
                         .clip(RoundedCornerShape(8.dp)),
                     contentDescription = "машинка для примера",
                     contentScale = ContentScale.Crop,
-                    )
+                )
                 Column {
                     Text(
                         modifier = Modifier.padding(5.dp),

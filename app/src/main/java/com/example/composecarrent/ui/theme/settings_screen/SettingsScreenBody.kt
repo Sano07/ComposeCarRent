@@ -1,6 +1,8 @@
 package com.example.composecarrent.ui.theme.settings_screen
 
+import android.view.MotionEvent
 import android.widget.Toast
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +32,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -53,12 +57,34 @@ fun SettingsScreenBody(
     val context =
         LocalContext.current
     val logOutStatus = viewModel.logOutStatus // отслеживание статуса выхода из аккаунта
-    val deleteAccountStatus = viewModel.deleteAccountStatus // отслеживание статуса удаления аккаунта
+    val deleteAccountStatus =
+        viewModel.deleteAccountStatus // отслеживание статуса удаления аккаунта
     val fillAccountStatus = viewModel.fullAccountStatus
     var showDialog by remember { mutableStateOf(false) }
     val fillBalanceValue = viewModel.fillBalanceValue
     val colorGreen = colorResource(id = R.color.green)
     val colorWhiteBack = colorResource(id = R.color.white2)
+
+    var isPressedLogOut by remember { mutableStateOf(false) }
+    val scaleLogOut by animateFloatAsState(
+        if (isPressedLogOut) 0.9f else 1f,
+    )
+
+    var isPressedDelete by remember { mutableStateOf(false) }
+    val scaleDelete by animateFloatAsState(
+        if (isPressedDelete) 0.9f else 1f,
+    )
+
+    var isPressedFill by remember { mutableStateOf(false) }
+    val scaleFill by animateFloatAsState(
+        if (isPressedFill) 0.9f else 1f,
+    )
+
+    var isPressedAdd by remember { mutableStateOf(false) }
+    val scaleAdd by animateFloatAsState(
+        if (isPressedAdd) 0.9f else 1f,
+    )
+
 
 
     LaunchedEffect(logOutStatus) {
@@ -124,7 +150,8 @@ fun SettingsScreenBody(
             }
             Card(
                 modifier = Modifier
-                    .padding(top = 15.dp, start = 30.dp).background(colorWhiteBack)
+                    .padding(top = 15.dp, start = 30.dp)
+                    .background(colorWhiteBack)
             ) {
                 Text(
                     modifier = Modifier.background(colorWhiteBack),
@@ -141,41 +168,82 @@ fun SettingsScreenBody(
                     .padding(10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth(0.5f)
-                        .height(60.dp).background(colorWhiteBack),
-                    onClick = {
-                        viewModel.logOut()
-                        onLogOut()
-                    },
-                    colors = ButtonDefaults.buttonColors(Color.White),
-                    border = BorderStroke(2.dp, Color.Black)
+                        .graphicsLayer(
+                            scaleX = scaleLogOut,
+                            scaleY = scaleLogOut
+                        )
+                        .pointerInteropFilter {
+                            when (it.action) {
+                                MotionEvent.ACTION_DOWN -> isPressedLogOut = true
+                                MotionEvent.ACTION_UP -> {
+                                    isPressedLogOut = false
+                                }
+
+                                MotionEvent.ACTION_CANCEL -> isPressedLogOut = false
+                            }
+                            false
+                        }
                 ) {
-                    Text(
-                        text = "Log Out",
-                        color = Color.Black,
-                        fontSize = 16.sp
-                    )
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth(0.5f)
+                            .height(60.dp)
+                            .background(colorWhiteBack),
+                        onClick = {
+                            viewModel.logOut()
+                            onLogOut()
+                            isPressedLogOut = false
+                        },
+                        colors = ButtonDefaults.buttonColors(Color.White),
+                        border = BorderStroke(2.dp, Color.Black)
+                    ) {
+                        Text(
+                            text = "Log Out",
+                            color = Color.Black,
+                            fontSize = 16.sp
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.width(5.dp))
-                Button(
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp).background(colorWhiteBack),
-                    onClick = {
-                        showDialog = true
-                    },
-                    colors = ButtonDefaults.buttonColors(Color.Red),
-                    border = ButtonDefaults.outlinedButtonBorder(enabled = true),
-                ) {
-                    Text(
-                        text = "Delete Account",
-                        color = Color.White,
-                        fontSize = 16.sp
-                    )
-                }
+                        .graphicsLayer(
+                            scaleX = scaleDelete,
+                            scaleY = scaleDelete
+                        )
+                        .pointerInteropFilter {
+                            when (it.action) {
+                                MotionEvent.ACTION_DOWN -> isPressedDelete = true
+                                MotionEvent.ACTION_UP -> {
+                                    isPressedDelete = false
+                                }
 
+                                MotionEvent.ACTION_CANCEL -> isPressedDelete = false
+                            }
+                            false
+                        }
+                ) {
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp)
+                            .background(colorWhiteBack),
+                        onClick = {
+                            showDialog = true
+                            isPressedDelete = false
+                        },
+                        colors = ButtonDefaults.buttonColors(Color.Red),
+                        border = ButtonDefaults.outlinedButtonBorder(enabled = true),
+                    ) {
+                        Text(
+                            text = "Delete Account",
+                            color = Color.White,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
             }
             Spacer(modifier = Modifier.height(10.dp))
             Box(
@@ -209,23 +277,43 @@ fun SettingsScreenBody(
                     fontSize = 50.sp
                 )
                 Spacer(modifier = Modifier.width(20.dp))
-                Button(
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp)
-                        .padding(end = 15.dp),
-                    onClick = {
-                        viewModel.fillBalance()
-                        viewModel.fullAccountStatus = "success"
-                    },
-                    colors = ButtonDefaults.buttonColors(Color.White),
-                    border = BorderStroke(2.dp, Color.Black)
+                        .graphicsLayer(
+                            scaleX = scaleFill,
+                            scaleY = scaleFill
+                        )
+                        .pointerInteropFilter {
+                            when (it.action) {
+                                MotionEvent.ACTION_DOWN -> isPressedFill = true
+                                MotionEvent.ACTION_UP -> {
+                                    isPressedFill = false
+                                }
+
+                                MotionEvent.ACTION_CANCEL -> isPressedFill = false
+                            }
+                            false
+                        }
                 ) {
-                    Text(
-                        text = "Fill",
-                        color = Color.Black,
-                        fontSize = 20.sp
-                    )
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp)
+                            .padding(end = 15.dp),
+                        onClick = {
+                            viewModel.fillBalance()
+                            viewModel.fullAccountStatus = "success"
+                            isPressedFill = false
+                        },
+                        colors = ButtonDefaults.buttonColors(Color.White),
+                        border = BorderStroke(2.dp, Color.Black)
+                    ) {
+                        Text(
+                            text = "Fill",
+                            color = Color.Black,
+                            fontSize = 20.sp
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -240,22 +328,42 @@ fun SettingsScreenBody(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Button(
+                    Box(
                         modifier = Modifier
-                            .fillMaxWidth(0.7f)
-                            .padding(15.dp)
-                            .height(60.dp),
-                        onClick = {
-                            onAddCar()
-                        },
-                        colors = ButtonDefaults.buttonColors(Color.White),
-                        border = BorderStroke(2.dp, Color.Black)
+                            .graphicsLayer(
+                                scaleX = scaleAdd,
+                                scaleY = scaleAdd
+                            )
+                            .pointerInteropFilter {
+                                when (it.action) {
+                                    MotionEvent.ACTION_DOWN -> isPressedAdd = true
+                                    MotionEvent.ACTION_UP -> {
+                                        isPressedAdd = false
+                                    }
+
+                                    MotionEvent.ACTION_CANCEL -> isPressedAdd = false
+                                }
+                                false
+                            }
                     ) {
-                        Text(
-                            text = "Add new car",
-                            color = Color.Black,
-                            fontSize = 18.sp
-                        )
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth(0.7f)
+                                .padding(15.dp)
+                                .height(60.dp),
+                            onClick = {
+                                onAddCar()
+                                isPressedAdd = false
+                            },
+                            colors = ButtonDefaults.buttonColors(Color.White),
+                            border = BorderStroke(2.dp, Color.Black)
+                        ) {
+                            Text(
+                                text = "Add new car",
+                                color = Color.Black,
+                                fontSize = 18.sp
+                            )
+                        }
                     }
                 }
             }

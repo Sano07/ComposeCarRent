@@ -1,6 +1,8 @@
 package com.example.composecarrent.ui.theme.favorite_screen
 
 import android.graphics.Bitmap
+import android.view.MotionEvent
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +34,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -62,6 +66,8 @@ fun FavoriteScreenBody(
     val db = Firebase.firestore
     val uid = Firebase.auth.currentUser!!.uid
 
+
+
     LaunchedEffect(Unit) {
         try {
             val result = db.collection("users")
@@ -69,7 +75,7 @@ fun FavoriteScreenBody(
                 .collection("favCars")
                 .get()
                 .await()
-                    favoriteCarList = result.toObjects(CarDataModel::class.java)
+            favoriteCarList = result.toObjects(CarDataModel::class.java)
         } catch (_: Exception) {
         } finally {
             showMainLoader.value = false
@@ -122,6 +128,15 @@ fun FavCarCards(
 
     val colorGreen = colorResource(id = R.color.green)
     val colorGrey = colorResource(id = R.color.grey)
+
+    var isPressedRent by remember { mutableStateOf(false) }
+    val scaleRent by animateFloatAsState(
+        if (isPressedRent) 0.9f else 1f,
+    )
+    var isPressedDelete by remember { mutableStateOf(false) }
+    val scaleDelete by animateFloatAsState(
+        if (isPressedDelete) 0.9f else 1f,
+    )
 
     Card(
         modifier = Modifier
@@ -232,30 +247,70 @@ fun FavCarCards(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                Button(
-                    onClick = {
-                        // какая то логика для заказа машины
-                    },
+                Box(
                     modifier = Modifier
-                        .padding(end = 10.dp)
-                        .width(120.dp),
-                    colors = ButtonDefaults.buttonColors(Color.White),
-                    border = BorderStroke(2.dp, Color.Black)
+                        .graphicsLayer(
+                            scaleX = scaleRent,
+                            scaleY = scaleRent
+                        )
+                        .pointerInteropFilter {
+                            when (it.action) {
+                                MotionEvent.ACTION_DOWN -> isPressedRent = true
+                                MotionEvent.ACTION_UP -> {
+                                    isPressedRent = false
+                                }
+
+                                MotionEvent.ACTION_CANCEL -> isPressedRent = false
+                            }
+                            false
+                        }
                 ) {
-                    Text(text = "Rent", color = Color.Black)
+                    Button(
+                        onClick = {
+                            // какая то логика для заказа машины
+                            isPressedRent = false
+                        },
+                        modifier = Modifier
+                            .padding(end = 10.dp)
+                            .width(120.dp),
+                        colors = ButtonDefaults.buttonColors(Color.White),
+                        border = BorderStroke(2.dp, Color.Black)
+                    ) {
+                        Text(text = "Rent", color = Color.Black)
+                    }
                 }
-                Button(
-                    onClick = {
-                        onDelete(list.id)
-                        onFavCarChange(list.id)
-                    },
+                Box(
                     modifier = Modifier
-                        .padding(end = 10.dp)
-                        .width(120.dp),
-                    colors = ButtonDefaults.buttonColors(Color.White),
-                    border = BorderStroke(2.dp, Color.Black)
+                        .graphicsLayer(
+                            scaleX = scaleDelete,
+                            scaleY = scaleDelete
+                        )
+                        .pointerInteropFilter {
+                            when (it.action) {
+                                MotionEvent.ACTION_DOWN -> isPressedDelete = true
+                                MotionEvent.ACTION_UP -> {
+                                    isPressedDelete = false
+                                }
+
+                                MotionEvent.ACTION_CANCEL -> isPressedDelete = false
+                            }
+                            false
+                        }
                 ) {
-                    Text(text = "Delete", color = Color.Black)
+                    Button(
+                        onClick = {
+                            onDelete(list.id)
+                            onFavCarChange(list.id)
+                            isPressedDelete = false
+                        },
+                        modifier = Modifier
+                            .padding(end = 10.dp)
+                            .width(120.dp),
+                        colors = ButtonDefaults.buttonColors(Color.White),
+                        border = BorderStroke(2.dp, Color.Black)
+                    ) {
+                        Text(text = "Delete", color = Color.Black)
+                    }
                 }
             }
         }

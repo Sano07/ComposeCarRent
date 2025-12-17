@@ -4,13 +4,28 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -22,6 +37,7 @@ import com.example.composecarrent.ui.theme.main_screen.MainScreen
 import com.example.composecarrent.ui.theme.settings_screen.SettingsScreen
 import com.example.composecarrent.ui.theme.splash_screen.SplashScreen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun AppNavigation(
@@ -29,8 +45,10 @@ fun AppNavigation(
     onFavCarUpdate: (Set<Int>) -> Unit,
     onFavCarChange: (Int) -> Unit
 ) {
-    val email = remember { mutableStateOf("admin@admin.com") }       // cостояние отслеживает изменение имейла
-    val password = remember { mutableStateOf("123456789") }    // cостояние отслеживает изменение пароля
+    val email =
+        remember { mutableStateOf("admin@admin.com") }       // cостояние отслеживает изменение имейла
+    val password =
+        remember { mutableStateOf("123456789") }    // cостояние отслеживает изменение пароля
     //val favCarList = carList.filter { favCar.contains(it.id) }
     val navController = rememberNavController()
     val clicked = remember { mutableStateOf(true) }
@@ -40,6 +58,7 @@ fun AppNavigation(
     val selectedFavCars by remember { mutableStateOf<List<Int>>(emptyList()) }
     val selCategory = remember { mutableStateOf("Sedans") }
     val selectedCarForDesc = remember { mutableStateOf<Int?>(null) }
+    val isShowInfoWindow = remember { mutableStateOf(false) }
 
     // расшифровка картинки из base64 в Image
     val onDecode = fun(icon: String): Bitmap {
@@ -55,7 +74,14 @@ fun AppNavigation(
             )
         }
         composable("login") {
-            LoginScreen(email, password, onFavCarUpdate, favCar = favCar, isAdminState, navController = navController)
+            LoginScreen(
+                email,
+                password,
+                onFavCarUpdate,
+                favCar = favCar,
+                isAdminState,
+                navController = navController
+            )
         }
         composable("home_screen") {
             MainScreen(
@@ -75,6 +101,8 @@ fun AppNavigation(
         }
         composable("favorite_screen") {
             FavoriteScreen(
+                isShowInfoWindow,
+                //InfoWindow,
                 selectedItem,
                 favCar,
                 navController = navController,
@@ -95,7 +123,12 @@ fun AppNavigation(
             AdminPanelScreen(navController = navController)
         }
         composable("desc_screen") {
-            CarDescriptionScreen(navController = navController, onDecode, selectedCarForDesc, selCategory)
+            CarDescriptionScreen(
+                navController = navController,
+                onDecode,
+                selectedCarForDesc,
+                selCategory
+            )
         }
     }
 }

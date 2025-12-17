@@ -19,6 +19,8 @@ import com.example.composecarrent.ui.theme.data.CarDataModel
 @Composable
 
 fun FavoriteScreen(
+    isShowInfoWindow: MutableState<Boolean>,
+    //onInfoWindow: () -> Unit,
     selectedItem: MutableState<String>,
     favCars: Set<Int>,
     navController: NavController,
@@ -48,7 +50,8 @@ fun FavoriteScreen(
             modifier = Modifier.padding(padding),
             onFavCarChange = onFavCarChange,
             onDecode,
-            showFavMainLoader
+            showFavMainLoader,
+            isShowInfoWindow
         )
 
     }

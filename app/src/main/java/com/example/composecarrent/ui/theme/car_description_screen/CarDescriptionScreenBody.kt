@@ -1,6 +1,7 @@
 package com.example.composecarrent.ui.theme.car_description_screen
 
 import android.graphics.Bitmap
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

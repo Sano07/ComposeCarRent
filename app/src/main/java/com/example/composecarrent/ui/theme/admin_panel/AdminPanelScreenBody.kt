@@ -1,9 +1,11 @@
 package com.example.composecarrent.ui.theme.admin_panel
 
 import android.net.Uri
+import android.view.MotionEvent
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -29,11 +31,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -57,6 +63,16 @@ fun AdminPanelScreenBody(
     val categoryList = listOf("Sedans", "Crossovers", "Full-size Sedans", "Coupes and Convertibles", "Electric Vehicles", "Moto")
     val fuelList = listOf("Diesel", "Gasoline", "Electricity" )
     val gearList = listOf("Auto", "Mech", "Robot", "Variator" )
+
+    var isPressedBack by remember { mutableStateOf(false) }
+    val scaleBack by animateFloatAsState(
+        if (isPressedBack) 0.9f else 1f
+    )
+
+    var isPressedSave by remember { mutableStateOf(false) }
+    val scaleSave by animateFloatAsState(
+        if (isPressedSave) 0.9f else 1f
+    )
 
     val addCarStatus = viewModel.addCarStatus
 
@@ -253,41 +269,80 @@ fun AdminPanelScreenBody(
                 contentAlignment = Alignment.Center
             ) {
                 Row {
-                    Button(
+                    Box(
                         modifier = Modifier
-                            .fillMaxWidth(0.5f)
-                            .padding(15.dp)
-                            .height(60.dp),
-                        onClick = {
-                            onStepBack()
-                        },
-                        colors = ButtonDefaults.buttonColors(Color.White),
-                        border = BorderStroke(2.dp, Color.Black)
-                    ) {
-                        Text(
-                            text = "Back",
-                            color = Color.Black,
-                            fontSize = 18.sp
-                        )
-                    }
-                    Button(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(15.dp)
-                            .height(60.dp),
-                        onClick = {
-                            viewModel.addNewCar(newCar, category, carId.toString())
-                            onStepBack()
+                            .graphicsLayer(
+                                scaleX = scaleBack,
+                                scaleY = scaleBack
+                            )
+                            .pointerInteropFilter {
+                                when (it.action) {
+                                    MotionEvent.ACTION_DOWN -> isPressedBack = true
+                                    MotionEvent.ACTION_UP -> {
+                                        isPressedBack = false
+                                    }
 
-                        },
-                        colors = ButtonDefaults.buttonColors(Color.White),
-                        border = BorderStroke(2.dp, Color.Black)
+                                    MotionEvent.ACTION_CANCEL -> isPressedBack = false
+                                }
+                                false
+                            }
                     ) {
-                        Text(
-                            text = "Save car",
-                            color = Color.Black,
-                            fontSize = 18.sp
-                        )
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth(0.5f)
+                                .padding(15.dp)
+                                .height(60.dp),
+                            onClick = {
+                                onStepBack()
+                                isPressedBack = false
+                            },
+                            colors = ButtonDefaults.buttonColors(Color.White),
+                            border = BorderStroke(2.dp, Color.Black)
+                        ) {
+                            Text(
+                                text = "Back",
+                                color = Color.Black,
+                                fontSize = 18.sp
+                            )
+                        }
+                    }
+                    Box(
+                        modifier = Modifier
+                            .graphicsLayer(
+                                scaleX = scaleSave,
+                                scaleY = scaleSave
+                            )
+                            .pointerInteropFilter {
+                                when (it.action) {
+                                    MotionEvent.ACTION_DOWN -> isPressedSave = true
+                                    MotionEvent.ACTION_UP -> {
+                                        isPressedSave = false
+                                    }
+
+                                    MotionEvent.ACTION_CANCEL -> isPressedSave = false
+                                }
+                                false
+                            }
+                    ) {
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(15.dp)
+                                .height(60.dp),
+                            onClick = {
+                                viewModel.addNewCar(newCar, category, carId.toString())
+                                onStepBack()
+                                isPressedSave = false
+                            },
+                            colors = ButtonDefaults.buttonColors(Color.White),
+                            border = BorderStroke(2.dp, Color.Black)
+                        ) {
+                            Text(
+                                text = "Save car",
+                                color = Color.Black,
+                                fontSize = 18.sp
+                            )
+                        }
                     }
                 }
             }

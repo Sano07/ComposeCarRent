@@ -3,9 +3,13 @@ package com.example.composecarrent.ui.theme.main_screen
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Handler
+import android.os.Looper
 import android.util.Base64
 import android.util.Log
+import android.view.MotionEvent
 import android.widget.ImageButton
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -40,6 +44,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -87,7 +93,7 @@ fun MainScreenBody(
             .document(carId.toString())
             .delete()
 
-        selectedCarList = selectedCarList.filter { it.id != selectedCarForDesc.value  }
+        selectedCarList = selectedCarList.filter { it.id != selectedCarForDesc.value }
     }
 
     LaunchedEffect(selectedCategory.value) {
@@ -176,7 +182,9 @@ fun CarCards(
     val uid = Firebase.auth.currentUser!!.uid
 
     Card(
-        modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 5.dp)
             .combinedClickable(
                 onClick = {
                     navController.navigate("desc_screen")
@@ -185,7 +193,7 @@ fun CarCards(
                 onLongClick = {
                     if (isAdmin.value) showDopMenu.value = true
                     selectedCarForDesc.value = item.id
-                }
+                },
             ),
         shape = RoundedCornerShape(15.dp)
     ) {
@@ -333,6 +341,7 @@ fun CarCards(
         }
     }
 }
+
 
 
 

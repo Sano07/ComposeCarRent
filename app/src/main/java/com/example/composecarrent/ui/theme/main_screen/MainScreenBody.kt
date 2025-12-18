@@ -7,6 +7,7 @@ import android.util.Base64
 import android.util.Log
 import android.widget.ImageButton
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -70,11 +73,22 @@ fun MainScreenBody(
     clicked: MutableState<Boolean>,
     modifier: Modifier = Modifier,
     favCars: Set<Int>,
-    onFavCarChange: (Int) -> Unit
+    onFavCarChange: (Int) -> Unit,
+    //showDopMenu: MutableState<Boolean>
 ) {
     var selectedCarList by remember { mutableStateOf<List<CarDataModel>>(emptyList()) }
 
     val db = Firebase.firestore
+
+    fun onDeleteCar(carId: Int) {
+        db.collection("cars")
+            .document(selectedCategory.value)
+            .collection("cars")
+            .document(carId.toString())
+            .delete()
+
+        selectedCarList = selectedCarList.filter { it.id != selectedCarForDesc.value  }
+    }
 
     LaunchedEffect(selectedCategory.value) {
 
@@ -105,22 +119,42 @@ fun MainScreenBody(
             ) {
                 itemsIndexed(selectedCarList) { _, item ->
                     val isFav = favCars.contains(item.id)
-                    CarCards(
-                        navController,
-                        onDecode,
-                        isAdmin,
-                        selectedCarForDesc,
-                        favCars,
-                        clicked,
-                        item,
-                        isFav,
-                        onFavCarChange = { onFavCarChange(item.id) }
-                    )
+                    val showDopMenu = remember { mutableStateOf(false) }
+
+                    Box {
+                        CarCards(
+                            navController,
+                            onDecode,
+                            isAdmin,
+                            selectedCarForDesc,
+                            favCars,
+                            clicked,
+                            item,
+                            isFav,
+                            onFavCarChange = { onFavCarChange(item.id) },
+                            showDopMenu
+                        )
+
+                        DropdownMenu(
+                            expanded = showDopMenu.value,
+                            onDismissRequest = { showDopMenu.value = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Delete car") },
+                                onClick = {
+                                    showDopMenu.value = false
+                                    onDeleteCar(item.id)
+                                }
+                            )
+                        }
+
+                    }
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun CarCards(
@@ -132,7 +166,8 @@ fun CarCards(
     clicked: MutableState<Boolean>,
     item: CarDataModel,
     isFav: Boolean,
-    onFavCarChange: (String) -> Unit
+    onFavCarChange: (String) -> Unit,
+    showDopMenu: MutableState<Boolean>
 ) {
 
     val colorGreen = colorResource(id = R.color.green)
@@ -141,12 +176,18 @@ fun CarCards(
     val uid = Firebase.auth.currentUser!!.uid
 
     Card(
-        modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp),
-        shape = RoundedCornerShape(15.dp),
-        onClick = {
-            navController.navigate("desc_screen")
-            selectedCarForDesc.value = item.id
-        }
+        modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp)
+            .combinedClickable(
+                onClick = {
+                    navController.navigate("desc_screen")
+                    selectedCarForDesc.value = item.id
+                },
+                onLongClick = {
+                    if (isAdmin.value) showDopMenu.value = true
+                    selectedCarForDesc.value = item.id
+                }
+            ),
+        shape = RoundedCornerShape(15.dp)
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
 

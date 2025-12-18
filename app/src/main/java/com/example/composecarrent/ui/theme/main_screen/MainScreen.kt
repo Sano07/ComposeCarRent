@@ -44,6 +44,9 @@ fun MainScreen(
     val coroutineScope = rememberCoroutineScope()
     val showMainLoader = remember { mutableStateOf(true) }
 
+    //val showDopMenu = remember { mutableStateOf(false) }
+
+
     ModalNavigationDrawer(
         drawerState = drawerState,   // передача состояния ( открыто по умолчанию)
         drawerContent = {
@@ -135,7 +138,8 @@ fun MainScreen(
                 clicked,
                 modifier = Modifier.padding(padding),
                 favCars,
-                onFavCarChange = onFavCarChange
+                onFavCarChange = onFavCarChange,
+                //showDopMenu
             )
         }
     }

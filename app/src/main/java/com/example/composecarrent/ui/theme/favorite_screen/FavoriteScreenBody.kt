@@ -355,7 +355,7 @@ fun InfoWindow(isShowInfoWindow: MutableState<Boolean>) {
     if (isShowInfoWindow.value) {
         BasicAlertDialog(
             onDismissRequest = { isShowInfoWindow.value = false },
-            modifier = Modifier.size(1000.dp),
+            modifier = Modifier.size(250.dp),
             properties = DialogProperties(
                 dismissOnBackPress = true,
                 dismissOnClickOutside = true
@@ -363,20 +363,28 @@ fun InfoWindow(isShowInfoWindow: MutableState<Boolean>) {
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
                     .background(Color.White, shape = RoundedCornerShape(8.dp))
-                    .padding(12.dp)
+                    .padding(15.dp)
+                    .width(260.dp)
             ) {
-                Column {
+                Column(modifier = Modifier, horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         text = "Тут какая то логика заказа авто :) я ее пока не придумал",
                         fontSize = 20.sp
                     )
-                    Spacer(modifier = Modifier.height(9.dp))
+                    Spacer(modifier = Modifier.height(15.dp))
+                    Spacer(modifier = Modifier.weight(0.5f))
                     Button(
-                        onClick = { isShowInfoWindow.value = false }
+                        onClick = { isShowInfoWindow.value = false },
+                        modifier = Modifier.fillMaxWidth().height(80.dp),
+                        colors = ButtonDefaults.buttonColors(Color.White),
+                        border = BorderStroke(2.dp, Color.Black)
                     ) {
-                        Text(text = "OK")
+                        Text(
+                            text = "OK",
+                            fontSize = 20.sp,
+                            color = Color.Black
+                        )
                     }
                 }
             }

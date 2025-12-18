@@ -15,6 +15,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import com.example.composecarrent.R
 
 @Composable
-fun CarDescriptionScreenBottomBar(onStepBack: () -> Unit) {
+fun CarDescriptionScreenBottomBar(onStepBack: () -> Unit, isShowInfoWindow: MutableState<Boolean>) {
     val colorWhiteBack = colorResource(id = R.color.white2)
 
     var isPressedRent by remember { mutableStateOf(false) }
@@ -100,8 +101,8 @@ fun CarDescriptionScreenBottomBar(onStepBack: () -> Unit) {
             ) {
                 Button(
                     onClick = {
-                        // какая то логика для заказа машины
                         isPressedRent = false
+                        isShowInfoWindow.value = true
                     },
                     modifier = Modifier
                         .fillMaxWidth()

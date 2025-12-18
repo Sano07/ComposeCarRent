@@ -127,7 +127,8 @@ fun AppNavigation(
                 navController = navController,
                 onDecode,
                 selectedCarForDesc,
-                selCategory
+                selCategory,
+                isShowInfoWindow
             )
         }
     }

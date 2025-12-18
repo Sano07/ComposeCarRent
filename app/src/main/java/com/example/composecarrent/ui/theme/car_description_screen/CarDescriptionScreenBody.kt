@@ -77,7 +77,8 @@ fun CarDescriptionScreenBody(
     showLoader: MutableState<Boolean>,
     onDecode: (String) -> Bitmap,
     selectedCarForDesc: MutableState<Int?>,
-    selectedCategory: MutableState<String>
+    selectedCategory: MutableState<String>,
+    isShowInfoWindow: MutableState<Boolean>,
 ) {
     val colorGrey = colorResource(id = R.color.grey)
     val colorGreen = colorResource(id = R.color.green)

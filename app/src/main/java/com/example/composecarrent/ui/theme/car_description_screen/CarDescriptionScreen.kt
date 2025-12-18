@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.example.composecarrent.ui.theme.bottomTopNavigation.DefaultTopBar
+import com.example.composecarrent.ui.theme.info_window.InfoWindow
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -57,7 +58,12 @@ fun CarDescriptionScreen(
             if (!showDescLoader.value) {
                 CarDescriptionScreenBottomBar(onStepBack = { navController.popBackStack() }, isShowInfoWindow)
             }
-            InfoWindow(isShowInfoWindow)
+            InfoWindow(
+                visible = isShowInfoWindow.value,
+                text = "а тут какая то логика заказа авто :) я ее еще не придумал",
+                onDismissRequest = { isShowInfoWindow.value = false },
+                onButtonClick = {isShowInfoWindow.value = false }
+            )
         }
     ) { padding ->
 
@@ -69,48 +75,5 @@ fun CarDescriptionScreen(
             selectedCategory,
             isShowInfoWindow
         )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun InfoWindow(isShowInfoWindow: MutableState<Boolean>) {
-    if (isShowInfoWindow.value) {
-        BasicAlertDialog(
-            onDismissRequest = { isShowInfoWindow.value = false },
-            modifier = Modifier.size(250.dp),
-            properties = DialogProperties(
-                dismissOnBackPress = true,
-                dismissOnClickOutside = true
-            ),
-        ) {
-            Box(
-                modifier = Modifier
-                    .background(Color.White, shape = RoundedCornerShape(8.dp))
-                    .padding(15.dp)
-                    .width(260.dp)
-            ) {
-                Column(modifier = Modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "Тут какая то логика заказа авто :) я ее пока не придумал",
-                        fontSize = 20.sp
-                    )
-                    Spacer(modifier = Modifier.height(15.dp))
-                    Spacer(modifier = Modifier.weight(0.5f))
-                    Button(
-                        onClick = { isShowInfoWindow.value = false },
-                        modifier = Modifier.fillMaxWidth().height(80.dp),
-                        colors = ButtonDefaults.buttonColors(Color.White),
-                        border = BorderStroke(2.dp, Color.Black)
-                    ) {
-                        Text(
-                            text = "OK",
-                            fontSize = 20.sp,
-                            color = Color.Black
-                        )
-                    }
-                }
-            }
-        }
     }
 }
